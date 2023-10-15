@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.name }} - Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ course.name }}</h1>
+        <a href="{{ url_for('index') }}">Back to courses list</a>
+    </header>
+
+    <main>
+        <section class="course-details">
+            <h2>Course Information</h2>
+            <p><strong>Code:</strong> {{ course.code }}</p>
+            <p><strong>Description:</strong> {{ course.description }}</p>
+            <p><strong>Days left for completion:</strong> {{ days_left }}</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
+    </footer>
+</body>
+</html>
