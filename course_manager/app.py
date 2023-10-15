@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template,session, redirect, url_for, request
+import uuid
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask import session
@@ -53,57 +54,93 @@ def course_details(course_id):
 
 
 
-# @app.route('/create_course', methods=['POST'])
-# def create_course():
-#     # ... course creation logic ...
+#@app.route('/create_course', methods=['POST'])
+def create_course():
+    # Extract the course data from the form (or wherever it's coming from)
+    course_name = request.form.get('course_name')
+    course_code = request.form.get('course_code')
 
-#     user_id = None
-#     if 'user_id' in session:  # Check if user is logged in
-#         user_id = session['user_id']
+    # If the user is logged in, store the course in the database
+    if 'user_id' in session:
+        user_id = session['user_id']
+        new_course = Course(name=course_name, code=course_code, user_id=user_id)
+        db.session.add(new_course)
+        db.session.commit()
+    # If the user is not logged in, store the course data temporarily in the session
+    else:
+        if 'temporary_courses' not in session:
+            session['temporary_courses'] = []
+        temp_id = str(uuid.uuid4())
+        session['temporary_courses'].append({
+        'id': temp_id,
+        'name': course_name,
+        'code': course_code,
+        'assessments': []
+    })
 
-#     new_course = Course(name="Example", user_id=user_id, temporary=(user_id is None), ...)
-#     db.session.add(new_course)
-#     db.session.commit()
 
-#     # If user is not logged in, store course ID in session for later association with user
-#     if user_id is None:
-#         session['temp_course_id'] = new_course.id
+    return redirect(url_for('index'))
 
-#     return redirect(url_for('index'))
+@app.route('/course/<course_code>/add_assessment', methods=['POST'])
+def add_assessment(course_code):
+    # Extract assessment data and the associated course code from the form
 
-# @app.route('/signup', methods=['POST'])
-# def signup():
-#     # ... user registration logic ...
-#     new_user = User(username="example", ...)
-#     db.session.add(new_user)
-#     db.session.commit()
+    assessment_name = request.form.get('assessment_name')
+    assessment_mark = request.form.get('assessment_mark')
 
-#     # If there's a temp_course_id in the session, associate it with the new user
-#     if 'temp_course_id' in session:
-#         temp_course = Course.query.get(session['temp_course_id'])
-#         if temp_course:
-#             temp_course.user_id = new_user.id
-#             temp_course.temporary = False
-#             db.session.commit()
-#         # Optionally clear the temp_course_id from the session
-#         session.pop('temp_course_id', None)
+    if 'user_id' in session:
+        # Add the assessment to the database if the user is logged in
+        user_id = session['user_id']
+        course = Course.query.filter_by(user_id=user_id, code=course_code).first()
+        if course:
+            new_assessment = Assessment(name=assessment_name, mark=assessment_mark, course_id=course.id)
+            db.session.add(new_assessment)
+            db.session.commit()
+    else:  # For guest users
+        for course in session['temporary_courses']:
+            if course['id'] == course_code:
+                # Add the assessment to this course
+                course['assessments'].append({
+                    'name': request.form.get('assessment_name'),
+                    'mark': request.form.get('assessment_mark')
+                })
+    return redirect(url_for('course_details', course_id=course_code))
 
-#     return redirect(url_for('dashboard'))
 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # ... authentication logic ...
 
-#     if user_authenticated:  
-#         session['user_id'] = user.id  # Store the logged-in user's ID in the session
+@app.route('/signup', methods=['POST'])
+def signup():
+    # ... user registration logic ...
 
-#     return redirect(url_for('index'))
+    if 'temporary_courses' in session:
+        temp_courses_data = session['temporary_courses']
+        for course_data in temp_courses_data:
+            temp_course = Course(name=course_data['name'], code=course_data['code'], user_id=new_user.id)
+            db.session.add(temp_course)
+            db.session.flush()  # to get an ID for the new course before committing
+            for assessment_data in course_data['assessments']:
+                new_assessment = Assessment(name=assessment_data['name'], mark=assessment_data['mark'], course_id=temp_course.id)
+                db.session.add(new_assessment)
+            db.session.commit()
+        session.pop('temporary_courses', None)
 
-# @app.route('/logout')
-# def logout():
-#     session.pop('user_id', None)
-#     return redirect(url_for('index'))
+    return redirect(url_for('dashboard'))
 
+
+@app.route('/login', methods=['POST'])
+def login():
+    # ... authentication logic ...
+
+    # Let's assume the user was successfully authenticated and is stored in the variable `user`
+    if user_authenticated:  
+        session['user_id'] = user.id  # Store the logged-in user's ID in the session
+
+    return redirect(url_for('index'))
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
 # with app.app_context():
 #     db.create_all()
 
