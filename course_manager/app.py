@@ -11,7 +11,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     courses = db.relationship('Course', backref='user', lazy=True)
     GPA = db.Column(db.Float, nullable=True)  # GPA is usually a float, not an integer
-    goal = db.Column(db.String(100), nullable=True)  # Goal for the user (could be a description or target GPA)
+    goal = db.Column(db.Integer, nullable=True)  # Goal for the user (could be a description or target GPA)
 
 class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,14 +23,14 @@ class Assessment(db.Model):
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Allow nullable for temporary courses
-    temporary = db.Column(db.Boolean, default=True)  # New field to mark temporary courses
     code = db.Column(db.String(100), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    # description = db.Column(db.Text, nullable=True)
+    # date_created = db.Column(db.DateTime, default=datetime.utcnow)
     assessments = db.relationship('Assessment', backref='course', lazy=True)  # Relationship with Assessment
-    goal = db.Column(db.String(100), nullable=True)  # Goal for the course (e.g., target grade or outcome)
+    current_grade=db.Column(db.Integer, nullable=False)
+    goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
 
 
     # Method to calculate days remaining for the course to end
@@ -59,6 +59,9 @@ def create_course():
     # Extract the course data from the form (or wherever it's coming from)
     course_name = request.form.get('course_name')
     course_code = request.form.get('course_code')
+    end_date=request.form.get('end_date')
+    goal=request.form.get("goal")
+    #TODO add if any past assesments
 
     # If the user is logged in, store the course in the database
     if 'user_id' in session:
@@ -73,9 +76,11 @@ def create_course():
         temp_id = str(uuid.uuid4())
         session['temporary_courses'].append({
         'id': temp_id,
-        'name': course_name,
         'code': course_code,
-        'assessments': []
+        'name': course_name,
+        'end_date':end_date,
+        'assessments': [],
+        'goal':goal
     })
 
 
