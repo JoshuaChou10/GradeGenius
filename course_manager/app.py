@@ -29,7 +29,7 @@ class Course(db.Model):
     # description = db.Column(db.Text, nullable=True)
     # date_created = db.Column(db.DateTime, default=datetime.utcnow)
     assessments = db.relationship('Assessment', backref='course', lazy=True)  # Relationship with Assessment
-    current_grade=db.Column(db.Integer, nullable=False)
+    current_grade=db.Column(db.Float, nullable=False)
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
 
 
@@ -54,37 +54,40 @@ def course_details(course_id):
 
 
 
-#@app.route('/create_course', methods=['POST'])
+@app.route('/course/create', methods=['POST','GET'])
 def create_course():
-    # Extract the course data from the form (or wherever it's coming from)
-    course_name = request.form.get('course_name')
-    course_code = request.form.get('course_code')
-    end_date=request.form.get('end_date')
-    goal=request.form.get("goal")
-    #TODO add if any past assesments
+    if request.method == 'POST':
+        # Extract the course data from the form (or wherever it's coming from)
+        course_name = request.form.get('course_name')
+        course_code = request.form.get('course_code')
+        end_date=request.form.get('end_date')
+        goal=request.form.get("goal")
+        #TODO add if any past assesments
 
-    # If the user is logged in, store the course in the database
-    if 'user_id' in session:
-        user_id = session['user_id']
-        new_course = Course(name=course_name, code=course_code, user_id=user_id)
-        db.session.add(new_course)
-        db.session.commit()
-    # If the user is not logged in, store the course data temporarily in the session
-    else:
-        if 'temporary_courses' not in session:
-            session['temporary_courses'] = []
-        temp_id = str(uuid.uuid4())
-        session['temporary_courses'].append({
-        'id': temp_id,
-        'code': course_code,
-        'name': course_name,
-        'end_date':end_date,
-        'assessments': [],
-        'goal':goal
-    })
+        # If the user is logged in, store the course in the database
+        if 'user_id' in session:
+            user_id = session['user_id']
+            new_course = Course(name=course_name, code=course_code, user_id=user_id)
+            db.session.add(new_course)
+            db.session.commit()
+        # If the user is not logged in, store the course data temporarily in the session
+        else:
+            if 'temporary_courses' not in session:
+                session['temporary_courses'] = []
+            temp_id = str(uuid.uuid4())
+            session['temporary_courses'].append({
+            'id': temp_id,
+            'code': course_code,
+            'name': course_name,
+            'end_date':end_date,
+            'assessments': [],
+            'goal':goal
+        })
 
 
-    return redirect(url_for('index'))
+        return redirect(url_for('index')) #TODO change to course details with params
+    return render_template('add_course.html')
+
 
 @app.route('/course/<course_code>/add_assessment', methods=['POST'])
 def add_assessment(course_code):
