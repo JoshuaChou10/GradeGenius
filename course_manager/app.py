@@ -1,9 +1,14 @@
-from flask import Flask, render_template,session, redirect, url_for, request
+
+from flask import session, request, redirect, url_for, render_template,Flask
+
 import uuid
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask import session
+import os
 app = Flask(__name__)
+app.secret_key = os.urandom(16).hex()
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 db = SQLAlchemy(app)
@@ -54,42 +59,46 @@ def course_details(course_id):
 
 
 
-@app.route('/course/create', methods=['POST','GET'])
+@app.route('/course/create', methods=['POST', 'GET'])
 def create_course():
     if request.method == 'POST':
-        # Extract the course data from the form (or wherever it's coming from)
+        # Extract the course data from the form
         course_name = request.form.get('course_name')
         course_code = request.form.get('course_code')
-        end_date=request.form.get('end_date')
-        goal=request.form.get("goal")
-        #TODO add if any past assesments
+        end_date_str= request.form.get('end_date')
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
+
+        goal = request.form.get('goal')
 
         # If the user is logged in, store the course in the database
         if 'user_id' in session:
             user_id = session['user_id']
-            new_course = Course(name=course_name, code=course_code, user_id=user_id)
+            new_course = Course(name=course_name, code=course_code, end_date=end_date, goal=goal, user_id=user_id)
             db.session.add(new_course)
             db.session.commit()
+            return redirect(url_for('course_details', course_id=new_course.id))
         # If the user is not logged in, store the course data temporarily in the session
         else:
             if 'temporary_courses' not in session:
                 session['temporary_courses'] = []
-            temp_id = str(uuid.uuid4())
+            temp_id = int(uuid.uuid4())
             session['temporary_courses'].append({
-            'id': temp_id,
-            'code': course_code,
-            'name': course_name,
-            'end_date':end_date,
-            'assessments': [],
-            'goal':goal
-        })
+                'id': temp_id,
+                'code': course_code,
+                'name': course_name,
+                'end_date': end_date,
+                'assessments': [],
+                'goal': goal
+            })
+            return render_template('index.html', courses=session["temporary_courses"])
 
-
-        return redirect(url_for('index')) #TODO change to course details with params
+        
+       
+    
     return render_template('add_course.html')
 
 
-@app.route('/course/<course_code>/add_assessment', methods=['POST'])
+@app.route('/course/<course_id>/add_assessment', methods=['POST'])
 def add_assessment(course_code):
     # Extract assessment data and the associated course code from the form
 
