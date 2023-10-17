@@ -9,7 +9,7 @@
 <body>
     <header>
         <h1>{{ course.name }}</h1>
-        <a href="{{ url_for('index') }}">Back to courses list</a>
+        <a href="{{ url_for('index_with_session') }}">Back to courses list</a>
     </header>
 
     <main>
@@ -17,7 +17,7 @@
             <h2>Course Information</h2>
             <p><strong>Code:</strong> {{ course.code }}</p>
             <p><strong>Description:</strong> {{ course.description }}</p>
-            <p><strong>Days left for completion:</strong> {{ days_left }}</p>
+            <p><strong>Days left for completion:</strong> {{ time_left }}</p>
         </section>
     </main>
 

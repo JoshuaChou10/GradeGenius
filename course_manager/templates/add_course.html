@@ -5,6 +5,18 @@
 </head>
 <body>
     <h1>Add New Course</h1>
+
+    <!-- Display flashed messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashed-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     <form action="/course/create" method="post">
         <label for="course_name">Course Name:</label>
         <input type="text" id="course_name" name="course_name" required>
@@ -20,7 +32,6 @@
 
         <label for="goal">Goal for the Course (e.g., target grade):</label>
         <input type="number" id="goal" name="goal" required>
-
 
         <input type="submit" value="Add Course">
     </form>
