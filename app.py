@@ -51,23 +51,25 @@ def index():
 
 @app.route('/index_with_session')
 def index_with_session():
-    courses = session.get('temporary_courses', [])
+    courses = session.get('temporary_courses',[])
     return render_template('index.html', courses=courses)
 
 @app.route('/course/<int:course_id>')
 def course_details(course_id):
     course=None
     time_left = "N/A"
-    if 'user id' in session:
+    if 'user_id' in session:
         course = Course.query.get(course_id)
         if not course:
             return redirect(url_for('index'))
         days_left=course.days_remaining()
         time_left = f"{math.floor(days_left/30)} months and {days_left%30} days left"
     else:
-        for course in session['temporary_courses']:
-            if course['id'] == course_id:
-                course=course
+        for c in session['temporary_courses']:
+            if c['id'] == course_id:
+                course=c
+                time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
+                
     if not course:  # if course is not found
         return redirect(url_for('index'))
 
@@ -82,10 +84,8 @@ def create_course():
         # Extract the course data from the form
         course_name = request.form.get('course_name')
           # Check if a course with that name already exists
-        existing_course = Course.query.filter_by(name=course_name).first()
-        if existing_course:
-            # Course with that name already exists
-            flash('A course with that name already exists!', 'info')
+       
+
         course_code = request.form.get('course_code')
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
@@ -100,7 +100,7 @@ def create_course():
             return redirect(url_for('course_details', course_id=new_course.id))
         # If the user is not logged in, store the course data temporarily in the session
         else:
-            #TODO only allows one course in session for some reason
+       
             course_exists=False
             if 'temporary_courses' not in session:
                 session['temporary_courses'] = []
@@ -119,6 +119,7 @@ def create_course():
                     'assessments': [],
                     'goal': goal
                 })
+            session.modified = True
             return redirect(url_for('index_with_session'))
 
         
@@ -126,30 +127,36 @@ def create_course():
     return render_template('add_course.html')
 
 
-@app.route('/course/<course_id>/add_assessment', methods=['POST'])
+@app.route('/course/<course_id>/add_assessment', methods=['POST','GET'])
 def add_assessment(course_id):
-    # Extract assessment data and the associated course code from the form
+    if request.method == 'POST':
+        # Extract assessment data and the associated course code from the form
 
-    assessment_name = request.form.get('assessment_name')
-    assessment_mark = request.form.get('assessment_mark')
+        assessment_name = request.form.get('assessment_name')
+        assessment_mark = request.form.get('assessment_mark')
 
-    if 'user_id' in session:
-        # Add the assessment to the database if the user is logged in
-        user_id = session['user_id']
-        course = Course.query.filter_by(user_id=user_id, code=course_id).first()
-        if course:
-            new_assessment = Assessment(name=assessment_name, mark=assessment_mark, course_id=course.id)
-            db.session.add(new_assessment)
-            db.session.commit()
-    else:  # For guest users
-        for course in session['temporary_courses']:
-            if course['id'] == course_id:
-                # Add the assessment to this course
-                course['assessments'].append({
-                    'name': request.form.get('assessment_name'),
-                    'mark': request.form.get('assessment_mark')
-                })
-    return redirect(url_for('course_details', course_id=course_id))
+        if 'user_id' in session:
+            # Add the assessment to the database if the user is logged in
+            user_id = session['user_id']
+            course = Course.query.filter_by(user_id=user_id, code=course_id).first()
+            if course:
+                new_assessment = Assessment(name=assessment_name, mark=assessment_mark, course_id=course.id)
+                db.session.add(new_assessment)
+                db.session.commit()
+        else:  # For guest users
+            for course in session['temporary_courses']:
+                if str(course['id']) == str(course_id):
+                    # Add the assessment to this course
+                    course['assessments'].append({
+                        'name': assessment_name,
+                        'mark': assessment_mark
+                    })
+                    session.modified = True
+                    print("Added assessment:", course['assessments'])
+                    break
+         
+        return redirect(url_for('course_details', course_id=course_id))
+    return render_template('add_assesment.html',course_id=course_id)
 
 
 

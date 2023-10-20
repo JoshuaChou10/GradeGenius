@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ course.name }} - Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css') }}">
 </head>
+
 <body>
     <header>
         <h1>{{ course.name }}</h1>
@@ -14,10 +16,20 @@
 
     <main>
         <section class="course-details">
+            <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-assessment-btn">Add Assessment</a>
             <h2>Course Information</h2>
             <p><strong>Code:</strong> {{ course.code }}</p>
             <p><strong>Description:</strong> {{ course.description }}</p>
             <p><strong>Days left for completion:</strong> {{ time_left }}</p>
+
+            <!-- Displaying the list of assessments -->
+            <h3>Assessments</h3>
+            <ul>
+            {% for assessment in course.assessments %}
+                <li>{{ assessment['name'] }}: {{ assessment['mark'] }}</li>
+            {% endfor %}    
+
+            </ul>
         </section>
     </main>
 
@@ -25,4 +37,5 @@
         <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
     </footer>
 </body>
+
 </html>

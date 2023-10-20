@@ -4,12 +4,21 @@ body {
     padding: 0;
     background-color: #f4f4f4;
 }
+html, body {
+    height: 100%;
+}
 
 header, footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 1rem 0;
+}
+footer {
+    position: absolute; 
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 main {
@@ -56,16 +65,3 @@ header a:hover {
     background-color: #777;
 }
 
-.course-details h2 {
-    border-bottom: 2px solid #333;
-    padding-bottom: 0.5rem;
-}
-
-.course-details p {
-    margin: 1rem 0;
-}
-
-.course-details p strong {
-    display: block;
-    margin-bottom: 0.5rem;
-}

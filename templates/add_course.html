@@ -5,21 +5,11 @@
 </head>
 <body>
     <h1>Add New Course</h1>
-
-    <!-- Display flashed messages -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flashed-messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+  
 
     <form action="/course/create" method="post">
         <label for="course_name">Course Name:</label>
-        <input type="text" id="course_name" name="course_name" required>
+        <input type="text" id="course_name" name="course_name" oninput='check_if_existing()' required>
 
         <label for="course_code">Course Code:</label>
         <input type="text" id="course_code" name="course_code" required>

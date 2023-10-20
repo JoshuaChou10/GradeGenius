@@ -1,0 +1,14 @@
+.add-assessment-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+.add-assessment-btn:hover {
+    background-color: #0056b3;
+}
