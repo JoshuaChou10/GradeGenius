@@ -1,14 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header a {
+    color: #fff;
+    margin-left: 15px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+main {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.course-details {
+    margin-top: 20px;
+}
+
 .add-assessment-btn {
     display: inline-block;
-    padding: 10px 20px;
     background-color: #007BFF;
     color: #fff;
-    border-radius: 4px;
+    padding: 10px 15px;
     text-decoration: none;
-    margin-bottom: 20px;
-    transition: background-color 0.3s;
+    border-radius: 3px;
 }
 
 .add-assessment-btn:hover {
     background-color: #0056b3;
+}
+
+h2, h3 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    padding: 5px 0;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* or any color you want */
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
 }

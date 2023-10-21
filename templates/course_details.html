@@ -9,9 +9,16 @@
 </head>
 
 <body>
+    {% if time_left == 0 %}
+    <div style="background-color: #ff4d4d; color: white; text-align: center; padding: 10px;">
+        Course is finished!
+    </div>
+    {% endif %}
+
     <header>
-        <h1>{{ course.name }}</h1>
-        <a href="{{ url_for('index_with_session') }}">Back to courses list</a>
+        <h1>{{ course.name }}-{{course.code}}</h1>
+        <a class="home-btn" href="{{ url_for('index_with_session') }}">Home</a>
+
     </header>
 
     <main>
@@ -24,12 +31,20 @@
 
             <!-- Displaying the list of assessments -->
             <h3>Assessments</h3>
-            <ul>
-            {% for assessment in course.assessments %}
-                <li>{{ assessment['name'] }}: {{ assessment['mark'] }}</li>
-            {% endfor %}    
-
-            </ul>
+          
+            {% if course.assessments|length > 0 %}
+                <ul>
+                {% for assessment in course.assessments %}
+                    <li>{{ assessment['name'] }}: {{ assessment['mark'] }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No assessments yet!</p>
+            {% endif %}
+          
+            
+                        
+          
         </section>
     </main>
 

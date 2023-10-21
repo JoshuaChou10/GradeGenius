@@ -73,7 +73,7 @@ def course_details(course_id):
     if not course:  # if course is not found
         return redirect(url_for('index'))
 
-    return render_template('course_details.html', course=course, time_left=time_left)
+    return render_template('course_details.html', course=course, time_left=time_left if time_left>0 else 0)
 
 
 
