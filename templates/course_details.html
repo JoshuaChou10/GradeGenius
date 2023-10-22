@@ -20,7 +20,7 @@
         <div>
             <h1>{{ course.name }}-{{course.code}}</h1>
             <div class="grade">
-                {% if course.grade is none %}
+                {% if course.grade==0%}
                     No grade yet
                 {% else %}
                     {{course.grade}}%
