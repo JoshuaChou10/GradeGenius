@@ -95,6 +95,8 @@ def create_course():
                     'name': course_name,
                     'end_date': end_date,
                     'assessments': [],
+                    'starting_grade':grade,
+                    'starting_marks':total_marks,
                     'grade':grade,
                     'total_marks':total_marks,
                     'goal': goal
@@ -141,7 +143,6 @@ def add_assessment(course_id):
                     total_earned = (course['grade']/100)*course['total_marks']
                     course['total_marks'] = course['total_marks'] + total
                     course['grade'] = ((total_earned + earned)/course['total_marks'])*100
-
                     break
          
         return redirect(url_for('course_details', course_id=course_id))

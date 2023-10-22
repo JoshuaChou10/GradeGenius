@@ -23,7 +23,7 @@
                 {% if course.grade==0%}
                     No grade yet
                 {% else %}
-                    {{course.grade}}%
+                    {{ course['grade']|round(2) }%}
                 {% endif %}
             </div>
         </div>
@@ -40,13 +40,15 @@
 
             <!-- Displaying the list of assessments -->
             <h3>Assessments</h3>
-          
+            <p><strong>Starting Score:</strong> {{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</p>
+
             {% if course.assessments|length > 0 %}
                 <ul>
                 {% for assessment in course.assessments %}
                     <li>{{ assessment['name'] }}: {{ assessment['earned'] }} / {{ assessment['total'] }} at {{assessment['date']}}</li>
                 {% endfor %}
                 </ul>
+                Total: {{ (course.total_marks * course.grade) / 100 }} / {{ course.total_marks }}
             {% else %}
                 <p>No assessments yet!</p>
             {% endif %}

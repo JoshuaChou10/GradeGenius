@@ -25,6 +25,8 @@ class Course(db.Model):
     # description = db.Column(db.Text, nullable=True)
     # date_created = db.Column(db.DateTime, default=datetime.utcnow)
     assessments = db.relationship('Assessment', backref='course', lazy=True)  # Relationship with Assessment
+    starting_grade=db.Column(db.Float, nullable=False)
+    starting_marks=db.Column(db.Float, nullable=False)
     grade=db.Column(db.Float, nullable=False)
     total_marks=db.Column(db.Float, nullable=False)
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
