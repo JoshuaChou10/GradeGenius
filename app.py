@@ -21,7 +21,9 @@ class User(db.Model):
 class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    mark = db.Column(db.Float, nullable=True)
+    date = db.Column(db.DateTime, nullable=False)
+    earned = db.Column(db.Float, nullable=False)
+    total = db.Column(db.Float, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  # Foreign key linking to Course
 
 #do course_object.user to get user
@@ -34,7 +36,8 @@ class Course(db.Model):
     # description = db.Column(db.Text, nullable=True)
     # date_created = db.Column(db.DateTime, default=datetime.utcnow)
     assessments = db.relationship('Assessment', backref='course', lazy=True)  # Relationship with Assessment
-    current_grade=db.Column(db.Float, nullable=False)
+    grade=db.Column(db.Float, nullable=False)
+    total_marks=db.Column(db.Float, nullable=False)
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
 
 
@@ -54,6 +57,7 @@ def index_with_session():
     courses = session.get('temporary_courses',[])
     return render_template('index.html', courses=courses)
 
+#TODO, if user just enters the url, like deleting the other parts of the url, then there will be no session courses displayed
 @app.route('/course/<int:course_id>')
 def course_details(course_id):
     course=None
@@ -89,7 +93,9 @@ def create_course():
         course_code = request.form.get('course_code')
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
-        goal = request.form.get('goal')
+        grade= float(request.form.get('grade'))
+        total_marks=float(request.form.get('total_marks'))
+        goal = float(request.form.get('goal'))
 
         # If the user is logged in, store the course in the database
         if 'user_id' in session:
@@ -117,6 +123,8 @@ def create_course():
                     'name': course_name,
                     'end_date': end_date,
                     'assessments': [],
+                    'grade':grade,
+                    'total_marks':total_marks,
                     'goal': goal
                 })
             session.modified = True
@@ -132,15 +140,18 @@ def add_assessment(course_id):
     if request.method == 'POST':
         # Extract assessment data and the associated course code from the form
 
-        assessment_name = request.form.get('assessment_name')
-        assessment_mark = request.form.get('assessment_mark')
+        name= request.form.get('name')
+        date_str=request.form.get('date')
+        date = datetime.strptime(date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
+        earned = float(request.form.get('earned'))
+        total= float(request.form.get('total'))
 
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
             user_id = session['user_id']
-            course = Course.query.filter_by(user_id=user_id, code=course_id).first()
+            course = Course.query.filter_by(user_id=user_id, course_id=course_id).first()
             if course:
-                new_assessment = Assessment(name=assessment_name, mark=assessment_mark, course_id=course.id)
+                new_assessment = Assessment(name, date, earned,total,course_id=course.id)
                 db.session.add(new_assessment)
                 db.session.commit()
         else:  # For guest users
@@ -148,11 +159,15 @@ def add_assessment(course_id):
                 if str(course['id']) == str(course_id):
                     # Add the assessment to this course
                     course['assessments'].append({
-                        'name': assessment_name,
-                        'mark': assessment_mark
+                        'name': name,
+                        'date':date,
+                        'earned': earned,
+                        'total':total,
                     })
                     session.modified = True
-                    print("Added assessment:", course['assessments'])
+                    total_earned=(course["grade"]/100)*course["total_marks"]
+                    course['total_marks']=course['total_marks']+total
+                    course["grade"]=((total_earned+earned)/course['total_marks'])*100
                     break
          
         return redirect(url_for('course_details', course_id=course_id))

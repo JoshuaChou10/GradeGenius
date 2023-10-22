@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ course.name }} - Details</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css') }}">
+
 </head>
 
 <body>
@@ -16,9 +17,17 @@
     {% endif %}
 
     <header>
-        <h1>{{ course.name }}-{{course.code}}</h1>
+        <div>
+            <h1>{{ course.name }}-{{course.code}}</h1>
+            <div class="grade">
+                {% if course.grade is none %}
+                    No grade yet
+                {% else %}
+                    {{course.grade}}%
+                {% endif %}
+            </div>
+        </div>
         <a class="home-btn" href="{{ url_for('index_with_session') }}">Home</a>
-
     </header>
 
     <main>
@@ -35,16 +44,12 @@
             {% if course.assessments|length > 0 %}
                 <ul>
                 {% for assessment in course.assessments %}
-                    <li>{{ assessment['name'] }}: {{ assessment['mark'] }}</li>
+                    <li>{{ assessment['name'] }}: {{ assessment['earned'] }} / {{ assessment['total'] }} at {{assessment['date']}}</li>
                 {% endfor %}
                 </ul>
             {% else %}
                 <p>No assessments yet!</p>
             {% endif %}
-          
-            
-                        
-          
         </section>
     </main>
 

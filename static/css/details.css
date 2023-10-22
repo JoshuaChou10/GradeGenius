@@ -11,6 +11,15 @@ header {
     color: #fff;
     padding: 10px 0;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grade {
+    text-align: center;
+    font-size: 24px; /* Adjust as needed */
+    margin-top: 10px;
 }
 
 header a {
