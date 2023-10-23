@@ -10,11 +10,20 @@ header {
     background-color: #333;
     color: #fff;
     padding: 10px 0;
-    text-align: center;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* positions children towards the start of the flex container */
     align-items: center;
+    flex-direction: column; /* This stacks the items vertically */
 }
+
+header > div {
+    display: flex;
+    justify-content: center;  /* horizontally center */
+    align-items: center;      /* vertically center */
+    flex-direction: column;   /* stack child elements vertically */
+}
+
+
 
 .grade {
     text-align: center;
@@ -90,4 +99,5 @@ footer {
     border: none;
     cursor: pointer;
     text-decoration: none;
+    margin-right: auto;
 }

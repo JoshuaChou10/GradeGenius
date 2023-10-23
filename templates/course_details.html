@@ -17,17 +17,17 @@
     {% endif %}
 
     <header>
+        <a class="home-btn" href="{{ url_for('index') }}">Home</a>
         <div>
             <h1>{{ course.name }}-{{course.code}}</h1>
             <div class="grade">
                 {% if course.grade==0%}
                     No grade yet
                 {% else %}
-                    {{ course['grade']|round(2) }%}
+                    {{ course['grade']|round(2) }}%
                 {% endif %}
             </div>
         </div>
-        <a class="home-btn" href="{{ url_for('index_with_session') }}">Home</a>
     </header>
 
     <main>

@@ -13,13 +13,13 @@ from app import db
 
 @app.route('/')
 def index():
-    courses = Course.query.all()
+    if 'user_id' in session:
+        courses = Course.query.all()
+    else:
+        courses = session.get('temporary_courses',[])
     return render_template('index.html', courses=courses)
 
-@app.route('/index_with_session')
-def index_with_session():
-    courses = session.get('temporary_courses',[])
-    return render_template('index.html', courses=courses)
+
 
 #TODO, if user just enters the url, like deleting the other parts of the url, then there will be no session courses displayed
 @app.route('/course/<int:course_id>')
@@ -102,7 +102,7 @@ def create_course():
                     'goal': goal
                 })
             session.modified = True
-            return redirect(url_for('index_with_session'))
+            return redirect(url_for('index'))
 
         
        
@@ -119,7 +119,11 @@ def add_assessment(course_id):
         date = datetime.strptime(date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
-
+        if earned>total:
+            session['form_data'] = request.form
+            flash("Earned cannot be more than Total. Eg. 9/10",'danger')
+            return redirect(url_for('add_assessment', course_id=course_id))
+        
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
             user_id = session['user_id']
@@ -144,8 +148,10 @@ def add_assessment(course_id):
                     course['total_marks'] = course['total_marks'] + total
                     course['grade'] = ((total_earned + earned)/course['total_marks'])*100
                     break
-         
+
+        form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
+    
     return render_template('add_assesment.html',course_id=course_id)
 
 
