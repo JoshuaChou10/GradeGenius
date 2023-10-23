@@ -21,7 +21,7 @@ def index():
 
 
 
-#TODO, if user just enters the url, like deleting the other parts of the url, then there will be no session courses displayed
+#TODO, add error handling, if id does not exist
 @app.route('/course/<int:course_id>')
 def course_details(course_id):
     course=None
@@ -116,7 +116,7 @@ def add_assessment(course_id):
 
         name= request.form.get('name')
         date_str=request.form.get('date')
-        date = datetime.strptime(date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
+        date=datetime.strptime(date_str, '%Y-%m-%d').strftime('%B %d, %Y')
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
         if earned>total:
@@ -133,6 +133,9 @@ def add_assessment(course_id):
                 db.session.add(new_assessment)
                 db.session.commit()
                 course.update_mark(earned,total)
+            else:
+                flash('Course not found', 'danger')
+                return redirect(url_for('index'))  # Or wherever you want to redirect to
         else:  # For guest users
             for course in session['temporary_courses']:
                 if str(course['id']) == str(course_id):
