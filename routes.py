@@ -1,4 +1,5 @@
 from flask import session, request, redirect, url_for, render_template,Flask,flash
+from sqlalchemy import asc
 import math
 import uuid
 from datetime import datetime
@@ -41,7 +42,7 @@ def course_details(course_id):
     if not course:  # if course is not found
         return redirect(url_for('index'))
 
-    return render_template('course_details.html', course=course, time_left=time_left if time_left>0 else 0)
+    return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
 
 
 
@@ -116,7 +117,7 @@ def add_assessment(course_id):
 
         name= request.form.get('name')
         date_str=request.form.get('date')
-        date=datetime.strptime(date_str, '%Y-%m-%d').strftime('%B %d, %Y')
+        date=datetime.strptime(date_str, '%Y-%m-%d')
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
         if earned>total:
@@ -127,8 +128,10 @@ def add_assessment(course_id):
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
             user_id = session['user_id']
-            course = Course.query.filter_by(user_id=user_id, course_id=course_id).first()
+            course = Course.query.filter_by(user_id=user_id, course_id=course_id)
+                             
             if course:
+
                 new_assessment = Assessment(name, date, earned,total,course_id=course.id)
                 db.session.add(new_assessment)
                 db.session.commit()
@@ -146,6 +149,7 @@ def add_assessment(course_id):
                         'earned': earned,
                         'total':total,
                     })
+                 
                     session.modified = True
                     total_earned = (course['grade']/100)*course['total_marks']
                     course['total_marks'] = course['total_marks'] + total

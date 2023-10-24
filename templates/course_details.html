@@ -41,14 +41,32 @@
             <!-- Displaying the list of assessments -->
             <h3>Assessments</h3>
             <p><strong>Starting Score:</strong> {{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</p>
-
+    
             {% if course.assessments|length > 0 %}
-                <ul>
-                {% for assessment in course.assessments %}
-                    <li>{{ assessment['name'] }}: {{ assessment['earned'] }} / {{ assessment['total'] }} at {{assessment['date']}}</li>
-                {% endfor %}
-                </ul>
-                Total: {{ (course.total_marks * course.grade) / 100 }} / {{ course.total_marks }}
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Mark</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assessment in course.assessments %}
+                            <tr>
+                                <td>{{ assessment.name }}</td>
+                                <td>{{ assessment.earned }} / {{ assessment.total }}</td>
+                                <td>{{ assessment.date.strftime('%B %d, %Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                        <!-- Total row -->
+                        <tr style="font-weight:bold;">
+                            <td>Total</td>
+                            <td>{{ (course.total_marks * course.grade) / 100 }} / {{ course.total_marks }}</td>
+                            <td></td>  <!-- Empty cell in the Date column -->
+                        </tr>
+                    </tbody>
+                </table>
             {% else %}
                 <p>No assessments yet!</p>
             {% endif %}
