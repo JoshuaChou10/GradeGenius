@@ -3,7 +3,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('images/background.png');
+    background-image: url('./images/background.png');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -11,9 +11,7 @@ body {
     justify-content: space-between;
 }
 
-.header, .footer {
-    flex-shrink: 0; /* Prevents header and footer from shrinking */
-}
+
 
 .button-container {
     flex-grow: 1; /* Allows button container to grow and take up available space */

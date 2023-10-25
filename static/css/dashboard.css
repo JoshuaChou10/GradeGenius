@@ -35,17 +35,5 @@ main {
 .courses-list ul li a:hover {
     text-decoration: underline;
 }
-header a {
-    color: #fff;
-    text-decoration: none;
-    margin: 1rem;
-    display: inline-block;
-    background-color: #555;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-}
 
-header a:hover {
-    background-color: #777;
-}
 
