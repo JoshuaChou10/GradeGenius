@@ -1,25 +1,9 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
+@import url('globals.css');
+
 html, body {
     height: 100%;
 }
 
-header, footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1rem 0;
-}
-footer {
-    position: absolute; 
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
 
 main {
     width: 80%;

@@ -5,6 +5,7 @@
 </head>
 <body>
     <h1>Add New Course</h1>
+    <a class="home-btn" href="{{ url_for('dashboard') }}">Dashboard</a>
 
     <form action="/course/create" method="post">
         <label for="course_name">Course Name:</label>

@@ -17,7 +17,7 @@
     {% endif %}
 
     <header>
-        <a class="home-btn" href="{{ url_for('index') }}">Home</a>
+        <a class="home-btn" href="{{ url_for('dashboard') }}">Dashboard</a>
         <div>
             <h1>{{ course.name }}-{{course.code}}</h1>
             <div class="grade">
@@ -31,6 +31,11 @@
     </header>
 
     <main>
+        {% if course.grade >= course.goal %}
+        <p class="goal_reached">You are reaching your target grade!</p>
+    {% else %}
+        <p class="goal_not_reached">You are {{ course.goal - course.grade }}% away from reaching your target grade.</p>
+    {% endif %}
         <section class="course-details">
             <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-assessment-btn">Add Assessment</a>
             <h2>Course Information</h2>

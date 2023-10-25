@@ -1,32 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Manager</title>
+<link rel="stylesheet"  href="{{ url_for('static', filename='css/main.css') }}">
 </head>
+
 <body>
-    
     <header>
-        <h1>Welcome to the Courses Dashboard</h1>
+        <h1>The Course Manager</h1>
     </header>
-
-    <main>
-        <section class="courses-list">
-            <h2>Your Courses</h2>
-            <ul>
-                {% for course in courses %}
-                    <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
-
-                {% endfor %}
-            </ul>
-        </section>
-        <a href="{{ url_for('create_course') }}" class="btn">Add Course</a>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
-    </footer>
+<div class="button-container">
+    <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
+</div>
+<footer>
+    <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
+</footer>
 </body>
+
 </html>

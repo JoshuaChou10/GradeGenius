@@ -1,20 +1,7 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
+@import url('globals.css');
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-    display: flex;
-    justify-content: flex-start; /* positions children towards the start of the flex container */
-    align-items: center;
-    flex-direction: column; /* This stacks the items vertically */
-}
+
+
 
 header > div {
     display: flex;
@@ -29,6 +16,16 @@ header > div {
     text-align: center;
     font-size: 24px; /* Adjust as needed */
     margin-top: 10px;
+}
+.goal_reached {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.gaol_not_reached{
+    color: blue;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 header a {
@@ -81,15 +78,6 @@ li {
     padding: 5px 0;
 }
 
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
 
 .home-btn {
     display: inline-block;

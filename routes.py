@@ -11,14 +11,17 @@ from app import db
  # Method to calculate days remaining for the course to end
 
 
-
 @app.route('/')
 def index():
+    return render_template('index.html')
+    
+@app.route('/dashboard')
+def dashboard():
     if 'user_id' in session:
         courses = Course.query.all()
     else:
         courses = session.get('temporary_courses',[])
-    return render_template('index.html', courses=courses)
+    return render_template('dashboard.html', courses=courses)
 
 
 
@@ -30,7 +33,7 @@ def course_details(course_id):
     if 'user_id' in session:
         course = Course.query.get(course_id)
         if not course:
-            return redirect(url_for('index'))
+            return redirect(url_for('dashboard'))
         days_left=course.days_remaining()
         time_left = f"{math.floor(days_left/30)} months and {days_left%30} days left"
     else:
@@ -40,7 +43,7 @@ def course_details(course_id):
                 time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
                 
     if not course:  # if course is not found
-        return redirect(url_for('index'))
+        return redirect(url_for('dashboard'))
 
     return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
 
@@ -103,7 +106,7 @@ def create_course():
                     'goal': goal
                 })
             session.modified = True
-            return redirect(url_for('index'))
+            return redirect(url_for('dashboard'))
 
         
        
@@ -138,7 +141,7 @@ def add_assessment(course_id):
                 course.update_mark(earned,total)
             else:
                 flash('Course not found', 'danger')
-                return redirect(url_for('index'))  # Or wherever you want to redirect to
+                return redirect(url_for('dashboard'))  # Or wherever you want to redirect to
         else:  # For guest users
             for course in session['temporary_courses']:
                 if str(course['id']) == str(course_id):
