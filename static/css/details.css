@@ -1,91 +1,133 @@
-@import url('globals.css');
-
-
-
-
-header > div {
-    display: flex;
-    justify-content: center;  /* horizontally center */
-    align-items: center;      /* vertically center */
-    flex-direction: column;   /* stack child elements vertically */
+@import url("globals.css");
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
+h1, h2, h3, p {
+    margin: 0;
+}
 
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-.grade {
+/* Notification Bar */
+.notification-bar {
+    background-color: #ff4d4d;
+    color: white;
     text-align: center;
-    font-size: 24px; /* Adjust as needed */
-    margin-top: 10px;
-}
-.goal_reached {
-    color: green;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.gaol_not_reached{
-    color: blue;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-header a {
-    color: #fff;
-    margin-left: 15px;
-    text-decoration: none;
+    padding: 10px;
     font-size: 16px;
 }
 
-header a:hover {
-    text-decoration: underline;
+
+
+.home-btn {
+    color: #fff;
+    text-decoration: none;
+    background-color: #4CAF50;
+    padding: 8px 15px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
 }
 
+.home-btn:hover {
+    background-color: #388E3C;
+}
+
+.course-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.grade {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.goal_reached, .goal_not_reached {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.goal_reached {
+    color: green;
+}
+
+.goal_not_reached {
+    color: orange;
+}
+
+/* Main Content Styles */
 main {
-    width: 80%;
-    margin: 20px auto;
     background-color: #fff;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.course-details {
-    margin-top: 20px;
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .add-assessment-btn {
     display: inline-block;
+    padding: 10px 20px;
     background-color: #007BFF;
     color: #fff;
-    padding: 10px 15px;
-    text-decoration: none;
     border-radius: 3px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .add-assessment-btn:hover {
     background-color: #0056b3;
 }
 
-h2, h3 {
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+.info-container {
+    margin: 20px 0;
 }
 
-ul {
-    list-style-type: none;
-    padding-left: 0;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
 }
 
-li {
-    padding: 5px 0;
+table, th, td {
+    border: 1px solid #ddd;
 }
 
+th, td {
 
-.home-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50; /* or any color you want */
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    margin-right: auto;
+    padding: 15px 20px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.total-row {
+    font-weight: bold;
+}
+
+main {
+    padding: 20px 40px;
+}
+.info-container p {
+    margin: 10px 0;
 }
