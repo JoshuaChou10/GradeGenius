@@ -10,9 +10,22 @@
     
     <header>
         <h1>Courses Dashboard</h1>
+        <aside class="sidebar">
+            <ul>
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">Calendar</a></li>
+     <hr>
+        
+                <li class="courses-heading">Courses</li>
+                {% for course in courses %}
+                    <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </aside>
     </header>
-
+   
     <main>
+       
         <section class="courses-list">
             <h2>Your Courses</h2>
             <ul>
