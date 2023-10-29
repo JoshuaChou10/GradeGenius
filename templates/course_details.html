@@ -45,14 +45,27 @@
         <section class="course-details">
             <div class="section-header">
                 <h2>Course Information</h2>
-                <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-assessment-btn">+ Add Assessment</a>
+                <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-btn">+ Add Assessment</a>
+                <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-btn">+ Add Grade Section</a>
             </div>
             
-            <div class="info-container">
-                <p><strong>Code: </strong> {{ course.code }}</p>
-                <p><strong>Description: </strong> {{ course.description }}</p>
-                <p><strong>Days left for completion: </strong> {{ time_left }}</p>
-                <p><strong>Course Ends: </strong>{{course.end_date.strftime('%B %d, %Y') }}</p>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Code</label>
+                    <p>{{ course.code }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Description</label>
+                    <p>{{ course.description }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Days left</label>
+                    <p>{{ time_left }}</p>
+                </div>
+                <div class="info-item">
+                    <label>End Date</label>
+                    <p>{{course.end_date.strftime('%B %d, %Y') }}</p>
+                </div>
             </div>
 
             <!-- Assessments Table -->
