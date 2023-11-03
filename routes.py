@@ -21,7 +21,7 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' in session:
-        courses = Course(user_id=session['user_id']).all()
+        courses = Course.query.filter_by(user_id=session['user_id']).all()
     else:
         courses = session.get('temporary_courses',[])
     return render_template('dashboard.html', courses=courses)
@@ -188,8 +188,7 @@ def signup():
         if existing_user:
             flash('This username is already taken. Please choose another one.', 'danger')
             return redirect(url_for('signup'))
-
-        # Hash the password here before storing (use Werkzeug or bcrypt). I'll skip that for simplicity now.
+        
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(username=username, password=hashed_password,GPA=0,goal=0)
         db.session.add(new_user)
