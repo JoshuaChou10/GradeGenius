@@ -79,7 +79,7 @@ main {
     align-items: center;
 }
 
-.add-assessment-btn {
+.add-btn {
     display: inline-block;
     padding: 10px 20px;
     background-color: #007BFF;
@@ -89,7 +89,7 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.add-assessment-btn:hover {
+.add-btn:hover {
     background-color: #0056b3;
 }
 
@@ -130,4 +130,30 @@ main {
 }
 .info-container p {
     margin: 10px 0;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.info-item p {
+    font-size: 1.1em;
+    color: #333;
 }

@@ -1,4 +1,6 @@
 from flask import session, request, redirect, url_for, render_template,Flask,flash
+
+from flask_bcrypt import Bcrypt
 from sqlalchemy import asc
 import math
 import uuid
@@ -9,6 +11,7 @@ from flask import session
 from app import db
 
  # Method to calculate days remaining for the course to end
+bcrypt = Bcrypt(app)
 
 
 @app.route('/')
@@ -18,7 +21,7 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' in session:
-        courses = Course.query.all()
+        courses = Course(user_id=session['user_id']).all()
     else:
         courses = session.get('temporary_courses',[])
     return render_template('dashboard.html', courses=courses)
@@ -29,13 +32,13 @@ def dashboard():
 @app.route('/course/<int:course_id>')
 def course_details(course_id):
     course=None
-    time_left = "N/A"
+    time_left = 0
     if 'user_id' in session:
         course = Course.query.get(course_id)
         if not course:
             return redirect(url_for('dashboard'))
         days_left=course.days_remaining()
-        time_left = f"{math.floor(days_left/30)} months and {days_left%30} days left"
+        time_left = days_left
     else:
         for c in session['temporary_courses']:
             if c['id'] == course_id:
@@ -56,8 +59,6 @@ def create_course():
         # Extract the course data from the form
         course_name = request.form.get('course_name')
           # Check if a course with that name already exists
-       
-
         course_code = request.form.get('course_code')
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
@@ -76,7 +77,15 @@ def create_course():
         # If the user is logged in, store the course in the database
         if 'user_id' in session:
             user_id = session['user_id']
-            new_course = Course(name=course_name, code=course_code, end_date=end_date, goal=goal, user_id=user_id)
+            new_course = Course(user_id=user_id,
+                                code=course_code,
+                                name=course_name,
+                                end_date=end_date, 
+                                starting_grade=grade,
+                                starting_marks=total_marks,
+                                grade=grade,
+                                total_marks=total_marks,
+                                goal=goal)
             db.session.add(new_course)
             db.session.commit()
             return redirect(url_for('course_details', course_id=new_course.id))
@@ -131,14 +140,15 @@ def add_assessment(course_id):
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
             user_id = session['user_id']
-            course = Course.query.filter_by(user_id=user_id, course_id=course_id)
+            course = Course.query.filter_by(id=course_id,user_id=user_id).first()
                              
             if course:
-
-                new_assessment = Assessment(name, date, earned,total,course_id=course.id)
+                new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
                 db.session.add(new_assessment)
                 db.session.commit()
-                course.update_mark(earned,total)
+                total_earned = (course.grade/100)*course.total_marks
+                course.total_marks = course.total_marks + total
+                course.grade = ((total_earned + earned)/course.total_marks)*100
             else:
                 flash('Course not found', 'danger')
                 return redirect(url_for('dashboard'))  # Or wherever you want to redirect to
@@ -166,34 +176,64 @@ def add_assessment(course_id):
 
 
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
-    # ... user registration logic ...
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        # Check if a user with this username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        
+        if existing_user:
+            flash('This username is already taken. Please choose another one.', 'danger')
+            return redirect(url_for('signup'))
 
-    if 'temporary_courses' in session:
-        temp_courses_data = session['temporary_courses']
-        for course_data in temp_courses_data:
-            temp_course = Course(name=course_data['name'], code=course_data['code'], user_id=new_user.id)
-            db.session.add(temp_course)
-            db.session.flush()  # to get an ID for the new course before committing
-            for assessment_data in course_data['assessments']:
-                new_assessment = Assessment(name=assessment_data['name'], mark=assessment_data['mark'], course_id=temp_course.id)
-                db.session.add(new_assessment)
-            db.session.commit()
-        session.pop('temporary_courses', None)
+        # Hash the password here before storing (use Werkzeug or bcrypt). I'll skip that for simplicity now.
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        new_user = User(username=username, password=hashed_password,GPA=0,goal=0)
+        db.session.add(new_user)
+        db.session.commit()
+        
+        session['user_id'] = str(new_user.id)
+        
+        # Handling temporary courses for the newly registered user
+        if 'temporary_courses' in session:
+            temp_courses_data = session['temporary_courses']
+            for course_data in temp_courses_data:
+                temp_course = Course(name=course_data['name'], code=course_data['code'], user_id=new_user.id)
+                db.session.add(temp_course)
+                db.session.flush()  # to get an ID for the new course before committing
+                for assessment_data in course_data['assessments']:
+                    new_assessment = Assessment(name=assessment_data['name'], date=assessment_data['date'], earned=assessment_data['earned'], total=assessment_data['total'], course_id=temp_course.id)
+                    db.session.add(new_assessment)
+                db.session.commit()
+            session.pop('temporary_courses', None)
+        
+        return redirect(url_for('dashboard'))
+    return render_template('signup.html')
 
-    return redirect(url_for('dashboard'))
 
-
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    # ... authentication logic ...
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-    # Let's assume the user was successfully authenticated and is stored in the variable `user`
-    if user_authenticated:  
-        session['user_id'] = user.id  # Store the logged-in user's ID in the session
+        # Authenticate the user using the provided credentials
+        user = User.query.filter_by(username=username).first()
+        
+        # Verify password (assuming you have a hashed password stored)
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid username or password. Please try again.', 'danger')
+            return redirect(url_for('login'))
 
-    return redirect(url_for('index'))
+    return render_template('login.html')
+
 
 @app.route('/logout')
 def logout():

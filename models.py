@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 db = SQLAlchemy()
 class User(db.Model):
+    username=db.Column(db.String, nullable=False)
+    password=db.Column(db.String,nullable=False)
     id = db.Column(db.Integer, primary_key=True)
     courses = db.relationship('Course', backref='user', lazy=True)
     GPA = db.Column(db.Float, nullable=True)  # GPA is usually a float, not an integer
