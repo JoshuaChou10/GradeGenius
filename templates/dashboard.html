@@ -1,28 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses Dashboard</title>
+<!-- dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Courses Dashboard{% endblock %}
+
+{% block stylesheets %}
+    <!-- Specific stylesheet for the dashboard page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-</head>
-<body>
-    
-    <header>
-        <h1>Courses Dashboard</h1>
-        <aside class="sidebar">
-            <ul>
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Calendar</a></li>
-     <hr>
-        
-                <li class="courses-heading">Courses</li>
-                {% for course in courses %}
-                    <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </aside>
-    </header>
+{% endblock %}
+
+{% block header %}Courses Dashboard{% endblock %}
+
+{% block content %}
     {% if user %}
     <div id="user-info">
         <!-- Assuming you have a profile_pic_url field in your User model -->
@@ -30,23 +18,15 @@
         <span>{{ user.username }}</span>
     </div>
     {% endif %}
-    <main>
-       
-        <section class="courses-list">
-            <h2>Your Courses</h2>
-            <ul>
-                {% for course in courses %}
-                    <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
-
-                {% endfor %}
-            </ul>
-        </section>
-        <a href="{{ url_for('create_course') }}" class="btn">Add Course</a>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
-    </footer>
-</body>
-
-</html>
+    
+    <section class="courses-list">
+        <h2>Your Courses</h2>
+        <ul>
+            {% for course in courses %}
+                <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+    
+    <a href="{{ url_for('create_course') }}" class="btn">Add Course</a>
+{% endblock %}

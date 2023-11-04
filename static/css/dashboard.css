@@ -1,4 +1,4 @@
-@import url('globals.css');
+
 
 html, body {
     height: 100%;
@@ -10,15 +10,6 @@ body {
     background-color: white;
 }
 
-/* Top Bar */
-.courses-heading {
-    font-weight: bold;
-   
-    color: black;
-    padding: 15px 0; /* Increased padding for spacing */
-    text-align: center;
-    margin: 0; /* Resetting margin */
-}
 
 
 .courses-list h2 {

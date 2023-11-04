@@ -1,0 +1,109 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+header, footer {
+    background-color: #2c3e50;
+
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    flex-shrink: 0; /* Prevents header and footer from shrinking */
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+header a, footer a {
+    color: #3498db;
+}
+
+
+ 
+.hamburger {
+    display: block;
+    cursor: pointer;
+    /* Additional styling for the hamburger icon */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px; /* Adjust the width as needed */
+    height: 100vh; /* Viewport Height */
+    background-color: #fff; /* White background */
+    border-right: 1px solid #ececec; /* Right border */
+    padding-top: 20px;
+    padding-left: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* subtle shadow */
+    position: fixed; /* Fixed position */
+    overflow-y: auto; /* Enable scroll if content is longer than the screen */
+    border-top-right-radius: 8px; /* Rounded corners on the top right */
+    border-bottom-right-radius: 8px; /* Rounded corners on the bottom right */
+    left: -250px; /* Initially hide the sidebar */
+}
+
+
+.sidebar.visible {
+    left: 0; /* Bring the sidebar into view */
+}
+.content-shift {
+    margin-left: 250px;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding-left: 0; /* Remove default padding */
+    margin-top: 0; /* Align to the top */
+}
+
+.sidebar li {
+    padding: 10px 20px;
+    text-align: left;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+    background-color: #f6f7f8; /* Light grey background */
+    border-radius: 0 30px 30px 0; /* Rounded corners on the right */
+    box-shadow: inset 5px 0 10px -5px rgba(0, 0, 0, 0.1); /* Inner shadow on the right */
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #3c4043; /* Dark grey text color for contrast */
+    font-weight: 500; /* Slightly bolder font */
+    display: block;
+}
+
+.sidebar .courses-heading {
+    color: #5f6368; /* Darker grey text */
+    padding: 15px 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85em; /* Smaller font size */
+}
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+/* Main Content */
+main {
+    flex: 1;
+    width: 80%;
+    margin: 2rem auto;
+    margin-left: 250px;
+    background-color: #fff;
+    padding: 2rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}

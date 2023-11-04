@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Assessment</title>
+
+
+{% extends 'base.html' %}
+
+{% block title %}Add Assessment{% endblock %}
+
+{% block stylesheets %}
+    <!-- Styles specific to the add_assessment page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/add_assessment.css') }}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-6Q8xRTZg4O3g6Ll4+BF6uF8zSDdruBtEbt0/0atH6FQgFgOBVgFB2h4CkE2Fj6dk" crossorigin="anonymous">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <header>
         <h1>Add Assessment</h1>
         <a href="{{ url_for('course_details', course_id=course_id) }}">Back to Course Details</a>
@@ -23,37 +26,35 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
+        
         <section class="add-assessment-form">
             <form action="{{ url_for('add_assessment', course_id=course_id) }}" method="post">
-                <div class="form-group">
-                    <label for="name">Assessment Name:</label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ session['form_data']['name'] if 'form_data' in session and 'name' in session['form_data'] else '' }}" required>
-                </div>
+                <form action="{{ url_for('add_assessment', course_id=course_id) }}" method="post">
+                    <div class="form-group">
+                        <label for="name">Assessment Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ session['form_data']['name'] if 'form_data' in session and 'name' in session['form_data'] else '' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" class="form-control" value="{{ session['form_data']['date'] if 'form_data' in session and 'date' in session['form_data'] else '' }}" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="earned">Earned Marks:</label>
+                        <input type="number" id="earned" name="earned" class="form-control" value="{{ session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '' }}" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="total">Total Marks:</label>
+                        <input type="number" id="total" name="total" class="form-control" value="{{ session['form_data']['total'] if 'form_data' in session and 'total' in session['form_data'] else '' }}" required>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary">Add Assessment</button>
+                </form>
                 
-                <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" class="form-control" value="{{ session['form_data']['date'] if 'form_data' in session and 'date' in session['form_data'] else '' }}" required>
-                </div>
 
-                <div class="form-group">
-                    <label for="earned">Earned Marks:</label>
-                    <input type="number" id="earned" name="earned" class="form-control" value="{{ session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '' }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="total">Total Marks:</label>
-                    <input type="number" id="total" name="total" class="form-control" value="{{ session['form_data']['total'] if 'form_data' in session and 'total' in session['form_data'] else '' }}" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Add Assessment</button>
             </form>
         </section>
     </main>
-
-
-    <footer>
-        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
-    </footer>
-</body>
-
-</html>
+{% endblock %}

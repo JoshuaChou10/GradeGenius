@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- course_details.html -->
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ course.name }} - Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css') }}">
-</head>
+{% block title %}{{ course.name }} - Details{% endblock %}
 
-<body>
+{% block stylesheets %}
+    <!-- Specific stylesheet for the course details page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/course_details.css') }}">
+{% endblock %}
 
+{% block content %}
     <!-- Notification Bar -->
     {% if time_left == 0 %}
     <div class="notification-bar">
@@ -17,30 +16,14 @@
     </div>
     {% endif %}
 
-    <!-- Header Section -->
+    <!-- Main Content -->
     <header>
-   
-            <h1>{{ course.name }} ({{course.code}})</h1>
-
+        <h1>{{ course.name }} ({{course.code}})</h1>
         <div class="course-info">
-            <span class="grade">
-                {% if course.grade==0 %}
-                    No grade yet
-                {% else %}
-                    {{ course['grade']|round(2) }}%
-                {% endif %}
-            </span>
-            {% if course.grade >= course.goal %}
-            <span class="goal_reached">You are reaching your target grade!</span>
-            {% elif course.grade==0 %}
-            <span class="goal_not_reached">Your target grade is {{course['goal']|round(2)}}%</span>
-            {% else %}
-            <span class="goal_not_reached">You are {{ (course.goal - course.grade)|round(2) }}% away from reaching your target grade.</span>
-            {% endif %}
+            <!-- Content -->
         </div>
     </header>
 
-    <!-- Main Content Section -->
     <main>
         <section class="course-details">
             <div class="section-header">
@@ -102,11 +85,4 @@
             {% endif %}
         </section>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
-    </footer>
-
-</body>
-</html>
+{% endblock %}
