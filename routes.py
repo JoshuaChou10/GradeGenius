@@ -147,10 +147,11 @@ def add_assessment(course_id):
             if course:
                 new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
                 db.session.add(new_assessment)
-                db.session.commit()
                 total_earned = (course.grade/100)*course.total_marks
                 course.total_marks = course.total_marks + total
                 course.grade = ((total_earned + earned)/course.total_marks)*100
+                db.session.commit()
+                
             else:
                 flash('Course not found', 'danger')
                 return redirect(url_for('dashboard'))  # Or wherever you want to redirect to
