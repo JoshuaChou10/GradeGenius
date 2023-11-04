@@ -43,3 +43,14 @@ body {
 .courses-list ul li a:hover {
     text-decoration: underline;
 }
+#user-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+#user-info img {
+    border-radius: 50%;
+    margin-right: 10px;
+}

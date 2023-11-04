@@ -20,11 +20,13 @@ def index():
     
 @app.route('/dashboard')
 def dashboard():
+    user = None  
     if 'user_id' in session:
         courses = Course.query.filter_by(user_id=session['user_id']).all()
+        user = User.query.filter_by(id=session['user_id']).first()
     else:
-        courses = session.get('temporary_courses',[])
-    return render_template('dashboard.html', courses=courses)
+        courses = session.get('temporary_courses', [])
+    return render_template('dashboard.html', courses=courses, user=user)
 
 
 
@@ -200,7 +202,16 @@ def signup():
         if 'temporary_courses' in session:
             temp_courses_data = session['temporary_courses']
             for course_data in temp_courses_data:
-                temp_course = Course(name=course_data['name'], code=course_data['code'], user_id=new_user.id)
+                temp_course=Course(user_id=session['user_id'],
+                                code=course_data["code"],
+                                name=course_data["name"],
+                                end_date=course_data["end_date"], 
+                                starting_grade=course_data["starting_grade"],
+                                starting_marks=course_data["starting_marks"],
+                                grade=course_data["grade"],
+                                total_marks=course_data["total_marks"],
+                                goal=course_data["goal"])
+         
                 db.session.add(temp_course)
                 db.session.flush()  # to get an ID for the new course before committing
                 for assessment_data in course_data['assessments']:
@@ -222,7 +233,7 @@ def login():
         # Authenticate the user using the provided credentials
         user = User.query.filter_by(username=username).first()
         
-        # Verify password (assuming you have a hashed password stored)
+
         if user and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.id
             flash('Logged in successfully!', 'success')

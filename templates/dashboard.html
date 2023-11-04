@@ -23,7 +23,13 @@
             </ul>
         </aside>
     </header>
-   
+    {% if user %}
+    <div id="user-info">
+        <!-- Assuming you have a profile_pic_url field in your User model -->
+        <img src="{{ user.profile_pic_url | default('/path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50">
+        <span>{{ user.username }}</span>
+    </div>
+    {% endif %}
     <main>
        
         <section class="courses-list">
