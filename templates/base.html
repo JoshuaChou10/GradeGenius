@@ -14,7 +14,7 @@
          <div class="hamburger" onclick="toggleSidebar()">
             &#9776; <!-- Unicode character for hamburger icon -->
         </div>
-        <h1>{% block header %}Courses Dashboard{% endblock %}</h1>
+        <h1>{% block header %}{% endblock %}</h1>
         <aside class="sidebar">
             <!-- Sidebar content -->
             <ul>
@@ -31,6 +31,10 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+    
+    <footer>
+        <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
+    </footer>
     <script>
         function toggleSidebar() {
             var sidebar = document.querySelector('.sidebar');
