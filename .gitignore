@@ -1,5 +1,5 @@
 
-*.secret
+
 config.py
 
 instance/*
