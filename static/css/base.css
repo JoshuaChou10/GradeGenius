@@ -61,7 +61,13 @@ header a, footer a {
     transition: margin-left 0.3s; /* Smooth transition for the margin */
     margin-left: 100px;; /* Set the initial margin to 0 */
 }
-
+.notification-bar {
+    background-color: #ff4d4d;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+}
 .sidebar.visible {
     left: 0; /* Bring the sidebar into view */
 }
