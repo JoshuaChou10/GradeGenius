@@ -7,8 +7,11 @@
     <!-- Specific stylesheet for the course details page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/course_details.css') }}">
 {% endblock %}
-{% block header %}{{ course.name }} - {{course.code}}{% endblock %}
+{% block header %}{{ course.name }} - {{course.grade |round(2)}}%{% endblock %}
+
+
 {% block content %}
+
     <!-- Notification Bar -->
     {% if time_left == 0 %}
     <div class="notification-bar">
