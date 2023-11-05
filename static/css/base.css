@@ -61,13 +61,7 @@ header a, footer a {
     transition: margin-left 0.3s; /* Smooth transition for the margin */
     margin-left: 100px;; /* Set the initial margin to 0 */
 }
-.notification-bar {
-    background-color: #ff4d4d;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 16px;
-}
+
 .sidebar.visible {
     left: 0; /* Bring the sidebar into view */
 }
@@ -123,4 +117,36 @@ main {
     background-color: #fff;
     padding: 2rem;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+/* Flash message styles */
+.flash-message {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.flash-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.flash-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.flash-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.flash-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
 }
