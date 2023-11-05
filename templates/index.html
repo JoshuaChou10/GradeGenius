@@ -1,11 +1,13 @@
-{% extends 'base.html' %}
-{% block title %}Classify-The Course Manager{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Manager</title>
+<link rel="stylesheet"  href="{{ url_for('static', filename='css/main.css') }}">
+</head>
 
-{% block stylesheets %}
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-{% endblock %}
-{% block content %}
+<body>
     <header>
         <h1>The Course Manager</h1>
         <p>Master Your Academic Journey</p>
@@ -14,7 +16,9 @@
     <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
    
 </div>
-
-{% endblock %}
+<footer>
+    <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
+</footer>
+</body>
 
 </html>

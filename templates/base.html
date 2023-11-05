@@ -1,47 +1,47 @@
-<!-- base.html -->
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  
     {% block stylesheets %}{% endblock %}
-    
 </head>
 <body>
     <header>
-         <!-- Hamburger Menu Icon -->
-         <div class="hamburger" onclick="toggleSidebar()">
-            &#9776; <!-- Unicode character for hamburger icon -->
+        <div class="header-content">
+            <div class="hamburger" onclick="toggleSidebar()">
+                &#9776; <!-- Unicode character for hamburger icon -->
+            </div>
+            <h1>{% block header %}{% endblock %}</h1>
         </div>
-        <h1>{% block header %}{% endblock %}</h1>
-        <aside class="sidebar">
-            <!-- Sidebar content -->
-            <ul>
-                <li class="{% if request.endpoint == 'dashboard' %}active{% endif %}"><a href="{{ url_for('dashboard') }}">Home</a></li>
-                <li><a href="#">Calendar</a></li>
-                <hr>
-                <li class="courses-heading">Courses</li>
-                {% for course in courses %}
-                    <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </aside>
+        <hr>
     </header>
-    <main>
+    <aside class="sidebar">
+        <!-- Sidebar content -->
+        <ul>
+            <li class="{% if request.endpoint == 'dashboard' %}active{% endif %}"><a href="{{ url_for('dashboard') }}">Home</a></li>
+            <li><a href="#">Calendar</a></li>
+            <hr>
+            <li class="courses-heading">Courses</li>
+            {% for course in courses %}
+                <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
+    <main class="content">
         {% block content %}{% endblock %}
     </main>
-    
     <footer>
         <p>&copy; 2023 Courses Dashboard. All rights reserved.</p>
     </footer>
     <script>
         function toggleSidebar() {
-            var sidebar = document.querySelector('.sidebar');
-            var content = document.querySelector('.content');
-            sidebar.classList.toggle('visible');
-            content.classList.toggle('content-shift');
-        }
+    var sidebar = document.querySelector('.sidebar');
+    var content = document.querySelector('.content');
+    sidebar.classList.toggle('visible');
+    content.classList.toggle('content-shift');
+}
     </script>
 </body>
 </html>

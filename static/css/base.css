@@ -32,7 +32,7 @@ header a, footer a {
 .hamburger {
     display: block;
     cursor: pointer;
-    /* Additional styling for the hamburger icon */
+    margin-right: 10px;
 }
 
 /* Sidebar */
@@ -51,6 +51,16 @@ header a, footer a {
     left: -250px; /* Initially hide the sidebar */
 }
 
+.header-content {
+    display: flex; /* Use flexbox to align items in a row */
+    align-items: center; /* Center items vertically */
+    justify-content: start; /* Align items to the start of the container */
+    padding: 0 20px; /* Add some padding on the sides */
+}
+.content {
+    transition: margin-left 0.3s; /* Smooth transition for the margin */
+    margin-left: 100px;; /* Set the initial margin to 0 */
+}
 
 .sidebar.visible {
     left: 0; /* Bring the sidebar into view */
@@ -101,6 +111,7 @@ hr {
 main {
     flex: 1;
     width: 80%;
+
     margin: 2rem auto;
     margin-left: 250px;
     background-color: #fff;

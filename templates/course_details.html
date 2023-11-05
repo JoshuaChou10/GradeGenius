@@ -1,13 +1,13 @@
 <!-- course_details.html -->
 {% extends 'base.html' %}
 
-{% block title %}{{ course.name }} - Details{% endblock %}
+
 
 {% block stylesheets %}
     <!-- Specific stylesheet for the course details page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/course_details.css') }}">
 {% endblock %}
-
+{% block header %}{{ course.name }} - {{course.code}}{% endblock %}
 {% block content %}
     <!-- Notification Bar -->
     {% if time_left == 0 %}
@@ -16,13 +16,7 @@
     </div>
     {% endif %}
 
-    <!-- Main Content -->
-    <header>
-        <h1>{{ course.name }} ({{course.code}})</h1>
-        <div class="course-info">
-            <!-- Content -->
-        </div>
-    </header>
+   
 
     <main>
         <section class="course-details">
