@@ -36,19 +36,21 @@ def course_details(course_id):
     course=None
     time_left = 0
     if 'user_id' in session:
+       
         course = Course.query.get(course_id)
-        if not course:
-            return redirect(url_for('dashboard'))
+        if not course or course.user_id!=session['user_id']:
+             return render_template("not_found.html")
         days_left=course.days_remaining()
         time_left = days_left
     else:
-        for c in session['temporary_courses']:
+        temporary_courses = session.get('temporary_courses', [])  # Use .get() to avoid KeyError
+        for c in temporary_courses:
             if c['id'] == course_id:
                 course=c
                 time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
-                
-    if not course:  # if course is not found
-        return redirect(url_for('dashboard'))
+        if not course:
+           
+            return render_template("not_found.html")
 
     return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
 
