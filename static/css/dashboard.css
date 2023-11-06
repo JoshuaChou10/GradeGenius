@@ -5,11 +5,6 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
-body {
-    display: flex;
-    background-color: white;
-}
-
 
 
 .courses-list h2 {

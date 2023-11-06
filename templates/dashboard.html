@@ -11,13 +11,7 @@
 {% block header %}Courses Dashboard{% endblock %}
 
 {% block content %}
-    {% if user %}
-    <div id="user-info">
-   
-        <img src="{{ user.profile_pic_url | default('/path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50">
-        <span>{{ user.username }}</span>
-    </div>
-    {% endif %}
+    
     
     <section class="courses-list">
         <h2>Your Courses</h2>
