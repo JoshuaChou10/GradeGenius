@@ -1,4 +1,4 @@
-from flask import session, request, redirect, url_for, render_template,Flask,flash
+from flask import session, request, redirect, url_for, render_template,Flask,flash,jsonify
 
 from flask_bcrypt import Bcrypt
 from sqlalchemy import asc
@@ -13,11 +13,35 @@ from app import db
  # Method to calculate days remaining for the course to end
 bcrypt = Bcrypt(app)
 
+@app.context_processor
+def inject_user():
+    user = None
+    if 'user_id' in session:
+        user = User.query.filter_by(id=session['user_id']).first()
+    return dict(user=user)
+
+
+
+
+# def course_existing(course_name):
+#     if 'user_id' in session:
+#         course = Course.query.filter_by(name=course_name, user_id=session['user_id']).first()
+#         return course is not None
+#     else:
+#         courses = session.get('temporary_courses', [])
+#         for course in courses:
+#             if course["name"]==course_name:
+#                 return True
+#         return False
+
+   
+
+    
 
 @app.route('/')
 def index():
     return render_template('index.html')
-    
+
 @app.route('/dashboard')
 def dashboard():
     user = None  
@@ -37,11 +61,12 @@ def course_details(course_id):
     time_left = 0
     if 'user_id' in session:
        
-        course = Course.query.get(course_id)
-        if not course or course.user_id!=session['user_id']:
+        course = Course.query.filter_by(id=course_id,user_id=session["user_id"]).first()
+        if not course:
              return render_template("not_found.html")
         days_left=course.days_remaining()
         time_left = days_left
+
     else:
         temporary_courses = session.get('temporary_courses', [])  # Use .get() to avoid KeyError
         for c in temporary_courses:
@@ -49,9 +74,8 @@ def course_details(course_id):
                 course=c
                 time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
         if not course:
-           
             return render_template("not_found.html")
-
+        flash('signup_prompt', 'info')
     return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
 
 
@@ -62,7 +86,8 @@ def create_course():
     if request.method == 'POST':
         # Extract the course data from the form
         course_name = request.form.get('course_name')
-          # Check if a course with that name already exists
+     
+        
         course_code = request.form.get('course_code')
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
@@ -96,15 +121,9 @@ def create_course():
         # If the user is not logged in, store the course data temporarily in the session
         else:
        
-            course_exists=False
+            
             if 'temporary_courses' not in session:
                 session['temporary_courses'] = []
-            for course in session['temporary_courses']:
-                if course['name']==course_name:
-                     flash('A course with that name already exists!', 'info')
-                     course_exists=True
-                     break
-            if not course_exists:
                 temp_id = int(uuid.uuid4())
                 session['temporary_courses'].append({
                     'id': temp_id,
@@ -119,6 +138,7 @@ def create_course():
                     'goal': goal
                 })
             session.modified = True
+         
             return redirect(url_for('dashboard'))
 
         
@@ -239,7 +259,7 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.id
-            flash('Logged in successfully!', 'success')
+            flash(f'Logged in as {user.username}', 'success')
             return redirect(url_for('dashboard'))
         else:
             flash('Invalid username or password. Please try again.', 'danger')

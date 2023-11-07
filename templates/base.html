@@ -20,6 +20,11 @@
             {% if user %}
                 <img src="{{ user.profile_pic_url | default('path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50">
                 <span>{{ user.username }}</span>
+                <!-- Logout Button -->
+                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            {% else %}
+                <!-- Signup/Login Button -->
+                <a href="{{ url_for('login') }}" class="btn-login">Signup/Login</a>
             {% endif %}
         </div>
         <hr>
@@ -38,14 +43,30 @@
             {% endfor %}
         </ul>
     </aside>
+    <div id="signupModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <form action="/signup" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+      
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+      
+            <input type="submit" value="Sign Up">
+          </form>
+        </div>
+      </div>
     <main class="content">
-       
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="flash-message flash-{{ category }}">
-                    {{ message }}
-                </div>
+                {% if message != 'signup_prompt' %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endif %}
             {% endfor %}
         {% endif %}
         {% endwith %}
@@ -62,5 +83,38 @@
     content.classList.toggle('content-shift');
 }
     </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        {% if message == 'signup_prompt' %}
+          <script type="text/javascript">
+            // JavaScript to open the signup modal
+            window.onload = function() {
+              // Code to trigger the modal popup
+              var signupModal = document.getElementById('signupModal');
+              signupModal.style.display = 'block';
+            }
+          </script>
+        {% endif %}
+      
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <script>
+    // When the user clicks on <span> (x), close the modal
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+      var modal = document.getElementById('signupModal');
+      modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      var modal = document.getElementById('signupModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
 </html>
