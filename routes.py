@@ -200,6 +200,24 @@ def add_assessment(course_id):
     return render_template('add_assesment.html',course_id=course_id)
 
 
+@app.route('/course/<int:course_id>/update_grade', methods=["POST"])
+def udpate_grade(course_id):
+    course=None
+    new_grade=int(request.form.get('new_grade'))
+    if 'user_id' in session:
+        course=Course.query.get(course_id)
+        if not course:
+            return render_template("not_found.html")
+        course.grade=new_grade
+      
+    else:
+        courses=session.get("temporary_courses",[])
+        for c in courses:
+            if c['id']==course_id:
+                c['grade']=new_grade
+        if not course:
+            return render_template("not_found.html")
+    return redirect(url_for('course_details',course_id=course_id))
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
