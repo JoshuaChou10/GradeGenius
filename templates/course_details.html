@@ -93,27 +93,28 @@
             {% endif %}
         </section>
     </main>
-{% endblock %}
 
-          <script type="text/javascript">
-            // JavaScript to open the signup modal
-             function show() {
-              // Code to trigger the modal popup
-              var update_grade = document.getElementsById('update_grade');
-              update_grade.style.display = 'block';
-            }
-              // When the user clicks on <span> (x), close the modal
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
-      var modal = document.getElementById('update_grade');
-      modal.style.display = "none";
-    }
-  
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      var modal = document.getElementById('update_grade');
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-          </script>
+    <script type="text/javascript">
+        // JavaScript to open the signup modal
+         function show() {
+          // Code to trigger the modal popup
+          var update_grade = document.getElementsById('update_grade');
+          update_grade.style.display = 'block';
+        }
+          // When the user clicks on <span> (x), close the modal
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+  var modal = document.getElementById('update_grade');
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  var modal = document.getElementById('update_grade');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+      </script>
+
+{% endblock %}
