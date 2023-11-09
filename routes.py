@@ -75,7 +75,7 @@ def course_details(course_id):
                 time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
         if not course:
             return render_template("not_found.html")
-        flash('signup_prompt', 'info')
+        
     return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
 
 
@@ -140,6 +140,10 @@ def create_course():
                     'goal': goal
             })
         session.modified = True
+        if len(session["temporary_courses"])==1:
+            flash('signup_prompt', 'info')
+        else:
+            flash("Course successfully added! Sign up to save your progress.","success")
         return redirect(url_for('dashboard'))
 
         
