@@ -219,6 +219,51 @@ def udpate_grade(course_id):
             return render_template("not_found.html")
     return redirect(url_for('course_details',course_id=course_id))
 
+@app.route('/course/<int:course_id>/delete',methods=["POST"])
+def delete_course(course_id):
+    if request.form.get('_method') == 'DELETE':
+        course=None
+        if 'user_id' in session:
+            course=Course.query.get(course_id)
+            if not course:
+                return render_template("not_found.html")
+            #TODO Disassosiate from user if needed. 
+            db.session.delete(course)
+            db.session.commit()
+
+        else:
+            courses=session.get('temporary_courses',[])
+            courses=[c for c in courses if c["id"]!=course_id]
+            session["temporary_courses"]=courses
+        flash('Course deleted successfully!', 'success')
+        return redirect(url_for('dashboard'))
+    else:
+        flash('Invalid method', 'error')
+        return redirect(url_for('courses_dashboard'))
+    
+# @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["DELETE"])
+# def delete_assessment(course_id, assessment_id):
+#     assessment=None
+#     if 'user_id' in session:
+#         assessment=Assessment.query.get(assessment_id)
+#          #TODO Disassosiate from course if needed.
+#         if not assessment:
+#             return redirect(url_for("course_details",course_id=course_id))
+#         db.session.delete(assessment)
+#         db.session.commit()
+#     else:
+#         courses=session.get('temporary_courses',[])
+#         course=None
+#         for c in courses:
+#             if c["id"]==course_id:
+#                 course=c
+#         for a in course['assessments']:
+#             if a["id"]==assessment_id:
+#                 course['assessments'].pop(a)
+#                 break
+#         session["temporary_courses"]['assessments']=course['assessments']
+#     return redirect(url_for('course_details',course_id=course_id))
+
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
