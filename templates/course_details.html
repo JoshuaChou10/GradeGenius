@@ -75,12 +75,17 @@
                 <tbody>
                     {% for assessment in course.assessments %}
                     <tr>
-                        <td>{{ assessment.name }}</td>
+                        <td>{{ assessment.name }}
+                            <form action="{{ url_for('delete_assessment', course_id=course['id'],assessment_id=assessment['id']) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this assessment?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
                         <td>{{ assessment.earned }} / {{ assessment.total }}</td>
                         <td>{{ assessment.date.strftime('%B %d, %Y') }}</td>
                     </tr>
                     {% endfor %}
-                    <!-- Total row -->
+             
                     <tr class="total-row">
                         <td>Total</td>
                         <td>{{ (course.total_marks * course.grade) / 100 }} / {{ course.total_marks }}</td>

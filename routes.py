@@ -124,8 +124,10 @@ def create_course():
             
             if 'temporary_courses' not in session:
                 session['temporary_courses'] = []
-                temp_id = int(uuid.uuid4())
-                session['temporary_courses'].append({
+
+          
+            temp_id = int(uuid.uuid4())
+            session['temporary_courses'].append({
                     'id': temp_id,
                     'code': course_code,
                     'name': course_name,
@@ -136,10 +138,9 @@ def create_course():
                     'grade':grade,
                     'total_marks':total_marks,
                     'goal': goal
-                })
-            session.modified = True
-         
-            return redirect(url_for('dashboard'))
+            })
+        session.modified = True
+        return redirect(url_for('dashboard'))
 
         
        
@@ -181,7 +182,9 @@ def add_assessment(course_id):
             for course in session['temporary_courses']:
                 if str(course['id']) == str(course_id):
                     # Add the assessment to this course
+                    temp_id = int(uuid.uuid4())
                     course['assessments'].append({
+                        'id':temp_id,
                         'name': name,
                         'date':date,
                         'earned': earned,
@@ -241,28 +244,32 @@ def delete_course(course_id):
         flash('Invalid method', 'error')
         return redirect(url_for('courses_dashboard'))
     
-# @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["DELETE"])
-# def delete_assessment(course_id, assessment_id):
-#     assessment=None
-#     if 'user_id' in session:
-#         assessment=Assessment.query.get(assessment_id)
-#          #TODO Disassosiate from course if needed.
-#         if not assessment:
-#             return redirect(url_for("course_details",course_id=course_id))
-#         db.session.delete(assessment)
-#         db.session.commit()
-#     else:
-#         courses=session.get('temporary_courses',[])
-#         course=None
-#         for c in courses:
-#             if c["id"]==course_id:
-#                 course=c
-#         for a in course['assessments']:
-#             if a["id"]==assessment_id:
-#                 course['assessments'].pop(a)
-#                 break
-#         session["temporary_courses"]['assessments']=course['assessments']
-#     return redirect(url_for('course_details',course_id=course_id))
+@app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
+def delete_assessment(course_id, assessment_id):
+    if request.form.get('_method') == 'DELETE':
+        assessment=None
+        if 'user_id' in session:
+            assessment=Assessment.query.get(assessment_id)
+        
+            if not assessment:
+                flash("assessment not found","error")
+                return redirect(url_for("course_details",course_id=course_id))
+            db.session.delete(assessment)
+            db.session.commit()
+        else:
+            courses=session.get('temporary_courses',[])
+            course=None
+            for c in courses:
+                if c["id"]==course_id:
+                    course=c
+            if not course:
+                return render_template("not_found.html")
+            assessments=[a for a in course['assessments'] if a['id']!=assessment_id]
+            course['assessments']=assessments
+        return redirect(url_for('course_details',course_id=course_id))
+    else:
+        flash('Invalid method', 'error')
+        return redirect(url_for('courses_dashboard'))
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
