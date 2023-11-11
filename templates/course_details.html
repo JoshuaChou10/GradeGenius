@@ -24,7 +24,7 @@
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close">&times;</span>
-          <form action="/course/{course.id}/update_grade" method="post">
+          <form action="{{ url_for('update_grade', course_id=course.id) }}" method="post"></form>
             <label for="new_grade">Enter Updated Grade:</label>
             <input type="text" id="new_grade" name="new_grade" required>
             <input type="submit" value="New Grade">
@@ -103,11 +103,11 @@
         // JavaScript to open the signup modal
          function show() {
           // Code to trigger the modal popup
-          var update_grade = document.getElementsById('update_grade');
+          var update_grade = document.getElementById('update_grade');
           update_grade.style.display = 'block';
         }
           // When the user clicks on <span> (x), close the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementByClassName("close")[0];
 span.onclick = function() {
   var modal = document.getElementById('update_grade');
   modal.style.display = "none";
