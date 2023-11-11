@@ -14,7 +14,8 @@ class Assessment(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     earned = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=True)
+    total = db.Column(db.Float, nullable=False)
+    weight=db.Column(db.Float, nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  # Foreign key linking to Course
 
 #do course_object.user to get user
@@ -36,7 +37,18 @@ class Course(db.Model):
         current_date = datetime.utcnow()
         difference = self.end_date - current_date
         return difference.days if difference.days > 0 else 0  # Return 0 if course has ended
-    def update_mark(self,earned,total):
-        total_earned = (self.grade/100)*self.total_marks
-        self.total_marks = self.total_marks + total
-        self.grade = ((total_earned + earned)/self.total_marks)*100
+    def get_updated_grade(self):
+        assessments=Assessment.query.filter_by(course_id=self.id).all()
+        earned=self.starting_marks*self.starting_grade
+        total_marks=self.starting_marks
+        for a in assessments:
+            earned+=a.earned
+            total_marks+=a.total
+        grade=(earned/total_marks)*100 if total_marks!=0 else 0
+        return total_marks,grade
+
+        
+        
+ 
+  
+
