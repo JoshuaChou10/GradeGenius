@@ -145,10 +145,56 @@ def create_course():
         else:
             flash("Course successfully added! Sign up to save your progress.","success")
         return redirect(url_for('dashboard'))
-
         
-       
     return render_template('add_course.html')
+
+@app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])
+def edit_course(course_id):
+    # Check if the user is logged in
+    if 'user_id' in session:
+        # Fetch the course from the database
+        course = Course.query.get_or_404(course_id)
+    else:
+        # Handle guest user with temporary courses in session
+        course = None
+        if 'temporary_courses' in session:
+            for temp_course in session['temporary_courses']:
+                if temp_course['id'] == course_id:
+                    course = temp_course
+                    break
+
+        if course is None:
+            flash("Course not found.", "error")
+            return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        # Extract and update course data from the form
+        course_data = {
+            'name': request.form.get('course_name'),
+            'code': request.form.get('course_code'),
+            'end_date': datetime.strptime(request.form.get('end_date'), '%Y-%m-%d'),
+            'grade': float(request.form.get('grade')) if request.form.get('grade') else 0.0,
+            'total_marks': float(request.form.get('total_marks')) if request.form.get('total_marks') else 0.0,
+            'goal': float(request.form.get('goal'))
+        }
+
+        if 'user_id' in session:
+            # Update course in the database
+            for key, value in course_data.items():
+                setattr(course, key, value)
+            db.session.commit()
+        else:
+            # Update temporary course in the session
+            for key, value in course_data.items():
+                course[key] = value
+            session.modified = True
+
+        flash("Course successfully updated!", "success")
+        return redirect(url_for('course_details', course_id=course_id))
+
+    # If GET request, display the course data for editing
+    return render_template('add_course.html', course=course)
+
 
 
 @app.route('/course/<course_id>/add_assessment', methods=['POST','GET'])
@@ -161,6 +207,10 @@ def add_assessment(course_id):
         date=datetime.strptime(date_str, '%Y-%m-%d')
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
+        weight=request.form.get('weight')
+        if weight:
+            weight=float(weight)/100
+      
         if earned>total:
             session['form_data'] = request.form
             flash("Earned cannot be more than Total. Eg. 9/10",'danger')
@@ -173,11 +223,20 @@ def add_assessment(course_id):
                              
             if course:
                 new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
+               
+                if not weight:
+                    total_earned = (course.grade/100)*course.total_marks
+                    # course.total_marks,course.grade=course.get_updated_grade()
+                else:
+                    percentage=earned/total
+                    denom=weight*100
+                    new_assessment.total=denom
+                    total_weight_earned=percentage*denom
+                    new_assessment.earned=total_weight_earned
+
                 db.session.add(new_assessment)
-                total_earned = (course.grade/100)*course.total_marks
-                course.total_marks = course.total_marks + total
-                course.grade = ((total_earned + earned)/course.total_marks)*100
                 db.session.commit()
+                course.total_marks, course.grade = course.get_updated_grade()
                 
             else:
                 flash('Course not found', 'danger')
@@ -208,7 +267,7 @@ def add_assessment(course_id):
 
 
 @app.route('/course/<int:course_id>/update_grade', methods=["POST"])
-def udpate_grade(course_id):
+def update_grade(course_id):
     course=None
     new_grade=int(request.form.get('new_grade'))
     if 'user_id' in session:
@@ -234,7 +293,7 @@ def delete_course(course_id):
             course=Course.query.get(course_id)
             if not course:
                 return render_template("not_found.html")
-            #TODO Disassosiate from user if needed. 
+            Assessment.query.filter_by(course_id=course_id).delete()
             db.session.delete(course)
             db.session.commit()
 
@@ -254,12 +313,18 @@ def delete_assessment(course_id, assessment_id):
         assessment=None
         if 'user_id' in session:
             assessment=Assessment.query.get(assessment_id)
-        
             if not assessment:
                 flash("assessment not found","error")
                 return redirect(url_for("course_details",course_id=course_id))
+            course=Course.query.get(course_id)
+            if not course:
+                flash("Course not found","error")
+                return render_template("not_found.html")
+
+            
             db.session.delete(assessment)
             db.session.commit()
+            course.total_marks, course.grade = course.get_updated_grade()
         else:
             courses=session.get('temporary_courses',[])
             course=None
