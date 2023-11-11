@@ -39,12 +39,13 @@ class Course(db.Model):
         return difference.days if difference.days > 0 else 0  # Return 0 if course has ended
     def get_updated_grade(self):
         assessments=Assessment.query.filter_by(course_id=self.id).all()
-        earned=self.starting_marks*self.starting_grade
+        earned=(self.starting_marks*self.starting_grade)/100
         total_marks=self.starting_marks
         for a in assessments:
             earned+=a.earned
             total_marks+=a.total
         grade=(earned/total_marks)*100 if total_marks!=0 else 0
+
         return total_marks,grade
 
         

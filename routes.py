@@ -62,6 +62,8 @@ def course_details(course_id):
     if 'user_id' in session:
        
         course = Course.query.filter_by(id=course_id,user_id=session["user_id"]).first()
+     
+    
         if not course:
              return render_template("not_found.html")
         days_left=course.days_remaining()
@@ -235,8 +237,10 @@ def add_assessment(course_id):
                     new_assessment.earned=total_weight_earned
 
                 db.session.add(new_assessment)
-                db.session.commit()
                 course.total_marks, course.grade = course.get_updated_grade()
+                db.session.commit()
+               
+           
                 
             else:
                 flash('Course not found', 'danger')
@@ -261,6 +265,7 @@ def add_assessment(course_id):
                     break
 
         form_data=session.pop('form_data',None)
+   
         return redirect(url_for('course_details', course_id=course_id))
     
     return render_template('add_assesment.html',course_id=course_id)
@@ -323,8 +328,9 @@ def delete_assessment(course_id, assessment_id):
 
             
             db.session.delete(assessment)
-            db.session.commit()
             course.total_marks, course.grade = course.get_updated_grade()
+            db.session.commit()
+           
         else:
             courses=session.get('temporary_courses',[])
             course=None
