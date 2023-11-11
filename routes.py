@@ -1,4 +1,5 @@
 from flask import session, request, redirect, url_for, render_template,Flask,flash,jsonify
+from functools import wraps
 
 from flask_bcrypt import Bcrypt
 from sqlalchemy import asc
@@ -54,18 +55,25 @@ def dashboard():
 
 
 
-#TODO, add error handling, if id does not exist
+def check_course_ownership(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        course_id = kwargs.get('course_id')
+        course = Course.query.filter_by(id=course_id, user_id=session['user_id']).first()
+        if not course:
+            return render_template("not_found.html")  # Assuming you have a dashboard route
+
+        return func(*args, **kwargs)
+    return decorated_function
+
+
 @app.route('/course/<int:course_id>')
+@check_course_ownership
 def course_details(course_id):
     course=None
     time_left = 0
     if 'user_id' in session:
-       
-        course = Course.query.filter_by(id=course_id,user_id=session["user_id"]).first()
-     
-    
-        if not course:
-             return render_template("not_found.html")
+        course = Course.query.get(course_id)
         days_left=course.days_remaining()
         time_left = days_left
 
@@ -148,7 +156,7 @@ def create_course():
             flash("Course successfully added! Sign up to save your progress.","success")
         return redirect(url_for('dashboard'))
         
-    return render_template('add_course.html')
+    return render_template('add_course.html',action="Add")
 
 @app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])
 def edit_course(course_id):
@@ -195,11 +203,12 @@ def edit_course(course_id):
         return redirect(url_for('course_details', course_id=course_id))
 
     # If GET request, display the course data for editing
-    return render_template('add_course.html', course=course)
+    return render_template('add_course.html', course=course,action="Edit")
 
 
 
 @app.route('/course/<course_id>/add_assessment', methods=['POST','GET'])
+@check_course_ownership
 def add_assessment(course_id):
     if request.method == 'POST':
         # Extract assessment data and the associated course code from the form
@@ -220,31 +229,29 @@ def add_assessment(course_id):
         
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
-            user_id = session['user_id']
-            course = Course.query.filter_by(id=course_id,user_id=user_id).first()
-                             
-            if course:
-                new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
-               
-                if not weight:
-                    total_earned = (course.grade/100)*course.total_marks
-                    # course.total_marks,course.grade=course.get_updated_grade()
-                else:
-                    percentage=earned/total
-                    denom=weight*100
-                    new_assessment.total=denom
-                    total_weight_earned=percentage*denom
-                    new_assessment.earned=total_weight_earned
 
-                db.session.add(new_assessment)
-                course.total_marks, course.grade = course.get_updated_grade()
-                db.session.commit()
+            course = Course.query.get(course_id)
+                             
+            
+            new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
+               
+            if not weight:
+                total_earned = (course.grade/100)*course.total_marks
+                    # course.total_marks,course.grade=course.get_updated_grade()
+            else:
+                percentage=earned/total
+                denom=weight*100
+                new_assessment.total=denom
+                total_weight_earned=percentage*denom
+                new_assessment.earned=total_weight_earned
+
+            db.session.add(new_assessment)
+            course.total_marks, course.grade = course.get_updated_grade()
+            db.session.commit()
                
            
                 
-            else:
-                flash('Course not found', 'danger')
-                return redirect(url_for('dashboard'))  # Or wherever you want to redirect to
+            
         else:  # For guest users
             for course in session['temporary_courses']:
                 if str(course['id']) == str(course_id):
@@ -272,13 +279,12 @@ def add_assessment(course_id):
 
 
 @app.route('/course/<int:course_id>/update_grade', methods=["POST"])
+@check_course_ownership
 def update_grade(course_id):
     course=None
     new_grade=int(request.form.get('new_grade'))
     if 'user_id' in session:
         course=Course.query.get(course_id)
-        if not course:
-            return render_template("not_found.html")
         course.grade=new_grade
       
     else:
@@ -291,13 +297,12 @@ def update_grade(course_id):
     return redirect(url_for('course_details',course_id=course_id))
 
 @app.route('/course/<int:course_id>/delete',methods=["POST"])
+@check_course_ownership
 def delete_course(course_id):
     if request.form.get('_method') == 'DELETE':
         course=None
         if 'user_id' in session:
             course=Course.query.get(course_id)
-            if not course:
-                return render_template("not_found.html")
             Assessment.query.filter_by(course_id=course_id).delete()
             db.session.delete(course)
             db.session.commit()
@@ -313,6 +318,7 @@ def delete_course(course_id):
         return redirect(url_for('courses_dashboard'))
     
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
+@check_course_ownership
 def delete_assessment(course_id, assessment_id):
     if request.form.get('_method') == 'DELETE':
         assessment=None
@@ -322,9 +328,6 @@ def delete_assessment(course_id, assessment_id):
                 flash("assessment not found","error")
                 return redirect(url_for("course_details",course_id=course_id))
             course=Course.query.get(course_id)
-            if not course:
-                flash("Course not found","error")
-                return render_template("not_found.html")
 
             
             db.session.delete(assessment)
