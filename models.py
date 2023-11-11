@@ -44,7 +44,7 @@ class Course(db.Model):
         for a in assessments:
             earned+=a.earned
             total_marks+=a.total
-        grade=(earned/total_marks)*100 if total_marks!=0 else 0
+        grade=int((earned/total_marks)*100*100)/100 if total_marks!=0 else 0
 
         return total_marks,grade
 
