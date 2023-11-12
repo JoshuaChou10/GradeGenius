@@ -9,7 +9,10 @@ Session(app)
 
 from models import db  # Import models after defining app
 db.init_app(app)  # Initialize db with app
-from routes import *
+from routes.main_routes import *
+from routes.course import *
+from routes.assessments import *
+from routes.auth import *
 # with app.app_context():
 #     db.create_all()
 
