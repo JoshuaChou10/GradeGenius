@@ -16,6 +16,10 @@
         <label for="course_code">Course Code:</label>
         <input type="text" id="course_code" name="course_code" value="{{ course.code if course else '' }}" required>
 
+        <label for="course_description">Course Description (optional):</label>
+        <input type="text" id="course_description" name="course_description" value="{{ course.description if course else '' }}" >
+
+
         <label for="end_date">End date for the Course:</label>
         <input type="date" id="end_date" name="end_date" value="{{ course.end_date.strftime('%Y-%m-%d') if course else '' }}" required>
 

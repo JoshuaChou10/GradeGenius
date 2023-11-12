@@ -23,24 +23,25 @@
     <div id="update_grade" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
-          <span class="close">&times;</span>
-          <form action="{{ url_for('update_grade', course_id=course.id) }}" method="post"></form>
-            <label for="new_grade">Enter Updated Grade:</label>
-            <input type="text" id="new_grade" name="new_grade" required>
-            <input type="submit" value="New Grade">
-          </form>
+            <span class="close">&times;</span>
+            <form action="{{ url_for('update_grade', course_id=course.id) }}" method="post">
+                <label for="new_grade">Enter Updated Grade:</label>
+                <input type="text" id="new_grade" name="new_grade" required>
+                <input type="submit" value="Update Grade">
+            </form>
         </div>
-      </div>
+    </div>
     <main>
         <button onclick="show()">Update Mark Manually</button>
         <section class="course-details">
             <div class="section-header">
                 <h2>Course Information</h2>
-                <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-btn">+ Add Assessment</a>
-                <!-- <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-btn">+ Add Grade Section</a> -->
+              
+              
             </div>
-            
+            <a href="{{ url_for('edit_course', course_id=course.id) }}" class="add-btn">Edit Course</a>
             <div class="info-grid">
+              
                 <div class="info-item">
                     <label>Code</label>
                     <p>{{ course.code }}</p>
@@ -61,6 +62,7 @@
 
             <!-- Assessments Table -->
             <h3>Assessments</h3>
+            <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="add-btn">+ Add Assessment</a>
             <p><strong>Starting Score:</strong> {{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</p>
     
             {% if course.assessments|length > 0 %}
@@ -107,12 +109,9 @@
           update_grade.style.display = 'block';
         }
           // When the user clicks on <span> (x), close the modal
-var span = document.getElementByClassName("close")[0];
-span.onclick = function() {
-  var modal = document.getElementById('update_grade');
-  modal.style.display = "none";
-}
-
+            document.querySelector(".close").addEventListener("click", function() {
+    document.getElementById('update_grade').style.display = "none";
+});
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   var modal = document.getElementById('update_grade');

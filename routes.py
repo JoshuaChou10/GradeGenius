@@ -99,6 +99,7 @@ def create_course():
      
         
         course_code = request.form.get('course_code')
+        course_description=request.form.get('course_description')
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
         grade= request.form.get('grade')
@@ -118,6 +119,7 @@ def create_course():
             user_id = session['user_id']
             new_course = Course(user_id=user_id,
                                 code=course_code,
+                                description=course_description,
                                 name=course_name,
                                 end_date=end_date, 
                                 starting_grade=grade,
@@ -140,6 +142,7 @@ def create_course():
             session['temporary_courses'].append({
                     'id': temp_id,
                     'code': course_code,
+                    'description':course_description,
                     'name': course_name,
                     'end_date': end_date,
                     'assessments': [],
@@ -182,6 +185,7 @@ def edit_course(course_id):
         course_data = {
             'name': request.form.get('course_name'),
             'code': request.form.get('course_code'),
+            'description':request.form.get('course_description'),
             'end_date': datetime.strptime(request.form.get('end_date'), '%Y-%m-%d'),
             'grade': float(request.form.get('grade')) if request.form.get('grade') else 0.0,
             'total_marks': float(request.form.get('total_marks')) if request.form.get('total_marks') else 0.0,
@@ -286,7 +290,7 @@ def update_grade(course_id):
     if 'user_id' in session:
         course=Course.query.get(course_id)
         course.grade=new_grade
-      
+        db.session.commit()
     else:
         courses=session.get("temporary_courses",[])
         for c in courses:

@@ -24,6 +24,7 @@ class Course(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Allow nullable for temporary courses
     code = db.Column(db.String(100), nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    description=db.Column(db.String(500), nullable=True)
     end_date = db.Column(db.DateTime, nullable=False)
     # description = db.Column(db.Text, nullable=True)
     # date_created = db.Column(db.DateTime, default=datetime.utcnow)
