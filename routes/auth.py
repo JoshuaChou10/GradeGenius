@@ -17,15 +17,18 @@ def inject_user():
 def check_course_ownership(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        course_id = kwargs.get('course_id')
-        course = Course.query.filter_by(id=course_id, user_id=session['user_id']).first()
-        if not course:
-            return render_template("not_found.html")  # Assuming you have a dashboard route
+        if "user_id" in session:
+            course_id = kwargs.get('course_id')
+            #will overflow if signed in user tries to access guest user id
+            try:
+                course = Course.query.filter_by(id=course_id, user_id=session['user_id']).first()
+            except OverflowError:
+                 return render_template("not_found.html") 
+            if not course:
+                return render_template("not_found.html") 
 
         return func(*args, **kwargs)
     return decorated_function
-
-
 
 
 @app.route('/signup', methods=['POST', 'GET'])
