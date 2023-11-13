@@ -18,7 +18,6 @@ def course_details(course_id):
         course = Course.query.get(course_id)
         days_left=course.days_remaining()
         time_left = days_left
-
     else:
         temporary_courses = session.get('temporary_courses', [])  # Use .get() to avoid KeyError
         for c in temporary_courses:
@@ -29,7 +28,6 @@ def course_details(course_id):
             return render_template("not_found.html")
         
     return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
-
 
 
 @app.route('/course/create', methods=['POST', 'GET'])
@@ -104,11 +102,12 @@ def create_course():
     return render_template('add_course.html',action="Add")
 
 @app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])
+@check_course_ownership
 def edit_course(course_id):
     # Check if the user is logged in
     if 'user_id' in session:
         # Fetch the course from the database
-        course = Course.query.get_or_404(course_id)
+        course = Course.query.get(course_id)
     else:
         # Handle guest user with temporary courses in session
         course = None
@@ -119,8 +118,7 @@ def edit_course(course_id):
                     break
 
         if course is None:
-            flash("Course not found.", "error")
-            return redirect(url_for('dashboard'))
+            return render_template("not_found.html")
 
     if request.method == 'POST':
         # Extract and update course data from the form
