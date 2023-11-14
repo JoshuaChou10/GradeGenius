@@ -35,11 +35,10 @@
         <!-- Sidebar content -->
         <ul>
             <li class="{% if request.endpoint == 'dashboard' %}active{% endif %}"><a href="{{ url_for('dashboard') }}">Home</a></li>
-            <li><a href="#">Calendar</a></li>
             <hr>
             <li class="courses-heading">Courses</li>
             {% for course in courses %}
-                <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course.name }}</a></li>
+                <li><a href="{{ url_for('course_details', course_id=course.id) }}">{{ course['name'] }}</a></li>
             {% endfor %}
         </ul>
     </aside>

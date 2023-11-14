@@ -9,6 +9,16 @@ from app import app
 from flask import session
 from app import db
 
+#side bar in all templates need courses
+@app.context_processor
+def inject_courses():
+    courses=None
+    if 'user_id' in session:
+        courses = Course.query.filter_by(user_id=session['user_id']).all()
+    else:
+        courses=session.get("temporary_courses",[])
+    return dict(courses=courses)
+
 @app.route('/course/<int:course_id>')
 @check_course_ownership
 def course_details(course_id):

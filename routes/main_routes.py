@@ -21,4 +21,4 @@ def dashboard():
         user = User.query.filter_by(id=session['user_id']).first()
     else:
         courses = session.get('temporary_courses', [])
-    return render_template('dashboard.html', courses=courses, user=user)
+    return render_template('dashboard.html')
