@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}{{ action }} Assessment{% endblock %}
+
+{% block stylesheets %}
+    <!-- Styles specific to the add/edit assessment page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_assessment.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="add-assessment-form">
+        <form action="{% if action == 'Add' %}{{ url_for('add_assessment', course_id=course_id) }}{% else %}{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}{% endif %}" method="post">
+            <div class="form-group">
+                <label for="name">Assessment Name:</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ assessment.name if assessment and action == 'Edit' else (session['form_data']['name'] if 'form_data' in session and 'name' in session['form_data'] else '') }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ assessment.date.strftime('%Y-%m-%d') if assessment and action == 'Edit' else (session['form_data']['date'] if 'form_data' in session and 'date' in session['form_data'] else '') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="earned">Earned Marks:</label>
+                <input type="number" id="earned" name="earned" class="form-control" value="{{ assessment.earned if assessment and action == 'Edit' else (session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="total">Total Marks:</label>
+                <input type="number" id="total" name="total" class="form-control" value="{{ assessment.total if assessment and action == 'Edit' else (session['form_data']['total'] if 'form_data' in session and 'total' in session['form_data'] else '') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (%):</label>
+                <input type="number" placeholder="optional" id="weight" name="weight" class="form-control" value="{{ assessment.weight if assessment and action == 'Edit' else (session['form_data']['weight'] if 'form_data' in session and 'weight' in session['form_data'] else '') }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ action }} Assessment</button>
+        </form>
+    </section>
+{% endblock %}

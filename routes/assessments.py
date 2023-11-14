@@ -37,10 +37,7 @@ def add_assessment(course_id):
             
             new_assessment = Assessment(name=name, date=date, earned=earned,total=total,course_id=course_id)
                
-            if not weight:
-                total_earned = (course.grade/100)*course.total_marks
-                    # course.total_marks,course.grade=course.get_updated_grade()
-            else:
+            if weight:
                 percentage=earned/total
                 denom=weight*100
                 new_assessment.total=denom
@@ -77,7 +74,7 @@ def add_assessment(course_id):
    
         return redirect(url_for('course_details', course_id=course_id))
     
-    return render_template('add_assesment.html',course_id=course_id)
+    return render_template('add_assessment.html',course_id=course_id, action="Add")
 
 
 
@@ -153,17 +150,20 @@ def edit_assessment(course_id,assessment_id):
             'total': float(request.form.get('total')) if request.form.get('total') else 0.0,
             'weight': float(request.form.get('weight')) if request.form.get('weight') else None
         }
-        percentage=assessment_data.earned/assessment_data.total
-        denom=assessment_data.weight*100
-        assessment_data.total=denom
-        total_weight_earned=percentage*denom
-        assessment_data.earned=total_weight_earned
+        if assessment_data["weight"]:
+            percentage=assessment_data["earned"]/assessment_data["total"]
+            denom=assessment_data["weight"]*100
+            assessment_data["total"]=denom
+            total_weight_earned=percentage*denom
+            assessment_data["earned"]=total_weight_earned
+
 
         if 'user_id' in session:
             # Update course in the database
-            course.total_marks, course.grade = course.get_updated_grade()
+           
             for key, value in assessment_data.items():
                 setattr(assessment, key, value)
+            course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
         else:
             course["total_marks"],course["grade"]=get_guest_grade(course)
@@ -172,7 +172,9 @@ def edit_assessment(course_id,assessment_id):
             session.modified = True
 
         flash("Assessment successfully updated!", "success")
+        print(course.grade)
         return redirect(url_for('course_details', course_id=course_id))
+    
 
     # If GET request, display the course data for editing
-    return render_template('add_assessment.html', course=course,action="Edit")
+    return render_template('add_assessment.html', course=course,assessment=assessment, action="Edit")

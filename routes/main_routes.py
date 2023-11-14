@@ -15,10 +15,4 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    user = None  
-    if 'user_id' in session:
-        courses = Course.query.filter_by(user_id=session['user_id']).all()
-        user = User.query.filter_by(id=session['user_id']).first()
-    else:
-        courses = session.get('temporary_courses', [])
     return render_template('dashboard.html')

@@ -7,6 +7,7 @@ from flask import session
 from app import db
  
 bcrypt = Bcrypt(app)
+
 @app.context_processor
 def inject_user():
     user = None
