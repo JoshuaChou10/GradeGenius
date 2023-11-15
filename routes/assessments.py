@@ -166,13 +166,13 @@ def edit_assessment(course_id,assessment_id):
             course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
             db.session.commit()
         else:
-            course["total_marks"],course["grade"]=get_guest_grade(course)
             for key, value in assessment_data.items():
                 assessment[key] = value
+            course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified = True
 
         flash("Assessment successfully updated!", "success")
-        print(course.grade)
+        
         return redirect(url_for('course_details', course_id=course_id))
     
 
