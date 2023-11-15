@@ -163,7 +163,7 @@ def edit_assessment(course_id,assessment_id):
            
             for key, value in assessment_data.items():
                 setattr(assessment, key, value)
-            course.total_marks, course.grade = course.get_updated_grade()
+            course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
             db.session.commit()
         else:
             course["total_marks"],course["grade"]=get_guest_grade(course)

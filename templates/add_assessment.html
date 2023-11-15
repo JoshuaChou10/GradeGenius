@@ -31,7 +31,7 @@
             </div>
 
             <div class="form-group">
-                <label for="weight">Weight (%):</label>
+                <label for="weight">Weight towards course (%):</label>
                 <input type="number" placeholder="optional" id="weight" name="weight" class="form-control" value="{{ assessment.weight if assessment and action == 'Edit' else (session['form_data']['weight'] if 'form_data' in session and 'weight' in session['form_data'] else '') }}">
             </div>
 

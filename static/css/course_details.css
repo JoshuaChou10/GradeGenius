@@ -73,16 +73,63 @@ main {
     align-items: center;
 }
 
-.add-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: #fff;
-    border-radius: 3px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+.section-separator {
+    border: 0;
+    height: 2px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
+.assessments-section {
+    background-color: #fff; /* or any other color you prefer */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Horizontal offset, vertical offset, blur radius, and color */
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.course-details {
+    background-color: #f9f9f9; /* Light grey background */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+
+.add-assessment-btn {
+    padding: 5px 10px;
+    color: #007BFF;
+    background-color: transparent;
+    border: 1px solid #007BFF;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.8em;
+    display: inline-block; /* Ensures the button does not stretch to fill its container */
+    margin-bottom: 10px; /* Provides some space between the button and the table */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.add-assessment-btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+.edit-btn {
+    padding: 5px 10px;
+    color: #007BFF;
+    background-color: transparent;
+    border: 1px solid #007BFF;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.8em;
+    align-self: center; /* Aligns button vertically center in flex container */
+    margin-left: auto; /* Pushes the button to the right */
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.edit-btn:hover {
+    color: #0056b3;
+    border-color: #0056b3;
+}
 .add-btn:hover {
     background-color: #0056b3;
 }
