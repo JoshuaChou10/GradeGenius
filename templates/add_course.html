@@ -26,8 +26,15 @@
         <label for="grade">Current Grade (%):</label>
         <input type="number" id="grade" name="grade" value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
 
-        <label for="total_marks">Total Marks Available So Far:</label>
-        <input type="number" id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
+        {% if action == "Edit" %}
+    <label for="total_marks">Starting Marks:</label>
+    <input type="number" id="starting_marks" name="starting_marks" value="{{ course.starting_marks if course else '' }}" min="0" placeholder="Blank for none">
+    
+{% else %}
+    <label for="total_marks">Total Marks Available So Far:</label>
+    <input type="number" id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
+{% endif %}
+      
 
         <label for="goal">Target Grade For Course:</label>
         <input type="number" id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>

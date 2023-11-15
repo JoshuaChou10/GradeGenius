@@ -137,8 +137,8 @@ def edit_course(course_id):
             'code': request.form.get('course_code'),
             'description':request.form.get('course_description'),
             'end_date': datetime.strptime(request.form.get('end_date'), '%Y-%m-%d'),
+            'starting_marks':float(request.form.get('starting_marks')) if request.form.get('starting_marks') else 0.0,
             'grade': float(request.form.get('grade')) if request.form.get('grade') else 0.0,
-            'total_marks': float(request.form.get('total_marks')) if request.form.get('total_marks') else 0.0,
             'goal': float(request.form.get('goal'))
         }
 
@@ -147,6 +147,7 @@ def edit_course(course_id):
             for key, value in course_data.items():
                 setattr(course, key, value)
             db.session.commit()
+  
         else:
             # Update temporary course in the session
             for key, value in course_data.items():
