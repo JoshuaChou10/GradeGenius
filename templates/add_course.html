@@ -24,7 +24,7 @@
         <input type="date" id="end_date" name="end_date" value="{{ course.end_date.strftime('%Y-%m-%d') if course else '' }}" required>
 
         <label for="grade">Current Grade (%):</label>
-        <input type="number" id="grade" name="grade" value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
+        <input type="number" id="grade" name="grade" step=0.01 value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
 
         {% if action == "Edit" %}
     <label for="total_marks">Starting Marks:</label>
