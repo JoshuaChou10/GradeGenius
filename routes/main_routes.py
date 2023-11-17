@@ -4,7 +4,7 @@ from models import User,Course
 from app import app
 from flask import session
 from app import db
-
+from helpers import get_guest_GPA
 
 
 
@@ -15,4 +15,10 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    if 'user_id' in session:
+        user=User.query.get(session['user_id'])
+        GPA=user.get_GPA()
+    else:
+        GPA=get_guest_GPA()
+
+    return render_template('dashboard.html',GPA=GPA)

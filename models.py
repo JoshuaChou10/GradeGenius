@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 db = SQLAlchemy()
+
+
 class User(db.Model):
     username=db.Column(db.String, nullable=False)
     password=db.Column(db.String,nullable=False)
@@ -8,6 +10,13 @@ class User(db.Model):
     courses = db.relationship('Course', backref='user', lazy=True)
     GPA = db.Column(db.Float, nullable=True)  # GPA is usually a float, not an integer
     goal = db.Column(db.Integer, nullable=True)  # Goal for the user (could be a description or target GPA)
+    def get_GPA(self):
+        courses = Course.query.filter(Course.user_id == self.id, Course.grade != 0.0).all()
+        total=0
+        for c in courses:
+                total+=c.grade
+        return (total/len(courses)) if courses else 0
+
 
 class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,7 +59,6 @@ class Course(db.Model):
         return total_marks,grade
 
         
-        
- 
+
   
 

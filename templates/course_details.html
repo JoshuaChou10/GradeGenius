@@ -110,7 +110,7 @@
              
                     <tr class="total-row">
                         <td>Total</td>
-                        <td>{{ (course.total_marks * course.grade) / 100 }} / {{ course.total_marks }}</td>
+                        <td>{{ ((course.total_marks * course.grade) / 100 )|round(2)}} / {{ course.total_marks }}</td>
                         <td></td>  <!-- Empty cell in the Date column -->
                     </tr>
                 </tbody>
