@@ -15,9 +15,11 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
+    GPA=0.0
     if 'user_id' in session:
         user=User.query.get(session['user_id'])
-        GPA=user.get_GPA()
+        if user:
+            GPA=user.get_GPA()
     else:
         GPA=get_guest_GPA()
 

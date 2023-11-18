@@ -24,7 +24,7 @@ class Assessment(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     earned = db.Column(db.Float, nullable=False)
     total = db.Column(db.Float, nullable=False)
-    weight=db.Column(db.Float, nullable=True)
+    weight=db.Column(db.Float,nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  # Foreign key linking to Course
 
 #do course_object.user to get user

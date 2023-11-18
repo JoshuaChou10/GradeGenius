@@ -55,7 +55,7 @@ html, body {
 
 .courses-list li {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
