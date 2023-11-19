@@ -94,9 +94,9 @@
                 <tbody>
                     {% for assessment in course.assessments %}
                     <tr>
-                        <td>
+                        <td style="width:10px">
                             <div class="assessment-container">
-                                <div class="kebab-menu" onclick="toggleMenu('menu-{{ assessment.id }}')"></div>
+                              
                                 <div id="menu-{{ assessment.id }}" class="dropdown-content">
                                     <a href="{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}">Edit</a>
                                     <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}')">Delete</a>
@@ -104,9 +104,13 @@
                                         <input type="hidden" name="_method" value="DELETE">
                                     </form>
                                 </div>
+                               
                                 <div class="assessment-name">
                                     {{ assessment.name }}
                                 </div>
+                                <div class="kebab-menu" onclick="toggleMenu('menu-{{ assessment.id }}')">...</div>
+                          
+                               
                             </div>
                         </td>
                         <td>{{ assessment.earned }} / {{ assessment.total }}</td>
@@ -149,8 +153,19 @@ window.addEventListener('click', function(event) {
 });
 
 function toggleMenu(menuId) {
+
+    // Toggle the clicked menu
     var menu = document.getElementById(menuId);
     menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    // Close any open menus
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.id !== menuId && openDropdown.style.display === 'block') {
+            openDropdown.style.display = 'none';
+        }
+    }
+
 }
 
 // Close the dropdown if the user clicks outside of it

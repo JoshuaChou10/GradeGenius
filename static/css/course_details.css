@@ -224,26 +224,34 @@ main {
     font-size: 24px; /* Adjust size as needed */
 }
 
-.kebab-menu:after {
-    content: '\2807'; /* Unicode character for vertical ellipsis */
-    
-}
 
 .dropdown-content {
     position: absolute;
-    right: 100%; /* Aligns the right edge of the dropdown with the left edge of the kebab menu */
-    margin-right: 10px; /* Adjust this value as needed for spacing */
-    /* Add other styles for your dropdown menu here */
+    left: 155px; /* Aligns the right edge of the dropdown with the left edge of the kebab menu */
+    top:40px;
+    z-index: 1000; 
 }
+
 
 .assessment-container {
     position: relative;
     display: flex;
     align-items: center;
-}
+    justify-content: space-between;
 
+}
+tr:hover .kebab-menu {
+    visibility: visible; /* or use 'opacity: 1;' */
+}
 .kebab-menu {
-    margin-right: 10px; /* Adjust as needed */
     cursor: pointer;
-    /* Other styles for the kebab menu */
+    visibility: hidden; 
+    text-align: right; /* Align the ellipsis to the right */
+    width: 30px; /* Example width; adjust as needed */
+
+}
+table {
+    width: 100%;
+    table-layout: fixed; /* This helps in maintaining the column widths */
+    /* Other styles */
 }
