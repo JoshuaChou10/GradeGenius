@@ -40,40 +40,36 @@ def add_assessment(course_id):
             course = Course.query.get(course_id)
             # modify total marks of the final assessment so that it will equal to [weight]% of the total course marks
             if weight:
-                total=(course.total_marks)/((1/weight)-1) 
+                total=(course.total_marks)/((1/weight)-1) #Derived from finals_weight=(finals_total/finals_total+course_work_marks)
                 earned=total*percentage
             new_assessment = Assessment(name=name, date=date, earned=earned,total=total,weight=weight, course_id=course_id)
-           
             db.session.add(new_assessment)
+            #if normal assessment then include in the course grade. 
+            # Don't include final assessment grade in course grade because will be scaled to fit course marks
             if not weight:
                 course.total_marks, course.grade = course.get_updated_grade()
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course_id).all()
-            
-            if len(finals)>1 or not weight:
-                finals_weight=0 # count the current weight so eg 30% total
+       
+            if len(finals)>1:
+                finals_weight=0 
                 finals_total=0 
                 for f in finals:
                     finals_total+=f.total
                     finals_weight+=f.weight
+                 # if new assessment is a final then don't count current total. 
+                 #This is because, only the total marks of the course_work, will be needed in the bottom calculation,
+                 # and the finals assessment weight was not included in the course.total marks and grade update above, so we do not need to subtract it from the course.total_marks,as it was never added
                 if weight:
-                    finals_total-=total # dont count current total so just do 18-3.75, so just count the course_work
-                print(f'finals_total:{finals_total}') # 3.75
-                print(f'unchanged finals_weight:{finals_weight}')#0.2
-                print(course.total_marks-finals_total)#20
-                finals_num=(course.total_marks-finals_total)/((1/(finals_weight))-1)
-                print(f'scaled finals_weight:{finals_num}')#5
-             
+                    finals_total-=total
+                #Get total marks finals are worth eg. 30% finals would be worth 30 marks if weight of course work is 70
+                finals_mark=(course.total_marks-finals_total)/((1/(finals_weight))-1)#Derived from finals_weight=(finals_mark/finals_mark+course_work_marks)
+                #scale each final assessment based on their weighting in the finals, eg. 10% final out of a total of 30% finals
                 for f in finals:
                     percentage=f.earned/f.total
-                    f.total=finals_num*(f.weight/finals_weight)
-                    print(f.total) # 5
+                    f.total=finals_mark*(f.weight/finals_weight)
                     f.earned=(percentage*f.total)
                    
              #TODO ensure finals weight is less than or equal to 100
-                #TODO change starting score back if assesments deleted
-              
-            #without new assessment
-
             course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
                     
