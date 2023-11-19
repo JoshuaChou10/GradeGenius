@@ -1,7 +1,7 @@
 from routes.auth import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash
-from helpers import get_guest_grade
-from sqlalchemy import func
+from helpers import get_guest_grade,check_grade_change
+
 import uuid
 from datetime import datetime
 from models import Course, Assessment
@@ -13,6 +13,7 @@ from app import db
 @check_course_ownership
 def add_assessment(course_id):
     if request.method == 'POST':
+      
         # Extract assessment data and the associated course code from the form
 
         name= request.form.get('name')
@@ -28,7 +29,6 @@ def add_assessment(course_id):
         else:
             weight=None
             
-      
         if earned>total:
             session['form_data'] = request.form
             flash("Earned cannot be more than Total. Eg. 9/10",'danger')
@@ -38,6 +38,7 @@ def add_assessment(course_id):
             # Add the assessment to the database if the user is logged in
 
             course = Course.query.get(course_id)
+            prev_grade=course.grade
             # modify total marks of the final assessment so that it will equal to [weight]% of the total course marks
             new_assessment = Assessment(name=name, date=date, earned=earned,total=total,weight=weight, course_id=course_id)
             db.session.add(new_assessment)
@@ -72,6 +73,7 @@ def add_assessment(course_id):
                 if str(c['id']) == str(course_id):
                     course = c
                     break
+            prev_grade=course['grade']
             temp_id = int(uuid.uuid4())
             course['assessments'].append({
                 'id': temp_id,
@@ -104,8 +106,9 @@ def add_assessment(course_id):
             course["total_marks"], course["grade"] = get_guest_grade(course)
             session.modified = True
 
+        check_grade_change(course,prev_grade,'added')
+       
         form_data=session.pop('form_data',None)
-   
         return redirect(url_for('course_details', course_id=course_id))
     
     return render_template('add_assessment.html',course_id=course_id, action="Add")
@@ -124,7 +127,7 @@ def delete_assessment(course_id, assessment_id):
                 flash("assessment not found","error")
                 return redirect(url_for("course_details",course_id=course_id))
             course=Course.query.get(course_id)
-
+            prev_grade=course.grade
             db.session.delete(assessment)
             course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
@@ -135,13 +138,16 @@ def delete_assessment(course_id, assessment_id):
             for c in courses:
                 if c["id"]==course_id:
                     course=c
+                    break
+            prev_grade=course['grade']
+            
             if not course:
                 return render_template("not_found.html")
             assessments=[a for a in course['assessments'] if a['id']!=assessment_id]
             course['assessments']=assessments
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified=True
-           
+        check_grade_change(course,prev_grade,'deleted')
         return redirect(url_for('course_details',course_id=course_id))
     else:
         flash('Invalid method', 'error')
@@ -154,16 +160,16 @@ def edit_assessment(course_id,assessment_id):
     # Check if the user is logged in
     if 'user_id' in session:
         course=Course.query.get(course_id)
+        prev_grade=course.grade
         assessment= Assessment.query.get(assessment_id)
     else:
- 
         course = None
-
         if 'temporary_courses' in session:
             for temp_course in session['temporary_courses']:
                 if temp_course['id'] == course_id:
                     course = temp_course
                     break
+            prev_grade=course['grade']
         if course is None:
             return render_template("not_found.html")
         
@@ -205,7 +211,7 @@ def edit_assessment(course_id,assessment_id):
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified = True
 
-        flash("Assessment successfully updated!", "success")
+        check_grade_change(course,prev_grade,'edited')
         
         return redirect(url_for('course_details', course_id=course_id))
     

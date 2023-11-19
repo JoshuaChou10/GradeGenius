@@ -1,4 +1,4 @@
-from flask import session
+from flask import session,flash
 
 def get_guest_grade(course):
         earned=(course["starting_marks"]*course["starting_grade"])/100
@@ -20,6 +20,12 @@ def get_guest_GPA():
             count += 1
 
     return total / count if count > 0 else 0
+
+def check_grade_change(course,prev_grade,action):
+    if prev_grade!=course['grade']:
+        flash(f"Assessment succesfully {action}. Grade {'increased' if course['grade']>prev_grade else 'decreased' } from {prev_grade}% to {course['grade']}%")
+    else:
+        flash(f"Assessment succesfully {action}. Grade stayed the same")
 
 
       
