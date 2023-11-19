@@ -6,8 +6,8 @@ def get_guest_grade(course):
         for a in course["assessments"]:
             earned+=a["earned"]
             total_marks+=a["total"]
-        grade=int((earned/total_marks)*100*100)/100 if total_marks!=0 else 0
-        return total_marks,grade
+        grade=(earned/total_marks)*100 if total_marks!=0 else 0
+        return round(total_marks,1),round(grade,1)
 
 
 def get_guest_GPA():
