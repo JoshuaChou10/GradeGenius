@@ -198,3 +198,52 @@ main {
     font-size: 1.1em;
     color: #333;
 }
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a 
+{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+.kebab-menu {
+    cursor: pointer;
+    font-size: 24px; /* Adjust size as needed */
+}
+
+.kebab-menu:after {
+    content: '\2807'; /* Unicode character for vertical ellipsis */
+    
+}
+
+.dropdown-content {
+    position: absolute;
+    right: 100%; /* Aligns the right edge of the dropdown with the left edge of the kebab menu */
+    margin-right: 10px; /* Adjust this value as needed for spacing */
+    /* Add other styles for your dropdown menu here */
+}
+
+.assessment-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.kebab-menu {
+    margin-right: 10px; /* Adjust as needed */
+    cursor: pointer;
+    /* Other styles for the kebab menu */
+}

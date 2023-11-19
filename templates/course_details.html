@@ -94,19 +94,25 @@
                 <tbody>
                     {% for assessment in course.assessments %}
                     <tr>
-                        <td>{{ assessment.name }}
-                            <form action="{{ url_for('delete_assessment', course_id=course['id'],assessment_id=assessment['id']) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this assessment?');">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Delete">
-                            </form>
-                            <form action="{{ url_for('edit_assessment', course_id=course['id'],assessment_id=assessment['id']) }}" method="get">
-                                <input type="submit" value="Edit">
-                            </form>
+                        <td>
+                            <div class="assessment-container">
+                                <div class="kebab-menu" onclick="toggleMenu('menu-{{ assessment.id }}')"></div>
+                                <div id="menu-{{ assessment.id }}" class="dropdown-content">
+                                    <a href="{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}">Edit</a>
+                                    <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}')">Delete</a>
+                                    <form id="delete-form-{{ assessment.id }}" action="{{ url_for('delete_assessment', course_id=course['id'], assessment_id=assessment['id']) }}" method="post" style="display: none;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                </div>
+                                <div class="assessment-name">
+                                    {{ assessment.name }}
+                                </div>
+                            </div>
                         </td>
                         <td>{{ assessment.earned }} / {{ assessment.total }}</td>
                         <td>{{ assessment.date.strftime('%B %d, %Y') }}</td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
              
                     <tr class="total-row">
                         <td>Total</td>
@@ -123,23 +129,48 @@
     </main>
 
     <script type="text/javascript">
-        // JavaScript to open the signup modal
-         function show() {
-          // Code to trigger the modal popup
-          var update_grade = document.getElementById('update_grade');
-          update_grade.style.display = 'block';
-        }
-          // When the user clicks on <span> (x), close the modal
-            document.querySelector(".close").addEventListener("click", function() {
+        // JavaScript to open the modal
+function show() {
+    var update_grade = document.getElementById('update_grade');
+    update_grade.style.display = 'block';
+}
+
+// Close the modal when user clicks on <span> (x)
+document.querySelector(".close").addEventListener("click", function() {
     document.getElementById('update_grade').style.display = "none";
 });
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  var modal = document.getElementById('update_grade');
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+
+// Close the modal when user clicks outside of it
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('update_grade');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+});
+
+function toggleMenu(menuId) {
+    var menu = document.getElementById(menuId);
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
 }
-      </script>
+
+// Close the dropdown if the user clicks outside of it
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('.kebab-menu')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.style.display === 'block') {
+                openDropdown.style.display = 'none';
+            }
+        }
+    }
+});function submitDeleteForm(formId) {
+    var confirmation = confirm('Are you sure you want to delete this assessment?');
+    if (confirmation) {
+        document.getElementById(formId).submit();
+    }
+}
+
+    </script>
 
 {% endblock %}
