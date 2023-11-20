@@ -1,6 +1,6 @@
 from routes.auth import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash
-
+from helpers import get_weights
 
 import uuid
 from datetime import datetime
@@ -36,8 +36,10 @@ def course_details(course_id):
                 time_left=(c['end_date'].replace(tzinfo=None)-datetime.utcnow()).days
         if not course:
             return render_template("not_found.html")
-        
-    return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0)
+    finals_weight,finals_grade,courses_grade=get_weights(course)
+    courses_score=f"{courses_grade*((1-finals_weight)*100)}/{(1-finals_weight)*100}"
+    finals_score=f"{finals_grade*finals_weight*100}/{finals_weight*100}"
+    return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0,courses_score=courses_score,finals_score=finals_score)
 
 
 @app.route('/course/create', methods=['POST', 'GET'])

@@ -13,16 +13,13 @@ from app import db
 @check_course_ownership
 def add_assessment(course_id):
     if request.method == 'POST':
-      
-        # Extract assessment data and the associated course code from the form
-
         name= request.form.get('name')
         date_str=request.form.get('date')
         date=datetime.strptime(date_str, '%Y-%m-%d')
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
         weight=request.form.get('weight')
-        #If final, calculate by grade a weight
+        #If final, get weight and percentage grade
         if weight:
             weight=float(weight)/100
             percentage=earned/total
@@ -36,7 +33,6 @@ def add_assessment(course_id):
         
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
-
             course = Course.query.get(course_id)
             prev_grade=course.grade
             # modify total marks of the final assessment so that it will equal to [weight]% of the total course marks
@@ -47,7 +43,7 @@ def add_assessment(course_id):
             if not weight:
                 course.total_marks, course.grade = course.get_updated_grade()
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course_id).all()
-       
+           
             if finals:
                 finals_weight=sum(f.weight for f in finals)
                 finals_total=sum(f.total for f in finals)
@@ -63,9 +59,10 @@ def add_assessment(course_id):
                     percentage=f.earned/f.total
                     f.total=round(finals_mark*(f.weight/finals_weight),1)
                     f.earned=round(percentage*f.total,1)
-                   
+                     
              #TODO ensure finals weight is less than or equal to 100
             course.total_marks, course.grade = course.get_updated_grade()
+          
             db.session.commit()
                     
         else:  # For guest users
@@ -107,11 +104,10 @@ def add_assessment(course_id):
             session.modified = True
 
         check_grade_change(course,prev_grade,'added')
-       
         form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
     
-    return render_template('add_assessment.html',course_id=course_id, action="Add")
+    return render_template('add_assessment.html',course_id=course_id,action="Add")
 
 
 
