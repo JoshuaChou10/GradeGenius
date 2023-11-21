@@ -168,14 +168,19 @@ def edit_assessment(course_id,assessment_id):
 
         if 'user_id' in session:
             # Update course in the database
-           
             for key, value in assessment_data.items():
                 setattr(assessment, key, value)
+            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+            course.total_marks, course.grade = course.get_updated_grade()
+            scale_finals(course,assessment_data['total'],assessment_data['weight'],finals)
             course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
             db.session.commit()
         else:
             for key, value in assessment_data.items():
                 assessment[key] = value
+            finals=[a for a in course['assessments'] if a['weight'] is not None]
+            course["total_marks"],course["grade"]=get_guest_grade(course)
+            scale_finals(course,assessment_data['total'],assessment_data['weight'],finals)
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified = True
 
