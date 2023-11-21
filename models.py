@@ -23,7 +23,9 @@ class Assessment(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     earned = db.Column(db.Float, nullable=False)
+    original_earned=db.Column(db.Float, nullable=True)
     total = db.Column(db.Float, nullable=False)
+    original_total=db.Column(db.Float,nullable=True) # used when editing a final assessment, as the grades were scaled down.
     weight=db.Column(db.Float,nullable=True)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  # Foreign key linking to Course
 

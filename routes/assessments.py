@@ -1,6 +1,6 @@
 from routes.auth import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash
-from helpers import get_guest_grade,check_grade_change
+from helpers import get_guest_grade,check_grade_change,scale_finals
 
 import uuid
 from datetime import datetime
@@ -36,33 +36,15 @@ def add_assessment(course_id):
             course = Course.query.get(course_id)
             prev_grade=course.grade
             # modify total marks of the final assessment so that it will equal to [weight]% of the total course marks
-            new_assessment = Assessment(name=name, date=date, earned=earned,total=total,weight=weight, course_id=course_id)
+            new_assessment = Assessment(name=name, date=date, earned=earned,original_earned=earned if weight else None, total=total,original_total=total if weight else None, weight=weight, course_id=course_id)
             db.session.add(new_assessment)
             #if normal assessment then include in the course grade. 
             # Don't include final assessment grade in course grade because will be scaled to fit course marks
             if not weight:
                 course.total_marks, course.grade = course.get_updated_grade()
-            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course_id).all()
-           
-            if finals:
-                finals_weight=sum(f.weight for f in finals)
-                finals_total=sum(f.total for f in finals)
-                 # if new assessment is a final then don't count current total. 
-                 #This is because, only the total marks of the course_work, will be needed in the bottom calculation,
-                 # and the finals assessment weight was not included in the course.total marks and grade update above, so we do not need to subtract it from the course.total_marks,as it was never added
-                if weight:
-                    finals_total-=total
-                #Get total marks finals are worth eg. 30% finals would be worth 30 marks if weight of course work is 70
-                finals_mark=(course.total_marks-finals_total)/((1/(finals_weight))-1)#Derived from finals_weight=(finals_mark/finals_mark+course_work_marks)
-                #scale each final assessment based on their weighting in the finals, eg. 10% final out of a total of 30% finals
-                for f in finals:
-                    percentage=f.earned/f.total
-                    f.total=round(finals_mark*(f.weight/finals_weight),1)
-                    f.earned=round(percentage*f.total,1)
-                     
-             #TODO ensure finals weight is less than or equal to 100
+            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+            finals=get_scaled_finals(course,total,weight,finals)
             course.total_marks, course.grade = course.get_updated_grade()
-          
             db.session.commit()
                     
         else:  # For guest users
@@ -77,30 +59,16 @@ def add_assessment(course_id):
                 'name': name,
                 'date': date,
                 'earned': earned,
+                "original_earned":earned if weight else None,
                 'total': total,
+                "original_total":total if weight else None,
                 'weight': weight
             })
             if not weight:
                 course["total_marks"], course["grade"] = get_guest_grade(course)
             finals=[a for a in course['assessments'] if a.get('weight') is not None]
-         
-            if len(finals)>0:
-                # get weight of all final assessments including the new one
-                finals_weight = sum(f['weight'] for f in finals) 
-                finals_total = sum(f['total'] for f in finals)
-                if weight:
-                    finals_total-=total
-                # Scale each final assessment based on their weighting in the finals
-                finals_mark = (course['total_marks'] - finals_total) / ((1 / (finals_weight)) - 1)
-                for a in finals:
-                    a_percentage = a['earned'] / a['total']
-                    a['total'] = round(finals_mark * (a['weight'] / finals_weight),1)
-                    a['earned'] = round(a_percentage * a['total'],1)
-                
-
-            # Add the assessment to the course
-            # Update total marks and grade for the course
-            course["total_marks"], course["grade"] = get_guest_grade(course)
+            finals=get_scaled_finals(course,total,weight,finals)
+            course['total_marks'],course['grade']=get_guest_grade(course)
             session.modified = True
 
         check_grade_change(course,prev_grade,'added')
@@ -125,7 +93,7 @@ def delete_assessment(course_id, assessment_id):
             course=Course.query.get(course_id)
             prev_grade=course.grade
             db.session.delete(assessment)
-            course.total_marks, course.grade = course.get_updated_grade()
+           
             db.session.commit()
            
         else:
@@ -211,6 +179,5 @@ def edit_assessment(course_id,assessment_id):
         
         return redirect(url_for('course_details', course_id=course_id))
     
-
     # If GET request, display the course data for editing
     return render_template('add_assessment.html', course=course,assessment=assessment, action="Edit")
