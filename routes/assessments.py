@@ -43,7 +43,7 @@ def add_assessment(course_id):
             if not weight:
                 course.total_marks, course.grade = course.get_updated_grade()
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            finals=get_scaled_finals(course,total,weight,finals)
+            scale_finals(course,total,weight,finals)
             course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
                     
@@ -67,7 +67,7 @@ def add_assessment(course_id):
             if not weight:
                 course["total_marks"], course["grade"] = get_guest_grade(course)
             finals=[a for a in course['assessments'] if a.get('weight') is not None]
-            finals=get_scaled_finals(course,total,weight,finals)
+            scale_finals(course,total,weight,finals)
             course['total_marks'],course['grade']=get_guest_grade(course)
             session.modified = True
 
@@ -76,8 +76,6 @@ def add_assessment(course_id):
         return redirect(url_for('course_details', course_id=course_id))
     
     return render_template('add_assessment.html',course_id=course_id,action="Add")
-
-
 
 
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
@@ -93,7 +91,10 @@ def delete_assessment(course_id, assessment_id):
             course=Course.query.get(course_id)
             prev_grade=course.grade
             db.session.delete(assessment)
-           
+            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+            course.total_marks, course.grade = course.get_updated_grade() #update total_marks to account for loss of assessment
+            scale_finals(course,0,None,finals)
+            course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
            
         else:
@@ -109,6 +110,9 @@ def delete_assessment(course_id, assessment_id):
                 return render_template("not_found.html")
             assessments=[a for a in course['assessments'] if a['id']!=assessment_id]
             course['assessments']=assessments
+            finals=[a for a in course['assessments'] if a['weight'] is not None]
+            course["total_marks"],course["grade"]=get_guest_grade(course) #update total_marks to account for loss of assessment
+            scale_finals(course,0,None,finals)
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified=True
         check_grade_change(course,prev_grade,'deleted')
