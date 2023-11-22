@@ -24,23 +24,6 @@ html, body {
     text-align: center;
     margin-bottom: 20px;
 }
-/* Button Styles */
-.btn {
-    display: block;
-    width: 200px;
-    padding: 10px;
-    margin: 20px auto;
-    text-align: center;
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn:hover {
-    background-color: #218838;
-}
 
 /* Courses List Styles */
 .courses-list h2 {
@@ -73,6 +56,13 @@ html, body {
     font-weight:500;
     font-size:1.7rem;
     padding:30px;
+}
+.courses-list .btn {
+    font-size: 1em; /* Adjust to match list item font size */
+    padding: 10px; /* Adjust to match list item padding */
+    margin-left:2rem;
+
+
 }
 
 .courses-list a:hover,

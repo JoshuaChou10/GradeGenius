@@ -105,7 +105,7 @@ def create_course():
                     'goal': goal
             })
         session.modified = True
-        if len(session["temporary_courses"])==1:
+        if len(session["temporary_courses"])==2:
             flash('signup_prompt', 'info')
         else:
             flash("Course successfully added! Sign up to save your progress.","success")

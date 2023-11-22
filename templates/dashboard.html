@@ -15,12 +15,12 @@
         <div class="gpa">
              {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
         </div>
-        <h2>Your Courses</h2>
+        <button href="{{ url_for('create_course') }}" class="btn">+ Course</button>
         <ul>
             {% for course in courses %}
                 <li>
                     <a href="{{ url_for('course_details', course_id=course.id) }}">
-                        {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
+                        {{course.code}}: {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
                     </a>
                     
                   
@@ -34,6 +34,6 @@
         </ul>
     </section>
     
-    <a href="{{ url_for('create_course') }}" class="btn">Add Course</a>
+
 
 {% endblock %}
