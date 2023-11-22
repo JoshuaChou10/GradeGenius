@@ -26,20 +26,26 @@
         <label for="grade">Current Grade (%):</label>
         <input type="number" id="grade" name="grade" step=0.01 value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
 
-        {% if action == "Edit" %}
-    <label for="total_marks">Starting Marks:</label>
-    <input type="number" id="starting_marks" name="starting_marks" value="{{ course.starting_marks if course else '' }}" min="0" placeholder="Blank for none">
-    
-{% else %}
-    <label for="total_marks">Total Marks Available So Far:</label>
-    <input type="number" id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
-{% endif %}
-      
 
         <label for="goal">Target Grade For Course:</label>
         <input type="number" id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>
 
-        <input type="submit" value="{{ action }} Course">
+       
+
+        {% if action == "Edit" %}
+        <div> 
+            <h3>On Course Creation:</h3>
+        <label for="total_marks">Starting Grade (Grade entered when course created):</label>
+        <input type="number" id="starting_grade" name="starting_grade" value="{{ course.starting_grade if course else '' }}" min="0" placeholder="Blank for none">
+
+    <label for="total_marks">Starting Marks (Total marks avalible when course created):</label>
+    <input type="number" id="starting_marks" name="starting_marks" value="{{ course.starting_marks if course else '' }}" min="0" placeholder="Blank for none">
+</div>
+{% else %}
+    <label for="total_marks">Total Marks Available So Far:</label>
+    <input type="number" id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
+{% endif %}
+<input type="submit" value="{{ action }} Course">
     </form>
    
 {% endblock %}
