@@ -55,15 +55,10 @@ def get_weights(course):
     return finals_weight, finals_grade, courses_grade
 
    
-def scale_finals(course,total,weight,finals):
+def scale_finals(course,finals):
     if len(finals)>0:
         finals_weight=sum(get_attr(f,'weight') for f in finals) 
         finals_total=sum(get_attr(f,'total') for f in finals) 
-        # if new assessment is a final then don't count current total. 
-        #This is because, only the total marks of the course_work, will be needed in the bottom calculation,
-        # and the finals assessment weight was not included in the course.total marks and grade update above, so we do not need to subtract it from the course.total_marks,as it was never added
-        if weight:
-            finals_total-=total
                 #Get total marks finals are worth eg. 30% finals would be worth 30 marks if weight of course work is 70
         finals_mark=(get_attr(course,'total_marks')-finals_total)/((1/(finals_weight))-1)#Derived from finals_weight=(finals_mark/finals_mark+course_work_marks) 
                 #scale each final assessment based on their weighting in the finals, eg. 10% final out of a total of 30% finals

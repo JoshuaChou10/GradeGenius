@@ -22,7 +22,6 @@ def add_assessment(course_id):
         #If final, get weight and percentage grade
         if weight:
             weight=float(weight)/100
-            percentage=earned/total
         else:
             weight=None
             
@@ -40,10 +39,11 @@ def add_assessment(course_id):
             db.session.add(new_assessment)
             #if normal assessment then include in the course grade. 
             # Don't include final assessment grade in course grade because will be scaled to fit course marks
-            if not weight:
-                course.total_marks, course.grade = course.get_updated_grade()
+   
+          
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            scale_finals(course,total,weight,finals)
+            course.total_marks, course.grade = course.get_updated_grade()
+            scale_finals(course,finals)
             course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
                     
@@ -64,10 +64,11 @@ def add_assessment(course_id):
                 "original_total":total if weight else None,
                 'weight': weight
             })
-            if not weight:
-                course["total_marks"], course["grade"] = get_guest_grade(course)
+            
+               
             finals=[a for a in course['assessments'] if a.get('weight') is not None]
-            scale_finals(course,total,weight,finals)
+            course["total_marks"], course["grade"] = get_guest_grade(course)
+            scale_finals(course,finals)
             course['total_marks'],course['grade']=get_guest_grade(course)
             session.modified = True
 
@@ -93,7 +94,7 @@ def delete_assessment(course_id, assessment_id):
             db.session.delete(assessment)
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
             course.total_marks, course.grade = course.get_updated_grade() #update total_marks to account for loss of assessment
-            scale_finals(course,0,None,finals)
+            scale_finals(course,finals)
             course.total_marks, course.grade = course.get_updated_grade()
             db.session.commit()
            
@@ -112,7 +113,7 @@ def delete_assessment(course_id, assessment_id):
             course['assessments']=assessments
             finals=[a for a in course['assessments'] if a['weight'] is not None]
             course["total_marks"],course["grade"]=get_guest_grade(course) #update total_marks to account for loss of assessment
-            scale_finals(course,0,None,finals)
+            scale_finals(course,finals)
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified=True
         check_grade_change(course,prev_grade,'deleted')
@@ -156,7 +157,7 @@ def edit_assessment(course_id,assessment_id):
             'date': datetime.strptime(request.form.get('date'), '%Y-%m-%d'),
             'earned': float(request.form.get('earned')) if request.form.get('earned') else 0.0,
             'total': float(request.form.get('total')) if request.form.get('total') else 0.0,
-            'weight': float(request.form.get('weight')) if request.form.get('weight') else None
+            'weight': float(request.form.get('weight'))/100 if request.form.get('weight') else None
         }
         if assessment_data["weight"]:
             percentage=assessment_data["earned"]/assessment_data["total"]
@@ -172,7 +173,7 @@ def edit_assessment(course_id,assessment_id):
                 setattr(assessment, key, value)
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
             course.total_marks, course.grade = course.get_updated_grade()
-            scale_finals(course,assessment_data['total'],assessment_data['weight'],finals)
+            scale_finals(course,finals) #dont need total_m
             course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
             db.session.commit()
         else:
@@ -180,7 +181,7 @@ def edit_assessment(course_id,assessment_id):
                 assessment[key] = value
             finals=[a for a in course['assessments'] if a['weight'] is not None]
             course["total_marks"],course["grade"]=get_guest_grade(course)
-            scale_finals(course,assessment_data['total'],assessment_data['weight'],finals)
+            scale_finals(course,finals)
             course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified = True
 
