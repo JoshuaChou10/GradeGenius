@@ -59,6 +59,7 @@ def signup():
                 temp_course=Course(user_id=session['user_id'],
                                 code=course_data["code"],
                                 name=course_data["name"],
+                                creation_date=course_data["creation_date"],
                                 end_date=course_data["end_date"], 
                                 starting_grade=course_data["starting_grade"],
                                 starting_marks=course_data["starting_marks"],
