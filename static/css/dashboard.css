@@ -24,6 +24,9 @@ html, body {
     text-align: center;
     margin-bottom: 20px;
 }
+.courses-list {
+    width: 60%; /* Adjust to desired width */
+}
 
 /* Courses List Styles */
 .courses-list h2 {
@@ -58,11 +61,13 @@ html, body {
     padding:30px;
 }
 .courses-list .btn {
-    font-size: 1em; /* Adjust to match list item font size */
-    padding: 10px; /* Adjust to match list item padding */
+    font-size: 1em; 
+    padding: 10px; 
     margin-left:2rem;
-
-
+}
+#add-course:hover{
+    background-color: #0056b3;
+    color: #fff;
 }
 
 .courses-list a:hover,
@@ -81,7 +86,7 @@ html, body {
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: pointer;
 }
 

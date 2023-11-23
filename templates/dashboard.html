@@ -10,12 +10,13 @@
 {% block header %}Courses Dashboard{% endblock %}
 
 {% block content %}
-    
+<div class="gpa">
+    {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
+</div>
     <section class="courses-list">
-        <div class="gpa">
-             {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
-        </div>
-        <button href="{{ url_for('create_course') }}" class="btn">+ Course</button>
+        
+        <a href="{{ url_for('create_course') }}" id="add-course" class="btn">+ Course</a>
+
         <ul>
             {% for course in courses %}
                 <li>
@@ -30,6 +31,7 @@
                         <input type="submit" value="Delete">
                     </form>
                 </li>
+                
             {% endfor %}
         </ul>
     </section>

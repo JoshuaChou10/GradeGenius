@@ -216,3 +216,13 @@ table {
     table-layout: fixed; /* This helps in maintaining the column widths */
     /* Other styles */
 }
+.scores-container {
+    display: flex;
+    justify-content: space-around; /* Adjusts the space between elements */
+    align-items: center; /* Aligns items vertically at the center */
+}
+
+.scores-container p {
+    margin: 0; /* Removes default margin to control spacing better */
+ 
+}
