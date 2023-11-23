@@ -72,6 +72,11 @@
                     <label>End Date</label>
                     <p>{{course.end_date.strftime('%B %d, %Y') }}</p>
                 </div>
+                <div class="info-item">
+                    <label>Creation Date</label>
+                    <p>{{course.creation_date.date().strftime('%B %d, %Y') }}</p>
+                </div>
+       
        
         </div>
             <hr class="section-separator">
@@ -81,11 +86,16 @@
     <h3>Assessments</h3>
     <a href="{{ url_for('add_assessment', course_id=course.id) }}" class="btn">+ Add Assessment</a>
 
-<p>{{courses_score}}</p>
-<p>{{finals_score}}</p>
-            <p><strong>Starting Score:</strong> {{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</p> <img alt="edit" src="./images/edit_icon.png">
+    <div class="scores-container">
+        <p>Course Work Score: {{ courses_score }}</p>
+        {% if finals_score != '0/0' %}
+        <p>Finals Score: {{ finals_score }}</p>
+        {% endif %}
+    </div>
     
-            {% if course.assessments|length > 0 %}
+
+    
+    
             <table>
                 <thead>
                     <tr>
@@ -95,6 +105,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>Starting Score <img alt="edit" src="./images/edit_icon.png"></td>
+                        <td>{{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</td>
+                        <td>{{ course.creation_date.date().strftime('%B %d, %Y') }}</td>
+
+                    </tr>
                     {% for assessment in course.assessments %}
                     <tr>
                         <td style="width:10px">
@@ -131,9 +147,7 @@
                     </tr>
                 </tbody>
             </table>
-            {% else %}
-            <p>No assessments yet!</p>
-            {% endif %}
+            
         </section>
     </div>
     </main>

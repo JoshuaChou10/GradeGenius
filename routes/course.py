@@ -48,10 +48,9 @@ def create_course():
     if request.method == 'POST':
         # Extract the course data from the form
         course_name = request.form.get('course_name')
-     
-        
         course_code = request.form.get('course_code')
         course_description=request.form.get('course_description')
+        creation_date= datetime.today()
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
         grade= request.form.get('grade')
@@ -73,6 +72,7 @@ def create_course():
                                 code=course_code,
                                 description=course_description,
                                 name=course_name,
+                                creation_date=creation_date,
                                 end_date=end_date, 
                                 starting_grade=grade,
                                 starting_marks=total_marks,
@@ -96,6 +96,7 @@ def create_course():
                     'code': course_code,
                     'description':course_description,
                     'name': course_name,
+                    "creation_date":creation_date,
                     'end_date': end_date,
                     'assessments': [],
                     'starting_grade':grade,

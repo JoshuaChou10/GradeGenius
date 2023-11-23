@@ -36,6 +36,7 @@ class Course(db.Model):
     code = db.Column(db.String(100), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     description=db.Column(db.String(500), nullable=True)
+    creation_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     # description = db.Column(db.Text, nullable=True)
     # date_created = db.Column(db.DateTime, default=datetime.utcnow)
