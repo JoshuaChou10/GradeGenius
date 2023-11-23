@@ -49,9 +49,8 @@ def get_weights(course):
     if len(finals) > 0:
         finals_weight = sum(get_attr(f, 'weight') for f in finals)
         finals_grade = (sum(get_attr(f, 'earned') for f in finals)) / (sum(get_attr(f, 'total') for f in finals))
-    if len(courses) > 0:
-        #TODO include starting score in calculations
-        courses_grade = (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')) / (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks'))
+
+    courses_grade =( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))
     return finals_weight, finals_grade, courses_grade
 
    
