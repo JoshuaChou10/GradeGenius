@@ -12,7 +12,7 @@ db.init_app(app)  # Initialize db with app
 from routes.main_routes import *
 from routes.course import *
 from routes.assessments import *
-from routes.auth import *
+from routes.user import *
 
 # with app.app_context():
 #     db.create_all()

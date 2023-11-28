@@ -13,29 +13,54 @@
 <div class="gpa">
     {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
 </div>
-    <section class="courses-list">
-        
-        <a href="{{ url_for('create_course') }}" id="add-course" class="btn">+ Course</a>
 
-        <ul>
-            {% for course in courses %}
-                <li>
-                    <a href="{{ url_for('course_details', course_id=course.id) }}">
-                        {{course.code}}: {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
-                    </a>
-                    
-                  
-                    <!-- Delete button in form -->
-                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this course?');">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete">
-                    </form>
-                </li>
+
+<div class="dashboard-container">
+<section class="courses-list">
+    <a href="{{ url_for('create_course') }}" id="add-course" class="btn">+ Course</a>
+
+    <ul>
+        {% for course in courses %}
+            <li>
+                <a href="{{ url_for('course_details', course_id=course.id) }}">
+                    {{course.code}}: {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
+                </a>
                 
-            {% endfor %}
-        </ul>
-    </section>
+                <!-- Delete button in form -->
+                <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+<div class="goal-section">
+    <h2>Your Goal</h2>
+    {% if user.goal %}
+        <p>Current Goal: {{ user.goal }}%</p>
+    {% else %}
+        <form action="{{ url_for('addgoal') }}" method="post" id="goal-form">
+            <input type="text" name="goal" placeholder="Enter your goal" id="goal-input" required>
+            <input type="submit" value="Add Goal" id="goal-submit">
+        </form>
+    {% endif %}
+</div>
+</div>
+<script>
+    // JavaScript to disable the button if the input is empty
+    document.addEventListener('DOMContentLoaded', function() {
+        const goalInput = document.getElementById('goal-input');
+        const goalSubmit = document.getElementById('goal-submit');
+        
+        // Disable the submit button initially
+        goalSubmit.disabled = true;
     
-
-
+        // Add event listener to input field
+        goalInput.addEventListener('input', function() {
+            // Enable submit button only if there's text in the input
+            goalSubmit.disabled = this.value.trim() === '';
+        });
+    });
+    </script>
 {% endblock %}

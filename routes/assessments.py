@@ -1,4 +1,4 @@
-from routes.auth import check_course_ownership
+from routes.user import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash
 from helpers import get_guest_grade,check_grade_change,scale_finals
 

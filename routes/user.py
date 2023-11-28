@@ -78,6 +78,32 @@ def signup():
         return redirect(url_for('dashboard'))
     return render_template('signup.html')
 
+@app.route('/addgoal',methods=["POST"])
+def addgoal():
+    if 'user_id' in session:
+        user_id = session['user_id']
+        user = User.query.get(user_id)
+        
+        if user is None:
+            flash('User not found. Please log in again.', 'error')
+            return redirect(url_for('login'))
+
+        goal = request.form.get("goal")
+        
+        # Validate and process 'goal' as needed here
+        
+        user.goal = goal
+        try:
+            db.session.commit()
+            flash('Goal updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while updating the goal.', 'error')
+    else:
+        flash("Sign up to add a goal!","warning")
+        flash('signup_prompt','info')
+    return redirect(url_for("dashboard"))
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -104,3 +130,6 @@ def login():
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('index'))
+
+
+    
