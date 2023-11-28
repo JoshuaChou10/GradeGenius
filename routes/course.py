@@ -1,5 +1,5 @@
 from routes.user import check_course_ownership
-from flask import session, request, redirect, url_for, render_template,flash
+from flask import session, request, redirect, url_for, render_template,flash,jsonify
 from helpers import get_weights
 
 import uuid
@@ -54,6 +54,7 @@ def create_course():
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
         grade= request.form.get('grade')
+        total_study= request.form.get('total_study')*60 #store in seconds
         if not grade:
             grade=0.0
         else:
@@ -78,18 +79,21 @@ def create_course():
                                 starting_marks=total_marks,
                                 grade=grade,
                                 total_marks=total_marks,
-                                goal=goal)
+                                goal=goal,
+                                total_study=total_study
+                                )
+
             db.session.add(new_course)
             db.session.commit()
             return redirect(url_for('course_details', course_id=new_course.id))
         # If the user is not logged in, store the course data temporarily in the session
         else:
-       
             
             if 'temporary_courses' not in session:
                 session['temporary_courses'] = []
-
-          
+            if len(session['temporary_courses'])>=2:
+                flash("signup_prompt","info")
+                return redirect(url_for('dashboard'))
             temp_id = int(uuid.uuid4())
             session['temporary_courses'].append({
                     'id': temp_id,
@@ -111,7 +115,11 @@ def create_course():
         else:
             flash("Course successfully added! Sign up to save your progress.","success")
         return redirect(url_for('dashboard'))
-        
+    if 'user_id' not in session:
+        if len(session['temporary_courses'])>=2:
+            flash("Signup to add more courses!","warning")
+            flash("signup_prompt","info")
+            return redirect(url_for('dashboard'))
     return render_template('add_course.html',action="Add")
 
 @app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])
@@ -143,7 +151,8 @@ def edit_course(course_id):
             'starting_grade':float(request.form.get('starting_grade')) if request.form.get('starting_grade') else 0.0,
             'starting_marks':float(request.form.get('starting_marks')) if request.form.get('starting_marks') else 0.0,
             'grade': float(request.form.get('grade')) if request.form.get('grade') else 0.0,
-            'goal': float(request.form.get('goal'))
+            'goal': float(request.form.get('goal')),
+            'total_study':float(request.form.get('total_study'))*60
         }
 
         if 'user_id' in session:
@@ -204,3 +213,33 @@ def update_grade(course_id):
         if not course:
             return render_template("not_found.html")
     return redirect(url_for('course_details',course_id=course_id))
+
+
+@app.route('/course/<int:course_id>/update_study_times', methods=['POST'])
+@check_course_ownership
+def update_study_times(course_id):
+    if 'user_id' in session:
+        data = request.json
+        course = Course.query.get(course_id)
+        if course:
+            course.total_study-=data['time_studied']
+            course.time_studied += data['time_studied']
+            db.session.commit()
+            return '', 204  # No Content response
+    else:
+        flash("signup_prompt","info")
+    return 'Course not found', 404
+
+@app.route('/course/<int:course_id>/update_total_study', methods=['POST'])
+@check_course_ownership
+def update_total_study(course_id):
+    if 'user_id' in session:
+        total_study=request.form.get("total_study")
+        course = Course.query.get(course_id)
+        if course:
+            course.total_study=total_study
+            db.session.commit()
+            return '', 204  # No Content response
+    else:
+        flash("signup_prompt","info")
+    return 'Course not found', 404

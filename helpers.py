@@ -31,7 +31,7 @@ def get_guest_GPA():
 def check_grade_change(course, prev_grade, action):
     course_grade = get_attr(course, 'grade')
     if prev_grade != course_grade:
-        flash(f"Assessment successfully {action}. Grade {'increased' if course_grade > prev_grade else 'decreased'} from {prev_grade}% to {course_grade}%",'info')
+        flash(f"Assessment successfully {action}. Grade {'increased' if course_grade > prev_grade else 'decreased'} from {prev_grade}% to {course_grade}%",'info' if prev_grade>course_grade else 'success')
     else:
         flash(f"Assessment successfully {action}. Grade stayed the same",'info')
 

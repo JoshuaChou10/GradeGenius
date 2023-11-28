@@ -105,6 +105,7 @@ html, body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
     margin-left: 2%; /* Spacing between courses list and goal section */
+    margin-top:5rem;
 }
 
 .goal-section h2 {

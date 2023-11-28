@@ -38,14 +38,14 @@ class Course(db.Model):
     description=db.Column(db.String(500), nullable=True)
     creation_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    # description = db.Column(db.Text, nullable=True)
-    # date_created = db.Column(db.DateTime, default=datetime.utcnow)
     assessments = db.relationship('Assessment', backref='course', lazy=True)  # Relationship with Assessment
     starting_grade=db.Column(db.Float, nullable=False)
     starting_marks=db.Column(db.Float, nullable=False)
     grade=db.Column(db.Float, nullable=False)
     total_marks=db.Column(db.Float, nullable=False)
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
+    total_study=db.Column(db.Float, nullable=False)
+    time_studied=db.Column(db.Float, nullable=False, default=0)
     def days_remaining(self):
         current_date = datetime.utcnow()
         difference = self.end_date - current_date

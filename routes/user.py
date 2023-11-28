@@ -89,9 +89,6 @@ def addgoal():
             return redirect(url_for('login'))
 
         goal = request.form.get("goal")
-        
-        # Validate and process 'goal' as needed here
-        
         user.goal = goal
         try:
             db.session.commit()

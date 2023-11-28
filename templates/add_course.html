@@ -30,7 +30,8 @@
         <label for="goal">Target Grade For Course:</label>
         <input type="number" id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>
 
-       
+        <label for="goal">Target Study Time per Day(min)</label>
+        <input type="number" id="total_study" name="total_study" value="{{ course.total_study if course else '' }}" min="0" oninput="reaction()" required>
 
         {% if action == "Edit" %}
         <div> 
@@ -47,5 +48,10 @@
 {% endif %}
 <input type="submit" value="{{ action }} Course">
     </form>
+    <script>
+        function reaction(){
+                
+        }
+    </script>
    
 {% endblock %}

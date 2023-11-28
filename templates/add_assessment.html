@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-                <label for="isFinal">Exam or Culminating?:</label>
+                <label for="isFinal">Final Assessment?</label>
                 <select id="isFinal" name="isFinal" class="form-control" onchange="showHideWeightInput()">
                     <option value="no" {% if not (assessment and assessment.weight) %}selected{% endif %}>No</option>
                     <option value="yes" {% if assessment and assessment.weight %}selected{% endif %}>Yes</option>
@@ -38,7 +38,7 @@
             </div>
             <div class="form-group" id="weightInput" style="{{ 'display:block;' if assessment and assessment.weight else 'display:none;' }}">
                 <label for="weight">Weight (%):</label>
-                <input type="number" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" max="100" value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
+                <input type="number" step="0.1" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" max="100" value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
             </div>
 
             <button type="submit" class="btn btn-primary">{{ action }} Assessment</button>

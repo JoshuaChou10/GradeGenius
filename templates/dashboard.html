@@ -38,7 +38,13 @@
 <div class="goal-section">
     <h2>Your Goal</h2>
     {% if user.goal %}
+    <img src="/images/edit_icon.png" onclick="show_edit()" style="cursor:pointer;" alt="Edit">
         <p>Current Goal: {{ user.goal }}%</p>
+        <form action="{{ url_for('addgoal') }}" method="post" id="goal-form" style="display:hidden">
+            <input type="text" name="goal" placeholder="New goal" id="goal-input" required>
+            <input type="submit" value="Edit Goal" id="goal-submit">
+        </form>
+
     {% else %}
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form">
             <input type="text" name="goal" placeholder="Enter your goal" id="goal-input" required>
@@ -62,5 +68,13 @@
             goalSubmit.disabled = this.value.trim() === '';
         });
     });
+    function show_edit() {
+        var form = document.getElementById('goal-form');
+        var currentGoal = document.getElementById('current-goal');
+        
+        // Show the form and hide the current goal paragraph
+        form.style.display = 'block';
+        currentGoal.style.display = 'none';
+    }
     </script>
 {% endblock %}

@@ -77,10 +77,22 @@
                     <p>{{course.creation_date.date().strftime('%B %d, %Y') }}</p>
                 </div>
                 <div class="info-item">
-                    <label>Recommended Study Time</label>
-                    <p>need course.time_studied and course.total_study</p>
+                    <label>Recommended Study Time per Day</label>
+                    <p>Time left: 
+                        <span id="time-left">
+                            {{ (course.total_study - course.time_studied) // 60 }} minutes 
+                            {{ (course.total_study - course.time_studied) % 60 }} seconds
+                        </span>
+                    </p>
+                    <p>Studied: 
+                        <span id="time-studied">{{ course.time_studied // 60 }}</span> minutes
+                        <span id="time-studied-seconds">{{ course.time_studied % 60 }}</span> seconds
+                    </p>
+                    <button id="study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study - course.time_studied }}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
+
                 </div>
-       
+                
+
         </div>
             <hr class="section-separator">
             <!-- Assessments Table -->
@@ -209,6 +221,58 @@ window.addEventListener('click', function(event) {
     }
 }
 
-    </script>
+document.addEventListener('DOMContentLoaded', function() {
+    const studyButton = document.getElementById('study-button');
+    let studyInterval;
+    let timeLeft = parseInt(studyButton.getAttribute('data-time-left'), 10);
+    let timeStudied = parseInt(studyButton.getAttribute('data-time-studied'), 10);
+    const timeLeftDisplay = document.getElementById('time-left');
+    const timeStudiedDisplay = document.getElementById('time-studied');
+    const timeStudiedSecondsDisplay = document.getElementById('time-studied-seconds');
+
+    studyButton.addEventListener('click', function() {
+        let isStudying = studyButton.getAttribute('data-studying') === 'true';
+        const courseId = studyButton.getAttribute('data-course-id');
+        isStudying = !isStudying;
+        studyButton.setAttribute('data-studying', isStudying.toString());
+
+        if (isStudying) {
+            studyButton.textContent = 'Stop studying';
+            studyInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft -= 1;
+                    timeStudied += 1;
+
+                    // Update the displayed time
+                    timeLeftDisplay.textContent = Math.floor(timeLeft / 60) + ' minutes ' + (timeLeft % 60) + ' seconds';
+                    timeStudiedDisplay.textContent = Math.floor(timeStudied / 60) ;
+                    timeStudiedSecondsDisplay.textContent = (timeStudied % 60) ;
+                } else {
+                    clearInterval(studyInterval);
+                    studyButton.disabled = true;
+                    studyButton.textContent = 'Time up!';
+                    updateStudyTimes(courseId, timeStudied);
+                }
+            }, 1000);
+        } else {
+            clearInterval(studyInterval);
+            updateStudyTimes(courseId, timeStudied);
+            studyButton.textContent = 'Start/Resume studying';
+        }
+    });
+
+    function updateStudyTimes(courseId, timeStudied) {
+        fetch(`/course/${courseId}/update_study_times`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_studied: timeStudied })
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+</script>
+
 
 {% endblock %}
