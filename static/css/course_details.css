@@ -1,6 +1,5 @@
-
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -8,30 +7,35 @@ body {
 
 h1, h2, h3, p {
     margin: 0;
+    padding: 0;
 }
 
 .container {
     width: 80%;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #fff;
+    border-radius: 15px; /* Increased for roundness */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for a floating effect */
+    overflow: hidden; /* Ensures inner content respects border radius */
 }
 
 
 
 
-
-
-.home-btn {
+.home-btn, #study-button {
     color: #fff;
     text-decoration: none;
     background-color: #4CAF50;
-    padding: 8px 15px;
-    border-radius: 3px;
-    transition: background-color 0.3s ease;
+    padding: 12px 20px; /* More padding for a pill-like shape */
+    border-radius: 25px; /* Fully rounded edges for a pill-like shape */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s;
 }
 
-.home-btn:hover {
+.home-btn:hover, #study-button:hover {
     background-color: #388E3C;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Lifted shadow effect */
+    transform: translateY(-2px); /* Slight raise effect */
 }
 
 .course-info {
@@ -62,11 +66,19 @@ h1, h2, h3, p {
 /* Main Content Styles */
 main {
     background-color: #fff;
-    margin: 20px auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    margin: 40px auto; /* Increased margin for more space around the container */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft, large shadow for a floating effect */
+    padding: 40px; /* More padding for a spacious look */
+    border-radius: 15px; /* Rounded corners */
 }
 
+.info-grid, .assessments-section, .course-details {
+    background-color: #f9f9f9; /* Light grey background */
+    padding: 30px; /* Increased padding for more space */
+    border-radius: 15px; /* Increased for roundness */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Soft shadow for a floaty look */
+    margin-bottom: 30px; /* Spacing between sections */
+}
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -291,4 +303,20 @@ table {
 .scores-container p {
     margin: 0; /* Removes default margin to control spacing better */
  
+}
+@media (max-width: 768px) {
+    .container, main {
+        width: 95%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr; /* Stack the grid items on top of each other */
+        padding: 20px;
+    }
+
+    .home-btn, #study-button {
+        width: 100%; /* Full width buttons for mobile */
+    }
 }

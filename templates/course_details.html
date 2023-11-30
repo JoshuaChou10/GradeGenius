@@ -79,29 +79,23 @@
                 <div class="info-item">
                     <label>Study Goals</label>
                     <p>Daily Study Goal:
-                    <span id="total-study">{{ course.total_study // 60 }}</span> minutes
-                    {% if course.total_study%60 != 0 %}
-                        <span id="time-study-seconds">{{ course.total_study% 60 }}</span> seconds
-                    {% endif %}
-                </p>
+                        <span id="total-study">{{ (course.total_study // 60) | int }}</span>:
+                        <span id="total-study-seconds">{{ '%02d' | format(course.total_study % 60) }}</span>
+                    </p>
                     <p>Studied: 
-                        <span id="time-studied">{{ course.time_studied // 60 }}</span> minutes
-                        <span id="time-studied-seconds">{{ course.time_studied % 60 }}</span> seconds
+                        <span id="time-studied">{{ (course.time_studied // 60) | int }}:{{ '%02d' | format(course.time_studied % 60) }}</span>
                     </p>
                     <p>Time left:  
                         <span id="time-left">
                             {% if course.total_study >= course.time_studied %}
-                                {{ (course.total_study - course.time_studied) // 60 }} minutes
-                                {{ (course.total_study - course.time_studied) % 60 }} seconds
+                                {{ ((course.total_study - course.time_studied) // 60) | int }}:{{ '%02d' | format((course.total_study - course.time_studied) % 60) }}
                             {% else %}
-                                0 minutes
-                                0 seconds
+                                0:00
                             {% endif %}
-
-                           
                         </span>
-                  
                     </p>
+                    
+
                     <button id="study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study-course.time_studied}}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
 
                 </div>
@@ -244,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let timeStudied = parseInt(studyButton.getAttribute('data-time-studied'), 10);
     const timeLeftDisplay = document.getElementById('time-left');
     const timeStudiedDisplay = document.getElementById('time-studied');
-    const timeStudiedSecondsDisplay = document.getElementById('time-studied-seconds');
+    // const timeStudiedSecondsDisplay = document.getElementById('time-studied-seconds');
     const courseId = studyButton.getAttribute('data-course-id');
 
     function updateStudyTimes(courseId, timeStudied) {
@@ -257,6 +251,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error:', error));
     }
+    function padToTwo(number) {
+    return number.toString().padStart(2, '0');
+}
 
     studyButton.addEventListener('click', function() {
         let isStudying = studyButton.getAttribute('data-studying') === 'true';
@@ -274,12 +271,13 @@ document.addEventListener('DOMContentLoaded', function() {
     timeStudied += 1;
     if (timeLeft > 0) {
         timeLeft -= 1;
-        timeLeftDisplay.textContent = Math.floor(timeLeft / 60) + ' minutes ' + (timeLeft % 60) + ' seconds';
+        timeLeftDisplay.textContent = Math.floor(timeLeft / 60) + ':' + padToTwo(timeLeft % 60);
+
     } else {
         timeLeftDisplay.textContent = "You have reached your daily study goal!";
     }
-                timeStudiedDisplay.textContent = Math.floor(timeStudied / 60);
-                timeStudiedSecondsDisplay.textContent = (timeStudied % 60);
+    timeStudiedDisplay.textContent = Math.floor(timeStudied / 60) + ':' + padToTwo(timeStudied % 60);
+     
             }, 1000);
 
             // Save the study time every minute
