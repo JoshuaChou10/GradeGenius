@@ -95,9 +95,17 @@ html, body {
 }
 .dashboard-container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Align the tops of the children */
+    justify-content: space-between; /* This will space out the children */
+    align-items: flex-start;
+    gap: 20px; /* This sets a consistent space between the children */
 }
+
+.goals-wrapper {
+    width: 45%; /* Adjust the width as per your layout needs */
+    display: flex;
+    flex-direction: column; /* Stack the sections vertically */
+}
+
 .goal-section {
     width: 40%; /* Adjust to desired width */
     padding: 20px;
@@ -156,9 +164,11 @@ html, body {
     }
 
     .courses-list,
-    .goal-section {
+    .goal-wrapper {
         width: 100%;
         margin-left: 0;
         margin-bottom: 20px;
     }
+    
 }
+

@@ -77,8 +77,12 @@
                     <p>{{course.creation_date.date().strftime('%B %d, %Y') }}</p>
                 </div>
                 <div class="info-item">
-                    <label>Recommended Study Time per Day</label>
-                    <p>Time left: 
+                    <label>Study Goals</label>
+                    <p>Studied: 
+                        <span id="time-studied">{{ course.time_studied // 60 }}</span> minutes
+                        <span id="time-studied-seconds">{{ course.time_studied % 60 }}</span> seconds
+                    </p>
+                    <p>Time left:  
                         <span id="time-left">
                             {% if course.total_study >= course.time_studied %}
                                 {{ (course.total_study - course.time_studied) // 60 }} minutes
@@ -90,10 +94,7 @@
 
                            
                         </span>
-                    </p>
-                    <p>Studied: 
-                        <span id="time-studied">{{ course.time_studied // 60 }}</span> minutes
-                        <span id="time-studied-seconds">{{ course.time_studied % 60 }}</span> seconds
+                  
                     </p>
                     <button id="study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study-course.time_studied}}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
 

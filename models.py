@@ -16,6 +16,14 @@ class User(db.Model):
         for c in courses:
                 total+=c.grade
         return (total/len(courses)) if courses else 0
+    def get_study_goals(self):
+        courses = Course.query.filter(Course.user_id == self.id, Course.grade != 0.0).all()
+        timeStudied=0
+        total=0
+        for c in courses:
+                timeStudied+=c.time_studied
+                total+=c.total_study
+        return timeStudied,total-timeStudied
 
 
 class Assessment(db.Model):
@@ -44,7 +52,7 @@ class Course(db.Model):
     grade=db.Column(db.Float, nullable=False)
     total_marks=db.Column(db.Float, nullable=False)
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
-    total_study=db.Column(db.Float, nullable=False)
+    total_study=db.Column(db.Float, nullable=False) 
     time_studied=db.Column(db.Float, nullable=False, default=0)
     def days_remaining(self):
         current_date = datetime.utcnow()

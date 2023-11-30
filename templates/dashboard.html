@@ -35,6 +35,7 @@
         {% endfor %}
     </ul>
 </section>
+<div class="goals_wrapper"> 
 <div class="goal-section">
     <h2>Your Goal</h2>
     {% if user.goal %}
@@ -52,6 +53,27 @@
         </form>
     {% endif %}
 </div>
+<div class="study-section">
+    <h2>Study Goals:</h2>
+ 
+    <img src="/images/edit_icon.png" onclick="show_edit()" style="cursor:pointer;" alt="Edit">
+    <p>Time Studied Today (i)</p>
+    <span id="time-studied">{{ timeStudied // 60 }}</span> minutes
+    <span id="time-studied-seconds">{{ timeStudied % 60 }}</span> seconds
+    <p>Time Left:</p>
+    <span id="time-left">
+        {% if timeLeft > 0 %}
+            {{ timeLeft // 60 }} minutes
+            {{ timeLeft % 60 }} seconds
+        {% else %}
+            0 minutes
+            0 seconds
+        {% endif %}
+    </span>
+    
+</div>
+</div>
+
 </div>
 <script>
     // JavaScript to disable the button if the input is empty
