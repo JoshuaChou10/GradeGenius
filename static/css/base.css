@@ -1,7 +1,8 @@
 html, body {
+    padding-top: 70px;
     height: 100%;
     margin: 0;
-    padding: 0;
+
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
 }
@@ -28,7 +29,19 @@ header a, footer a {
 }
 
 
- 
+header {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    flex-shrink: 0; /* Prevents header and footer from shrinking */
+    position: fixed; /* Fixed positioning */
+    top: 0; /* Align to top of the viewport */
+    left: 0; /* Align to left of the viewport */
+    right: 0; /* Align to right of the viewport */
+    z-index: 1000; /* Ensures the header is above other content */
+}
+
 .hamburger {
     display: block;
     cursor: pointer;
@@ -48,6 +61,7 @@ header a, footer a {
     overflow-y: auto; /* Enable scroll if content is longer than the screen */
     border-top-right-radius: 8px; /* Rounded corners on the top right */
     border-bottom-right-radius: 8px; /* Rounded corners on the bottom right */
+    top: 70px;
     left: -250px; /* Initially hide the sidebar */
 }
 
@@ -111,7 +125,7 @@ hr {
 main {
     flex: 1;
     width: 80%;
-
+    margin-top: 70px;
     margin: 2rem auto;
     margin-left: 250px;
     background-color: #fff;
