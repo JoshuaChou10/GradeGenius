@@ -31,7 +31,7 @@
         <input type="number" id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>
 
         <label for="goal">Target Study Time per Day(min)</label>
-        <input type="number" id="total_study" name="total_study" value="{{ course.total_study if course else '' }}" min="0" oninput="reaction()" required>
+        <input type="number" id="total_study" name="total_study" value="{{ (course.total_study)/60 if course else '' }}" min="0" oninput="reaction()" required>
 
         {% if action == "Edit" %}
         <div> 
@@ -46,12 +46,26 @@
     <label for="total_marks">Total Marks Available So Far (Enter sum total of marks avalible for all assessments):</label>
     <input type="number" id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
 {% endif %}
-<input type="submit" value="{{ action }} Course">
+<input type="submit" id="submit_button" value="{{ action }} Course">
+
     </form>
     <script>
         function reaction(){
                 
         }
+
+    document.getElementById('submit_button').addEventListener('click', function(event) {
+        var currentGrade = document.getElementById('grade').value;
+        var totalMarks = document.getElementById('total_marks').value;
+
+        // Check if current grade is entered but total marks is not
+        if (currentGrade !== '' && totalMarks === '') {
+            alert('Please enter a value for Total Marks.');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+
+
     </script>
    
 {% endblock %}

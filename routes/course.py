@@ -54,7 +54,8 @@ def create_course():
         end_date_str= request.form.get('end_date')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')  # Assuming end_date is in 'YYYY-MM-DD' format
         grade= request.form.get('grade')
-        total_study= request.form.get('total_study')*60 #store in seconds
+        total_study=float(request.form.get('total_study'))*60 #store in seconds
+
         if not grade:
             grade=0.0
         else:
@@ -152,8 +153,10 @@ def edit_course(course_id):
             'starting_marks':float(request.form.get('starting_marks')) if request.form.get('starting_marks') else 0.0,
             'grade': float(request.form.get('grade')) if request.form.get('grade') else 0.0,
             'goal': float(request.form.get('goal')),
-            'total_study':float(request.form.get('total_study'))*60
+            'total_study':(float(request.form.get('total_study'))*60),
+            'time_studied':course.time_studied
         }
+      
 
         if 'user_id' in session:
             # Update course in the database
@@ -163,6 +166,7 @@ def edit_course(course_id):
   
         else:
             # Update temporary course in the session
+            #TODO, time studied and total_study not included in guest session
             for key, value in course_data.items():
                 course[key] = value
             session.modified = True
@@ -222,7 +226,6 @@ def update_study_times(course_id):
         data = request.json
         course = Course.query.get(course_id)
         if course:
-            course.total_study-=data['time_studied']
             course.time_studied += data['time_studied']
             db.session.commit()
             return '', 204  # No Content response
