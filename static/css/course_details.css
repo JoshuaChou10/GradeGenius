@@ -156,10 +156,76 @@ main {
 }
 
 .info-item p {
-    font-size: 1.1em;
-    color: #333;
+    margin: 5px 0; /* Vertical margin for paragraphs */
+    color: #555; /* Slightly lighter grey for the paragraph text */
+    line-height: 1.6; /* More readable line height */
 }
 
+.info-item label {
+    display: block; /* Ensure the label is on its own line */
+    font-weight: bold; /* Make the label bold */
+    margin-bottom: 5px; /* Spacing after the label */
+    color: #333; /* Dark grey color for the text */
+    font-size: 1.1em; /* Slightly larger font size for labels */
+}
+.info-item span {
+    font-weight: bold; /* Make the time bold */
+    color: #007bff; /* Use a color that stands out, like Bootstrap's primary color */
+}
+#time-studied,
+#time-studied-seconds,
+#time-left {
+    display: inline-block; /* Keep these elements inline but block-level */
+    min-width: 30px; /* Ensure they don't collapse and have some space */
+    text-align: center; /* Center the text within the spans */
+}
+
+@media (max-width: 768px) {
+    .info-item {
+        padding: 15px; /* Slightly smaller padding on smaller screens */
+    }
+
+    .info-item label {
+        font-size: 1em; /* Adjust label size if necessary on smaller screens */
+    }
+}
+#study-button {
+    background-color: #28a745; /* A green shade similar to Bootstrap's success color */
+    color: white; /* White text color for contrast */
+    font-weight: bold; /* Bold text to make the button text stand out */
+    padding: 10px 20px; /* Vertical and horizontal padding */
+    border: none; /* No border for a modern look */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.1s; /* Smooth transition for background color and transform */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    outline: none; /* Remove the outline to avoid a boxy look when the button is focused */
+    font-size: 1em; /* Set the font size */
+}
+
+#study-button:hover {
+    background-color: #218838; /* A darker green on hover for feedback */
+    transform: translateY(-2px); /* Slight raise effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increased shadow for a "lifted" effect */
+}
+
+#study-button:active {
+    background-color: #1e7e34; /* Even darker green to simulate a pressed button */
+    transform: translateY(1px); /* Offset the raised effect to look pressed */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Smaller shadow to simulate being pressed down */
+}
+
+#study-button:focus {
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Focus ring around the button for accessibility */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    #study-button {
+        width: 100%; /* Full width button on smaller screens for better touch targets */
+        padding: 15px 20px; /* Slightly larger padding on smaller screens */
+    }
+}
 
 .dropdown-content {
     display: none;
