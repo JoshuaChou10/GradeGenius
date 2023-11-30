@@ -226,7 +226,7 @@ def update_study_times(course_id):
         data = request.json
         course = Course.query.get(course_id)
         if course:
-            course.time_studied += data['time_studied']
+            course.time_studied = data['time_studied']
             db.session.commit()
             return '', 204  # No Content response
     else:

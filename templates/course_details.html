@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     timeLeftDisplay.textContent = "You have reached your daily study goal!";
                 }
                 timeStudiedDisplay.textContent = Math.floor(timeStudied / 60);
-                timeStudiedSecondsDisplay.textContent = (timeStudied % 60) + ' seconds';
+                timeStudiedSecondsDisplay.textContent = (timeStudied % 60);
             }, 1000);
 
             // Save the study time every minute
