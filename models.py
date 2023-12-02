@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
 db = SQLAlchemy()
 
 
@@ -68,8 +69,19 @@ class Course(db.Model):
         grade=(earned/total_marks)*100 if total_marks!=0 else 0
 
         return round(total_marks,1),round(grade,1)
+    def reset_study_times():
+        courses = Course.query.all()
+        for course in courses:
+            course.time_studied = 0
+        db.session.commit()
+        print("Study times reset for all courses.")
 
-        
+    # Initialize APScheduler
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=reset_study_times, trigger="cron", hour=0, minute=0)
+    scheduler.start()
+
+                
 
   
 

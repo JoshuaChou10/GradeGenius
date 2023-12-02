@@ -235,16 +235,4 @@ def update_study_times(course_id):
         flash("signup_prompt","info")
     return redirect(url_for("course_details",course_id=course_id))
 
-@app.route('/course/<int:course_id>/update_total_study', methods=['POST'])
-@check_course_ownership
-def update_total_study(course_id):
-    if 'user_id' in session:
-        total_study=request.form.get("total_study")
-        course = Course.query.get(course_id)
-        if course:
-            course.total_study=total_study
-            db.session.commit()
-            return '', 204  # No Content response
-    else:
-        flash("signup_prompt","info")
-    return 'Course not found', 404
+
