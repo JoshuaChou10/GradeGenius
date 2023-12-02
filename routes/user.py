@@ -129,4 +129,26 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/account/delete', methods=['POST'])
+def delete_account():
+    user_id = session.get('user_id')
     
+    # Check if the user is logged in
+    if not user_id:
+        flash('You must be logged in to delete an account.', 'danger')
+        return redirect(url_for('login'))
+
+    # Retrieve the user from the database
+    user_to_delete = User.query.get(user_id)
+
+    # If the user exists, delete their account
+    if user_to_delete:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        flash('Your account has been successfully deleted.', 'success')
+    else:
+        flash('User account not found.', 'danger')
+
+    # Clear the session to log the user out
+    session.clear()
+    return redirect(url_for('index')) 
