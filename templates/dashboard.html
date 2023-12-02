@@ -52,28 +52,28 @@
             <input type="submit" value="Add Goal" id="goal-submit">
         </form>
     {% endif %}
-</div>
-<div class="study-section">
-    <h2>Study Goals:</h2>
- 
-    <img src="/images/edit_icon.png" onclick="show_edit()" style="cursor:pointer;" alt="Edit">
-    <p>Time Studied Today (i)</p>
-    <span id="time-studied">{{ timeStudied // 60 }}</span> minutes
-    <span id="time-studied-seconds">{{ timeStudied % 60 }}</span> seconds
-    <p>Time Left:</p>
-    <span id="time-left">
-        {% if timeLeft > 0 %}
-            {{ timeLeft // 60 }} minutes
-            {{ timeLeft % 60 }} seconds
-        {% else %}
-            0 minutes
-            0 seconds
-        {% endif %}
-    </span>
-    
-</div>
-</div>
 
+
+    <h2>Study Goals:<img src="/images/edit_icon.png" class="edit-icon" alt="Edit"></h2>
+    <div class="study-details">
+      
+
+        <div class="study-details">
+            <p>Time Studied Today (i)</p>
+            <span id="time-studied">{{ (timeStudied // 60) | int }}:{{ '%02d' | format(timeStudied % 60) }}</span>
+        </div>
+        <div class="study-details">
+            <p>Time Left:</p>
+            <span id="time-left">
+                {% if timeLeft > 0 %}
+                    {{ (timeLeft // 60) | int }}:{{ (timeLeft % 60) |int }} 
+                {% else %}
+                    0:00
+                {% endif %}
+            </span>
+        </div>
+</div>
+</div>
 </div>
 <script>
     // JavaScript to disable the button if the input is empty

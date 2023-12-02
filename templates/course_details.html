@@ -80,7 +80,7 @@
                     <label>Study Goals</label>
                     <p>Daily Study Goal:
                         <span id="total-study">{{ (course.total_study // 60) | int }}</span>:
-                        <span id="total-study-seconds">{{ '%02d' | format(course.total_study % 60) }}</span>
+                        <span id="total-study-seconds">{{ '%02d' | format(course.total_study % 60) }}  minutes</span>
                     </p>
                     <p>Studied: 
                         <span id="time-studied">{{ (course.time_studied // 60) | int }}:{{ '%02d' | format(course.time_studied % 60) }}</span>

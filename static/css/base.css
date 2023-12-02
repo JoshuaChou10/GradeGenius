@@ -61,7 +61,7 @@ header {
     overflow-y: auto; /* Enable scroll if content is longer than the screen */
     border-top-right-radius: 8px; /* Rounded corners on the top right */
     border-bottom-right-radius: 8px; /* Rounded corners on the bottom right */
-    top: 70px;
+    top: 120px;
     left: -250px; /* Initially hide the sidebar */
 }
 

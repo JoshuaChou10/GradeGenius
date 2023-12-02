@@ -59,7 +59,7 @@
         var totalMarks = document.getElementById('total_marks').value;
 
         // Check if current grade is entered but total marks is not
-        if (currentGrade !== '' && totalMarks === '') {
+        if (currentGrade !== '' && totalMarks === '' || totalMarks ==0) {
             alert('Please enter a value for Total Marks.');
             event.preventDefault(); // Prevent form submission
         }

@@ -22,7 +22,6 @@ h1, h2, h3, p {
 
 
 
-
 .home-btn, #study-button {
     color: #fff;
     text-decoration: none;
@@ -102,7 +101,7 @@ main {
     margin-bottom: 30px;
 }
 .course-details {
-    background-color: #f9f9f9; /* Light grey background */
+    background-color: #f9f9f9; 
     padding: 20px;
     border-radius: 5px;
 }
