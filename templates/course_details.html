@@ -74,7 +74,8 @@
                 </div>
                 <div class="info-item">
                     <label>Creation Date</label>
-                    <p>{{course.creation_date.date().strftime('%B %d, %Y') }}</p>
+                    <p>{{ datetime.strptime(course['creation_date'], '%Y-%m-%d').date().strftime('%B %d, %Y') }}</p>
+
                 </div>
                 <div class="info-item">
                     <label>Study Goals</label>
@@ -82,6 +83,9 @@
                         <span id="total-study">{{ (course.total_study // 60) | int }}</span>:
                         <span id="total-study-seconds">{{ '%02d' | format(course.total_study % 60) }}  minutes</span>
                     </p>
+                    {% if 'user_id' not in session %}
+                    <span>Sign in to start study timer!</span>
+                    {% else %}
                     <p>Studied: 
                         <span id="time-studied">{{ (course.time_studied // 60) | int }}:{{ '%02d' | format(course.time_studied % 60) }}</span>
                     </p>
@@ -97,7 +101,7 @@
                     
 
                     <button id="study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study-course.time_studied}}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
-
+                    {% endif %}
                 </div>
                 
 
@@ -131,7 +135,7 @@
                     <tr>
                         <td>Starting Score <img alt="edit" src="./images/edit_icon.png"></td>
                         <td>{{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</td>
-                        <td>{{ course.creation_date.date().strftime('%B %d, %Y') }}</td>
+                        <td>{{ datetime.strptime(course['creation_date'], '%Y-%m-%d').date().strftime('%B %d, %Y') }}</td>
 
                     </tr>
                     {% for assessment in course.assessments %}

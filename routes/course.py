@@ -1,7 +1,7 @@
 from routes.user import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash,jsonify
 from helpers import get_weights
-
+from datetime import datetime
 import uuid
 from datetime import datetime
 from models import Course, Assessment
@@ -39,7 +39,7 @@ def course_details(course_id):
     finals_weight,finals_grade,courses_grade=get_weights(course)
     courses_score=f"{round(courses_grade*((1-finals_weight)*100),1)}/{round((1-finals_weight)*100,1)}"
     finals_score=f"{round(finals_grade*finals_weight*100,1)}/{round(finals_weight*100,1)}"
-    return render_template('course_details.html', course=course,time_left=time_left if time_left>0 else 0,courses_score=courses_score,finals_score=finals_score)
+    return render_template('course_details.html', datetime=datetime,course=course,time_left=time_left if time_left>0 else 0,courses_score=courses_score,finals_score=finals_score)
 
 
 @app.route('/course/create', methods=['POST', 'GET'])
@@ -101,14 +101,15 @@ def create_course():
                     'code': course_code,
                     'description':course_description,
                     'name': course_name,
-                    "creation_date":creation_date,
+                    "creation_date": creation_date.strftime('%Y-%m-%d'),
                     'end_date': end_date,
                     'assessments': [],
                     'starting_grade':grade,
                     'starting_marks':total_marks,
                     'grade':grade,
                     'total_marks':total_marks,
-                    'goal': goal
+                    'goal': goal,
+                    'total_study':total_study
             })
         session.modified = True
         if len(session["temporary_courses"])==2:

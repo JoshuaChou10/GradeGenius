@@ -16,7 +16,7 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     GPA=0.0
-    time_studied=0.0
+    timeStudied,timeLeft=0.0,3600.0
     if 'user_id' in session:
         user=User.query.get(session['user_id'])
         if user:
