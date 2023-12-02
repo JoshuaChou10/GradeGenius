@@ -62,7 +62,7 @@ html, body {
     border-bottom: none;
 }
 
-/* You might want to adjust the Delete button as well to fit nicely with the new list item style */
+
 .courses-list input[type="submit"] {
     background-color: #dc3545;
     color: white;
@@ -103,12 +103,30 @@ html, body {
 }
 
 /* Delete Button Styles */
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #dc3545; /* or any color you prefer for the icon */
+    padding: 0;
+    font-size: 1.2em; /* Adjust the size as needed */
+    padding-right:10px;
+}
+
+.delete-btn:focus {
+    outline: none;
+}
+
+.delete-btn i {
+    pointer-events: none; /* Make sure the icon does not interfere with the button's click event */
+}
+
 .courses-list form {
     margin: 0;
 }
 
 .goals-wrapper {
-    width: 50%; /* Adjust the width as per your layout needs */
+    width: 50%; 
     display: flex;
     flex-direction: column; /* Stack the sections vertically */
     margin-right: auto; /* Center the element on the right side */
@@ -118,7 +136,7 @@ html, body {
 }
 
 .goal-section {
-    width: 100%; /* Adjust to desired width */
+    width: 100%; 
     padding: 20px;
     background-color: #f8f9fa; /* Light grey background */
     border-radius: 20px;
@@ -186,14 +204,14 @@ html, body {
 .study-section .edit-icon {
     cursor: pointer;
     float: right; /* Position the edit icon to the right of the title */
-    margin-top: -30px; /* Adjust as needed to align with the title */
+    margin-top: 30px;
 }
 
 .study-details {
     display: block; /* This can actually be omitted as divs are block-level by default */
     margin-top: 10px;
     padding: 10px 0;
-    border-top: 1px solid #eee;
+
 }
 
 .study-details p {
@@ -219,4 +237,23 @@ html, body {
     flex: 1; /* Divides the space equally between the study details */
     text-align: center;
 }
+/* for edit icon and title */
+.goal-header {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space between the h2 and the icon */
+}
 
+
+.goal-header #edit-btn {
+    visibility: hidden; /* Hide the edit icon initially */
+    opacity: 0;
+}
+
+.goal-header:hover #edit-btn {
+    visibility: visible; /* Show the edit icon on hover */
+    opacity: 1;
+}
+hr {
+    margin-bottom: 20px; /* Adjust the value as needed */
+}

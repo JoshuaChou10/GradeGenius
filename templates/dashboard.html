@@ -5,6 +5,8 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
 {% endblock %}
 
 {% block header %}Courses Dashboard{% endblock %}
@@ -29,17 +31,24 @@
                 <!-- Delete button in form -->
                 <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this course?');">
                     <input type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete">
+                    <button type="submit" class="delete-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </form>
+                
             </li>
         {% endfor %}
     </ul>
 </section>
 <div class="goals_wrapper"> 
 <div class="goal-section">
-    <h2>Your Goal</h2>
-    {% if user.goal %}
-    <img src="/images/edit_icon.png" onclick="show_edit()" style="cursor:pointer;" alt="Edit">
+    <div class="goal-header">
+        <h2>Target Grade Average</h2>
+        {% if user.goal %}
+        <i onclick="show_edit()" style="cursor:pointer;" id='edit-btn' class="fa fa-edit"></i>
+  
+    </div>
+
         <p>Current Goal: {{ user.goal }}%</p>
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form" style="display:hidden">
             <input type="text" name="goal" placeholder="New goal" id="goal-input" required>
@@ -53,20 +62,20 @@
         </form>
     {% endif %}
 
-
-    <h2>Study Goals:<img src="/images/edit_icon.png" class="edit-icon" alt="Edit"></h2>
+<hr>
+    <h2>Study Goals:</h2>
     <div class="study-details">
       
 
         <div class="study-details">
             <p>Time Studied Today (i)</p>
-            <span id="time-studied">{{ (timeStudied // 60) | int }}:{{ '%02d' | format(timeStudied % 60) }}</span>
+            <span id="time-studied">{{ (timeStudied // 60) | int }}:{{ '%02d' | format(timeStudied % 60) }} minutes</span>
         </div>
         <div class="study-details">
             <p>Time Left:</p>
             <span id="time-left">
                 {% if timeLeft > 0 %}
-                    {{ (timeLeft // 60) | int }}:{{ (timeLeft % 60) |int }} 
+                    {{ (timeLeft // 60) | int }}:{{ (timeLeft % 60) |int }}  minutes
                 {% else %}
                     0:00
                 {% endif %}

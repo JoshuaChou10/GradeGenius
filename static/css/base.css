@@ -9,10 +9,8 @@ html, body {
 
 header, footer {
     background-color: #2c3e50;
-
     color: white;
     text-align: center;
-    padding: 20px 0;
     flex-shrink: 0; /* Prevents header and footer from shrinking */
 }
 
@@ -33,7 +31,7 @@ header {
     background-color: #2c3e50;
     color: white;
     text-align: center;
-    padding: 20px 0;
+
     flex-shrink: 0; /* Prevents header and footer from shrinking */
     position: fixed; /* Fixed positioning */
     top: 0; /* Align to top of the viewport */
@@ -50,7 +48,7 @@ header {
 
 /* Sidebar */
 .sidebar {
-    width: 250px; /* Adjust the width as needed */
+    width: 250px; 
     height: 100vh; /* Viewport Height */
     background-color: #fff; /* White background */
     border-right: 1px solid #ececec; /* Right border */
@@ -104,7 +102,9 @@ header {
     text-decoration: none;
     color: #3c4043; /* Dark grey text color for contrast */
     font-weight: 500; /* Slightly bolder font */
+    font-size:1.1rem;
     display: block;
+    padding:10px;
 }
 
 .sidebar .courses-heading {

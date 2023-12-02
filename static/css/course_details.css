@@ -83,6 +83,9 @@ main {
     justify-content: space-between;
     align-items: center;
 }
+header{
+    padding: 20px 0;
+}
 
 .section-separator {
     border: 0;
