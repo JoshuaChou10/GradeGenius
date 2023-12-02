@@ -43,20 +43,21 @@
         </ul>
     </aside>
     <div id="signupModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <form action="/signup" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-      
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-      
-            <input type="submit" value="Sign Up">
-          </form>
-        </div>
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Sign Up for Free!</h2>
+        <form action="/signup" method="post">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+    
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+    
+          <input type="submit" value="Sign Up">
+        </form>
       </div>
+    </div>
     <main class="content">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

@@ -43,17 +43,21 @@
 </section>
 <div class="goals-wrapper">
     <div class="goal-section">
+       
+        {% if user.goal %}
         <div class="goal-header">
             <h2>Target Grade Average</h2>
             <i onclick="show_edit()" style="cursor:pointer;" id='edit-btn' class="fa fa-edit"></i>
         </div>
-        {% if user.goal %}
         <p>Current Goal: {{ user.goal }}%</p>
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form" style="display:none;">
             <input type="text" name="goal" placeholder="New goal" id="goal-input" required>
             <input type="submit" value="Edit Goal" id="goal-submit">
         </form>
         {% else %}
+
+            <h2>Target Grade Average</h2>
+       
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form">
             <input type="text" name="goal" placeholder="Enter your goal" id="goal-input" required>
             <input type="submit" value="Add Goal" id="goal-submit">

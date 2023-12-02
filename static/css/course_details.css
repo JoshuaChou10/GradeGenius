@@ -203,7 +203,7 @@ main {
         font-size: 1em; /* Adjust label size if necessary on smaller screens */
     }
 }
-#study-button {
+.study-button {
     background-color: #28a745; /* A green shade similar to Bootstrap's success color */
     color: white; /* White text color for contrast */
     font-weight: bold; /* Bold text to make the button text stand out */
@@ -217,19 +217,19 @@ main {
     font-size: 1em; /* Set the font size */
 }
 
-#study-button:hover {
+.study-button:hover {
     background-color: #218838; /* A darker green on hover for feedback */
     transform: translateY(-2px); /* Slight raise effect on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Increased shadow for a "lifted" effect */
 }
 
-#study-button:active {
+.study-button:active {
     background-color: #1e7e34; /* Even darker green to simulate a pressed button */
     transform: translateY(1px); /* Offset the raised effect to look pressed */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Smaller shadow to simulate being pressed down */
 }
 
-#study-button:focus {
+.study-button:focus {
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Focus ring around the button for accessibility */
 }
 
