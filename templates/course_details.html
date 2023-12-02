@@ -74,7 +74,11 @@
                 </div>
                 <div class="info-item">
                     <label>Creation Date</label>
-                    <p>{{ datetime.strptime(course['creation_date'], '%Y-%m-%d').date().strftime('%B %d, %Y') }}</p>
+                    {% if course.creation_date is string %}
+    <p>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</p>
+{% else %}
+    <p>{{ course.creation_date.strftime('%B %d, %Y') }}</p>
+{% endif %}
 
                 </div>
                 <div class="info-item">
@@ -99,14 +103,14 @@
                     </p>
                     <button class="study-button" id="user-study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study-course.time_studied}}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
 
-                    
-{% endif %}
+    {% else %}                
+
 <form action="{{ url_for('update_study_times', course_id=course.id) }}" method="post" id="study-form">
     <input type="hidden" name="time_studied" id="time-studied" value="your_value_here" />
     <button class="study-button" type="submit" >Start studying</button>
 </form>
 
-           
+{% endif %}
                 </div>
                 
 
@@ -140,7 +144,11 @@
                     <tr>
                         <td>Starting Score <img alt="edit" src="./images/edit_icon.png"></td>
                         <td>{{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</td>
-                        <td>{{ datetime.strptime(course['creation_date'], '%Y-%m-%d').date().strftime('%B %d, %Y') }}</td>
+                        {% if course.creation_date is string %}
+    <td>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</td>
+{% else %}
+    <td>{{ course.creation_date.strftime('%B %d, %Y') }}</td>
+{% endif %}
 
                     </tr>
                     {% for assessment in course.assessments %}
