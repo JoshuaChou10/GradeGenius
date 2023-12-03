@@ -36,6 +36,7 @@ def check_grade_change(course, prev_grade, action):
         flash(f"Assessment successfully {action}. Grade stayed the same",'info')
 
 def get_weights(course):
+      #current final should be added before this is called
     finals_weight = 0
     finals_grade = 0
     courses_grade = 0
@@ -46,18 +47,21 @@ def get_weights(course):
         assessments = get_attr(course, 'assessments', [])
         finals = [a for a in assessments if get_attr(a, 'weight') is not None]
         courses = [a for a in assessments if get_attr(a, 'weight') is None]
-    if len(finals) > 0:
-        finals_weight = sum(get_attr(f, 'weight') for f in finals)
+    finals_total=(sum(get_attr(f, 'total') for f in finals)) 
+    if len(finals) > 0 and finals_total>0 :
+        finals_weight = sum(get_attr(f, 'weight') for f in finals)/finals_total
         finals_grade = (sum(get_attr(f, 'earned') for f in finals)) / (sum(get_attr(f, 'total') for f in finals))
 
-    courses_grade =( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))
+    courses_grade=0 if (get_attr(course,'total_marks')- (sum(get_attr(f, 'total') for f in finals)))<=0 else ( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))
     return finals_weight, finals_grade, courses_grade
 
    
 def scale_finals(course,finals):
-    if len(finals)>0:
+    #current final should be added before this is called
+    finals_total=sum(get_attr(f,'total') for f in finals) 
+    if len(finals)>0 and finals_total>0:
         finals_weight=sum(get_attr(f,'weight') for f in finals) 
-        finals_total=sum(get_attr(f,'total') for f in finals) 
+
                 #Get total marks finals are worth eg. 30% finals would be worth 30 marks if weight of course work is 70
         finals_mark=(get_attr(course,'total_marks')-finals_total)/((1/(finals_weight))-1)#Derived from finals_weight=(finals_mark/finals_mark+course_work_marks) 
                 #scale each final assessment based on their weighting in the finals, eg. 10% final out of a total of 30% finals

@@ -90,7 +90,7 @@
                             Daily Study Goal{% if course['total_study'] - course['time_studied'] <= 0 %} Reached!{% endif %}
                             <span id="total-study">
                                 {{ (course['total_study'] // 60) | int }}:{{ '%02d' | format(course['total_study'] % 60) }} minutes
-                                <i id='edit-btn' class="fa fa-edit"></i>
+                                <a href="{{ url_for('edit_course', course_id=course.id) }}"><i  id='edit-btn' class="fa fa-edit"></i></a>
                             </span>
                             
                         </p>
@@ -162,7 +162,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td id="starting-score">Starting Score <i style="cursor:pointer;" id='edit-btn' class="fa fa-edit"></i></td>
+                        <td id="starting-score">Starting Score   <a href="{{ url_for('edit_course', course_id=course.id) }}"><i  id='edit-btn' class="fa fa-edit"></i></a></td>
                         <td>{{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</td>
                         {% if course.creation_date is string %}
     <td>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</td>

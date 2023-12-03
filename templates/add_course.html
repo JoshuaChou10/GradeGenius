@@ -35,12 +35,12 @@
 
         {% if action == "Edit" %}
         <div> 
-            <h3>On Course Creation:</h3>
+            <h3>Edit Starting Marks:</h3>
         <label for="total_marks">Starting Grade (Grade entered when course created):</label>
         <input type="number" step=0.1 id="starting_grade" name="starting_grade" value="{{ course.starting_grade if course else '' }}" min="0" placeholder="Blank for none">
 
     <label for="total_marks">Starting Marks (Total marks avalible when course created):</label>
-    <input type="number" id="starting_marks" name="starting_marks" value="{{ course.starting_marks if course else '' }}" min="0" placeholder="Blank for none">
+    <input type="number" id="total_marks" name="total_marks" value="{{ course.starting_marks if course else '' }}" min="0" placeholder="Blank for none">
 </div>
 {% else %}
     <label for="total_marks">Total Marks Available So Far (Enter sum total of marks avalible for all assessments):</label>
@@ -54,17 +54,25 @@
                 
         }
 
-    document.getElementById('submit_button').addEventListener('click', function(event) {
-        var currentGrade = document.getElementById('grade').value;
-        var totalMarks = document.getElementById('total_marks').value;
+        document.getElementById('submit_button').addEventListener('click', function(event) {
+    var currentGrade = document.getElementById('grade').value;
+    var startingGradeElement = document.getElementById('starting_grade');
+    var totalMarks = document.getElementById('total_marks').value;
 
-        // Check if current grade is entered but total marks is not
-        if (currentGrade !== '' && totalMarks === '' || totalMarks ==0) {
+    var startingGrade = startingGradeElement ? startingGradeElement.value : null;
+    if (!startingGrade){
+    // Check if current grade is entered but total marks is not
+    if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0)) {
             alert('Please enter a value for Total Marks.');
             event.preventDefault(); // Prevent form submission
         }
-    });
-
+    }else{
+        if ( (totalMarks=='' || totalMarks==0) && (startingGrade!='' && startingGrade!=0)) {
+            alert('Please enter a value for Total Marks.');
+            event.preventDefault(); // Prevent form submission
+        }
+    }
+});
 
     </script>
    

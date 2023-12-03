@@ -3,7 +3,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('./images/background.png');
+    background: #56CCF2; 
     background-size: cover;
     background-position: center;
     display: flex;
@@ -22,17 +22,21 @@ body {
 
 .explore-button {
     display: inline-block;
-    font-size: 20px;
-    padding: 15px 30px;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 25px 50px;
     text-decoration: none;
-    border: none;
-    border-radius: 8px;
-    background-color: #008CBA;
-    color: white;
+    border-radius: 16px;
+    background-color: #fff;
+    color: #56CCF2;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease; /* Transition for the shadow and transform */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+    text-shadow: 1px 1px 0px #fff; /* Optional: subtle text shadow for depth */
 }
 
 .explore-button:hover {
-    background-color: #005f5f;
+    background-color: #ececec; /* Slight background color change on hover */
+    transform: translateY(-2px); /* Moves the button up a bit */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Reduces shadow for pressed effect */
 }

@@ -173,7 +173,7 @@ def edit_assessment(course_id,assessment_id):
                 setattr(assessment, key, value)
             finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
             course.total_marks, course.grade = course.get_updated_grade()
-            scale_finals(course,finals) #dont need total_m
+            scale_finals(course,finals) 
             course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
             db.session.commit()
         else:

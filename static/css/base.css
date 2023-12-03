@@ -2,10 +2,9 @@ html, body {
     padding-top: 70px;
     height: 100%;
     margin: 0;
-    background: linear-gradient(to right, #56CCF2, #2F80ED, #2D9CDB, #56CA85); /* Blue to green gradient */
-
+    background: #56CCF2; 
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+   
 }
 
 header, footer {
