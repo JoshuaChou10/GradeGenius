@@ -67,9 +67,10 @@ main{
 /* Main Content Styles */
 .page-main {
     background-color: #fff;
+
     margin: 40px auto; /* Increased margin for more space around the container */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft, large shadow for a floating effect */
-    padding: 40px; /* More padding for a spacious look */
+    padding: 80px; /* More padding for a spacious look */
     border-radius: 15px; /* Rounded corners */
 }
 
