@@ -325,14 +325,16 @@ table {
         width: 100%; /* Full width buttons for mobile */
     }
 }
-#starting-score #edit-btn {
+#starting-score #edit-btn,
+#total-study #edit-btn {
     visibility: hidden; /* Hide the edit icon initially */
     opacity: 0;
 }
 
-#starting-score:hover #edit-btn {
+#starting-score:hover #edit-btn,
+#total-study:hover #edit-btn {
     visibility: visible; /* Show the edit icon on hover */
-    color:#666;
+    color: #666;
     opacity: 1;
 }
 

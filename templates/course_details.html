@@ -90,7 +90,9 @@
                             Daily Study Goal{% if course['total_study'] - course['time_studied'] <= 0 %} Reached!{% endif %}
                             <span id="total-study">
                                 {{ (course['total_study'] // 60) | int }}:{{ '%02d' | format(course['total_study'] % 60) }} minutes
+                                <i id='edit-btn' class="fa fa-edit"></i>
                             </span>
+                            
                         </p>
                         
                   
