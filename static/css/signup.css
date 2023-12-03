@@ -1,4 +1,4 @@
-@import url('base.css');
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -10,6 +10,13 @@ body {
     width: 300px;
     margin: auto;
     padding-top: 100px;
+}
+input[type="text"], input[type="password"], input[type="submit"] {
+    width: calc(100% - 20px); /* Subtract padding from width */
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 h1 {
@@ -26,12 +33,7 @@ label {
     margin-bottom: 5px;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+
 
 button {
     display: block;

@@ -244,7 +244,6 @@ html, body {
     justify-content: space-between; /* Space between the h2 and the icon */
 }
 
-
 .goal-header #edit-btn {
     visibility: hidden; /* Hide the edit icon initially */
     opacity: 0;
@@ -252,8 +251,10 @@ html, body {
 
 .goal-header:hover #edit-btn {
     visibility: visible; /* Show the edit icon on hover */
+    color:#666;
     opacity: 1;
 }
+
 hr {
     margin-bottom: 20px; /* Adjust the value as needed */
 }

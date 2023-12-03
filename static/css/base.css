@@ -2,6 +2,7 @@ html, body {
     padding-top: 70px;
     height: 100%;
     margin: 0;
+    background: linear-gradient(to right, #56CCF2, #2F80ED, #2D9CDB, #56CA85); /* Blue to green gradient */
 
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -178,8 +179,6 @@ main {
 .btn-logout {
     background-color: #e74c3c;
 }
-  /* The Modal (background) */
-  /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -191,81 +190,83 @@ main {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content/Box */
-  .modal-content {
+}
+
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    border-radius: 5px; /* Optional: for rounded corners */
-  }
-  
-  /* The Close Button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  /* Add styles for the form and its elements */
-  .modal-content form {
+    width: 30%; /* Could be more or less, depending on screen size */
+    max-width: 400px; /* Maximum width */
+    min-height: 300px; /* Minimum height */
+    max-height: 400px; /* Maximum height */
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Spacing between form elements */
-  }
-  
-  .modal-content h2 {
-    text-align: center;
-    color: #004080; /* Adjust the color to fit your design */
-  }
-  
-  .modal-content label {
-    margin-bottom: 5px; /* Spacing between label and input */
-  }
-  
-  .modal-content input[type="text"],
-  .modal-content input[type="password"] {
-    padding: 10px;
-    margin-bottom: 10px; /* Spacing between input fields */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .modal-content input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #007bff; /* Bootstrap primary button color */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  
-  /* The Close Button */
-  .close {
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px; /* Optional: for rounded corners */
+   
+}
+.close {
     color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
+    position: absolute; /* Position it absolutely within the modal */
+    top: 20px; /* Position it 20px from the top */
+    right: 20px; /* Position it 20px from the right */
+    font-size: 24px; /* Adjust the font size */
+    cursor: pointer;
+}
+
+/* Hover effect for close button */
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
+}
+
+
+/* Additional styling for form elements */
+input[type=text], input[type=password] {
+    width: calc(100% - 10px); 
+    margin: 8px 0;
+  
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: calc(100% - 10px); 
+    margin: 8px 0;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
     cursor: pointer;
-  }
+   
+}
+
+input[type=submit]:hover {
+    opacity: 0.8;
+}
+
+/* Style for the form labels */
+label {
+    margin-top:20px;
+    width: 100%; /* Full width */
+    text-align: left; 
+    display: block; /* Make labels block level for better layout */
+    margin-bottom: 5px;
+}
+
+/* Adjusting the margins and layout of the sign-up message */
+.modal-content p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+ 
   .btn {
     padding: 5px 10px;
     color: #007BFF;

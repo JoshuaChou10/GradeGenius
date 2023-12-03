@@ -9,14 +9,16 @@ h1, h2, h3, p {
     margin: 0;
     padding: 0;
 }
-
+/* Removes outer box*/
+main{
+    background-color: transparent; 
+    box-shadow: none; 
+}
 .container {
     width: 80%;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 15px; /* Increased for roundness */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Enhanced shadow for a floating effect */
+    border-radius: 15px; 
     overflow: hidden; /* Ensures inner content respects border radius */
 }
 
@@ -63,7 +65,7 @@ h1, h2, h3, p {
 }
 
 /* Main Content Styles */
-main {
+.page-main {
     background-color: #fff;
     margin: 40px auto; /* Increased margin for more space around the container */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft, large shadow for a floating effect */
@@ -321,4 +323,62 @@ table {
     .home-btn, #study-button {
         width: 100%; /* Full width buttons for mobile */
     }
+}
+#starting-score #edit-btn {
+    visibility: hidden; /* Hide the edit icon initially */
+    opacity: 0;
+}
+
+#starting-score:hover #edit-btn {
+    visibility: visible; /* Show the edit icon on hover */
+    color:#666;
+    opacity: 1;
+}
+
+/* Style for the study goals container */
+.study-goals-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.tab-button {
+    background-color: #eee;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.tab-button:hover {
+    background-color: #ddd;
+}
+
+/* Style for the tab content */
+.tab-content {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.tab-button.active-tab {
+    background-color: #ddd; /* Slightly darker background for active tab */
+}
+
+
+.tab-button:hover, .tab-button.active-tab:hover {
+    background-color: #ccc;
 }

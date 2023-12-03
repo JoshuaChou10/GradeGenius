@@ -109,7 +109,8 @@ def create_course():
                     'grade':grade,
                     'total_marks':total_marks,
                     'goal': goal,
-                    'total_study':total_study
+                    'total_study':total_study,
+                    'time_studied':0
             })
         session.modified = True
         if len(session["temporary_courses"])==2:

@@ -6,6 +6,7 @@
 {% block stylesheets %}
     <!-- Specific stylesheet for the course details page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/course_details.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 {% endblock %}
 {% block header %}
     {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
@@ -34,7 +35,7 @@
             </form>
         </div>
     </div>
-    <main>
+    <main class="page-main">
         <button onclick="show()">Update Mark Manually</button>
 
         <section class="course-details">
@@ -75,33 +76,50 @@
                 <div class="info-item">
                     <label>Creation Date</label>
                     {% if course.creation_date is string %}
-    <p>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</p>
-{% else %}
-    <p>{{ course.creation_date.strftime('%B %d, %Y') }}</p>
-{% endif %}
+                    <p>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</p>
+                {% else %}
+                    <p>{{ course.creation_date.strftime('%B %d, %Y') }}</p>
+                {% endif %}
 
                 </div>
                 <div class="info-item">
                     <label>Study Goals</label>
-                    <p>Daily Study Goal:
-                        <span id="total-study">{{ (course.total_study // 60) | int }}</span>:
-                        <span id="total-study-seconds">{{ '%02d' | format(course.total_study % 60) }}  minutes</span>
-                    </p>
-                    {% if 'user_id' in session %}
+                    <div class="study-goals-container">
+                 
+                        <p style="{% if course['total_study'] - course['time_studied'] <= 0 %}color: green;{% endif %}">
+                            Daily Study Goal{% if course['total_study'] - course['time_studied'] <= 0 %} Reached!{% endif %}
+                            <span id="total-study">
+                                {{ (course['total_study'] // 60) | int }}:{{ '%02d' | format(course['total_study'] % 60) }} minutes
+                            </span>
+                        </p>
+                        
+                  
+                     <!-- Tabs for switching -->
+    <div class="tabs">
+        <button id="studied-btn" class="tab-button" onclick="openTab('studied')">Time Studied</button>
+        <button id="left-btn" class="tab-button" onclick="openTab('left')">Time Left</button>
+    </div>
               
-                    <p>Studied: 
-                        <span id="time-studied">{{ (course.time_studied // 60) | int }}:{{ '%02d' | format(course.time_studied % 60) }}</span>
-                    </p>
-                    <p>Time left:  
-                        <span id="time-left">
-                            {% if course.total_study >= course.time_studied %}
-                                {{ ((course.total_study - course.time_studied) // 60) | int }}:{{ '%02d' | format((course.total_study - course.time_studied) % 60) }}
-                            {% else %}
-                                0:00
-                            {% endif %}
-                        </span>
-                    </p>
-                    <button class="study-button" id="user-study-button" data-course-id="{{ course.id }}" data-time-left="{{ course.total_study-course.time_studied}}" data-time-studied="{{ course.time_studied }}">Start/Resume studying</button>
+                       <!-- Tab content --> 
+    <div id="studied" class="tab-content">
+        <p>Studied:
+            <span id="time-studied">{{ (course['time_studied'] // 60) | int }}:{{ '%02d' | format(course['time_studied'] % 60) }}</span>
+        </p>
+    </div>
+    <div id="left" class="tab-content" style="display:none;">
+        <p>Time left:
+            <span id="time-left">
+                {% if course['total_study'] >= course['time_studied'] %}
+                    {{ ((course['total_study'] - course['time_studied']) // 60) | int }}:{{ '%02d' | format((course['total_study'] - course['time_studied']) % 60) }}
+                {% else %}
+                    0:00
+                {% endif %}
+            </span>
+        </p>
+    </div>
+                    </div>
+                    {% if 'user_id' in session %}
+                    <button class="study-button" id="user-study-button" data-course-id="{{ course.id }}" data-time-left="{{ course['total_study']-course['time_studied']}}" data-time-studied="{{ course['time_studied'] }}">Start/Resume studying</button>
 
     {% else %}                
 
@@ -142,7 +160,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Starting Score <img alt="edit" src="./images/edit_icon.png"></td>
+                        <td id="starting-score">Starting Score <i style="cursor:pointer;" id='edit-btn' class="fa fa-edit"></i></td>
                         <td>{{ (course.starting_marks * course.starting_grade) / 100 }} / {{ course.starting_marks }}</td>
                         {% if course.creation_date is string %}
     <td>{{ datetime.strptime(course.creation_date, '%Y-%m-%d').date().strftime('%B %d, %Y') }}</td>
@@ -291,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timeLeftDisplay.textContent = Math.floor(timeLeft / 60) + ':' + padToTwo(timeLeft % 60);
 
     } else {
-        timeLeftDisplay.textContent = "You have reached your daily study goal!";
+        timeLeftDisplay.textContent = "0:00";
     }
     timeStudiedDisplay.textContent = Math.floor(timeStudied / 60) + ':' + padToTwo(timeStudied % 60);
      
@@ -319,6 +337,23 @@ document.addEventListener('DOMContentLoaded', function() {
         updateStudyTimes(courseId, timeStudied);
     });
 });
+function openTab(tabName) {
+    var i, tabcontent, tabbuttons;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tabbuttons = document.getElementsByClassName("tab-button");
+    for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active-tab");
+    }
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById(tabName + "-btn").classList.add("active-tab");
+}
+
+// Initial default active tab
+document.getElementById("studied-btn").classList.add("active-tab");
+
 
 </script>
 
