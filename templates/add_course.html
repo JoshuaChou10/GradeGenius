@@ -19,19 +19,17 @@
         <label for="course_description">Course Description (optional):</label>
         <input type="text" id="course_description" name="course_description" value="{{ course.description if course else '' }}" >
 
-
         <label for="end_date">End date for the Course:</label>
         <input type="date" id="end_date" name="end_date" value="{{ course.end_date.strftime('%Y-%m-%d') if course else '' }}" required>
 
         <label for="grade">Current Grade (%):</label>
-        <input type="number" id="grade" name="grade" step=0.01 value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
-
+        <input type="number" min=0 id="grade" name="grade" step=0.01 value="{{ course.grade|round(2) if course else '' }}" min="0" max="100" placeholder="Blank for none">
 
         <label for="goal">Target Grade For Course:</label>
-        <input type="number" id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>
+        <input type="number" min=0 id="goal" name="goal" value="{{ course.goal if course else '' }}" min="0" max="100" required>
 
         <label for="goal">Target Study Time per Day(min)</label>
-        <input type="number" step=0.1 id="total_study" name="total_study" value="{{ (course.total_study)/60 if course else '' }}" min="0" oninput="reaction()" required>
+        <input type="number" min=0 step=0.1 id="total_study" name="total_study" value="{{ (course.total_study)/60 if course else '' }}" min="0" oninput="reaction()" required>
 
         {% if action == "Edit" %}
         <div> 

@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="earned">Earned Marks:</label>
-                <input type="number" id="earned" name="earned" step=0.1 class="form-control" value="{% if assessment and assessment.weight and action == 'Edit' %}{{ assessment.original_earned }}{% elif assessment and action == 'Edit' %}{{ assessment.earned }}{% else %}{{ session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '' }}{% endif %}" required>
+                <input type="number" min=0 id="earned" name="earned" step=0.1 class="form-control" value="{% if assessment and assessment.weight and action == 'Edit' %}{{ assessment.original_earned }}{% elif assessment and action == 'Edit' %}{{ assessment.earned }}{% else %}{{ session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '' }}{% endif %}" required>
             </div>
 
             <div class="form-group">
@@ -37,6 +37,10 @@
                 </select>
             </div>
             <div class="form-group" id="weightInput" style="{{ 'display:block;' if assessment and assessment.weight else 'display:none;' }}">
+                <div class="form-group" id="current-finals-weight" style="display:none;">
+                    <label>Current Finals Weight (%):</label>
+                    <span>{{ finals_weight * 100 }}</span>% <!-- Assuming finals_weight is between 0 and 1 -->
+                </div>
                 <label for="weight">Weight (%):</label>
                 <input type="number" step="0.1" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" max="100" value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
             </div>
@@ -45,15 +49,37 @@
         </form>
     </section>
     <script>
-        function showHideWeightInput() {
-            var isFinal = document.getElementById("isFinal").value;
-            var weightInput = document.getElementById("weightInput");
-            if (isFinal === "yes") {
-                weightInput.style.display = "block";
-            } else {
-                weightInput.style.display = "none";
-            }
+          function showHideWeightInput() {
+        var isFinal = document.getElementById("isFinal").value;
+        var weightInput = document.getElementById("weightInput");
+        var currentFinalsWeight = document.getElementById("current-finals-weight");
+        if (isFinal === "yes") {
+            weightInput.style.display = "block";
+            currentFinalsWeight.style.display = "block"; // Show the current finals weight
+        } else {
+            weightInput.style.display = "none";
+            currentFinalsWeight.style.display = "none";
         }
+    }
+
+    // Event listener for form submission
+    document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+        var weightElement = document.getElementById("weight");
+        var finalsWeightElement = document.getElementById("current-finals-weight").querySelector("span");
+        var finalsWeight = parseFloat(finalsWeightElement.textContent) || 0;
+        var assessmentWeight = parseFloat(weightElement.value) || 0;
+        
+        // Calculate the combined weight and validate
+        var combinedWeight = finalsWeight + assessmentWeight;
+        console.log(combinedWeight)
+        if (combinedWeight > 100) {
+            alert('The combined weight of the finals and this assessment exceeds 100%. Please adjust the weights.');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+})
     </script>
     
 {% endblock %}

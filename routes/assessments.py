@@ -1,6 +1,6 @@
 from routes.user import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash
-from helpers import get_guest_grade,check_grade_change,scale_finals
+from helpers import check_grade_change,handle_grades,get_attr
 
 import uuid
 from datetime import datetime
@@ -12,6 +12,15 @@ from app import db
 @app.route('/course/<course_id>/add_assessment', methods=['POST','GET'])
 @check_course_ownership
 def add_assessment(course_id):
+    if 'user_id' in session:
+        course = Course.query.get(course_id)
+        finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+    else:
+        for c in session['temporary_courses']:
+            if str(c['id']) == str(course_id):
+                course = c
+                break
+        finals=[a for a in course['assessments'] if a['weight'] is not None]
     if request.method == 'POST':
         name= request.form.get('name')
         date_str=request.form.get('date')
@@ -32,26 +41,16 @@ def add_assessment(course_id):
         
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
-            course = Course.query.get(course_id)
             prev_grade=course.grade
             # modify total marks of the final assessment so that it will equal to [weight]% of the total course marks
             new_assessment = Assessment(name=name, date=date, earned=earned,original_earned=earned if weight else None, total=total,original_total=total if weight else None, weight=weight, course_id=course_id)
             db.session.add(new_assessment)
             #if normal assessment then include in the course grade. 
             # Don't include final assessment grade in course grade because will be scaled to fit course marks
-   
-          
-            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            course.total_marks, course.grade = course.get_updated_grade()
-            scale_finals(course,finals)
-            course.total_marks, course.grade = course.get_updated_grade()
+            handle_grades(course)
             db.session.commit()
                     
         else:  # For guest users
-            for c in session['temporary_courses']:
-                if str(c['id']) == str(course_id):
-                    course = c
-                    break
             prev_grade=course['grade']
             temp_id = int(uuid.uuid4())
             course['assessments'].append({
@@ -66,17 +65,14 @@ def add_assessment(course_id):
             })
             
                
-            finals=[a for a in course['assessments'] if a.get('weight') is not None]
-            course["total_marks"], course["grade"] = get_guest_grade(course)
-            scale_finals(course,finals)
-            course['total_marks'],course['grade']=get_guest_grade(course)
+            handle_grades(course)
             session.modified = True
 
         check_grade_change(course,prev_grade,'added')
         form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
-    
-    return render_template('add_assessment.html',course_id=course_id,action="Add")
+    finals_weight=sum(get_attr(f,'weight') for f in finals) 
+    return render_template('add_assessment.html',course_id=course_id,finals_weight=finals_weight,action="Add")
 
 
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
@@ -92,10 +88,7 @@ def delete_assessment(course_id, assessment_id):
             course=Course.query.get(course_id)
             prev_grade=course.grade
             db.session.delete(assessment)
-            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            course.total_marks, course.grade = course.get_updated_grade() #update total_marks to account for loss of assessment
-            scale_finals(course,finals)
-            course.total_marks, course.grade = course.get_updated_grade()
+            handle_grades(course)
             db.session.commit()
            
         else:
@@ -111,10 +104,7 @@ def delete_assessment(course_id, assessment_id):
                 return render_template("not_found.html")
             assessments=[a for a in course['assessments'] if a['id']!=assessment_id]
             course['assessments']=assessments
-            finals=[a for a in course['assessments'] if a['weight'] is not None]
-            course["total_marks"],course["grade"]=get_guest_grade(course) #update total_marks to account for loss of assessment
-            scale_finals(course,finals)
-            course["total_marks"],course["grade"]=get_guest_grade(course)
+            handle_grades(course)
             session.modified=True
         check_grade_change(course,prev_grade,'deleted')
         return redirect(url_for('course_details',course_id=course_id))
@@ -171,18 +161,12 @@ def edit_assessment(course_id,assessment_id):
             # Update course in the database
             for key, value in assessment_data.items():
                 setattr(assessment, key, value)
-            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            course.total_marks, course.grade = course.get_updated_grade()
-            scale_finals(course,finals) 
-            course.total_marks, course.grade = course.get_updated_grade() # function uses assesments to calculate so update assesment data first
+            handle_grades(course)
             db.session.commit()
         else:
             for key, value in assessment_data.items():
                 assessment[key] = value
-            finals=[a for a in course['assessments'] if a['weight'] is not None]
-            course["total_marks"],course["grade"]=get_guest_grade(course)
-            scale_finals(course,finals)
-            course["total_marks"],course["grade"]=get_guest_grade(course)
+            handle_grades(course)
             session.modified = True
 
         check_grade_change(course,prev_grade,'edited')
