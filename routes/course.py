@@ -113,16 +113,14 @@ def create_course():
                     'time_studied':0
             })
         session.modified = True
-        if len(session["temporary_courses"])==2:
+        temp_courses=session.get("temporary_courses",[])
+        if len(temp_courses)>=2:
+            flash("Signup to add more courses!","warning")
             flash('signup_prompt', 'info')
         else:
             flash("Course successfully added! Sign up to save your progress.","success")
         return redirect(url_for('dashboard'))
-    if 'user_id' not in session:
-        if len(session['temporary_courses'])>=2:
-            flash("Signup to add more courses!","warning")
-            flash("signup_prompt","info")
-            return redirect(url_for('dashboard'))
+
     return render_template('add_course.html',action="Add")
 
 @app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])

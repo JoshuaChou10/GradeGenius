@@ -3,11 +3,14 @@ from config import Config
 from flask_session import Session
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit  # Import the atexit module
-
+# from flask_talisman import Talisman
 
 app = Flask(__name__)
 
 app.config.from_object(Config)
+# TODO Enforce HTTPS for production, will not allow user to access if not https
+
+# talisman = Talisman(app)
 Session(app)
 
 from models import db  # Import models after defining app
@@ -16,9 +19,10 @@ from routes.main_routes import *
 from routes.course import *
 from routes.assessments import *
 from routes.user import *
-
+with app.app_context():
+    db.create_all()
 def reset_study_times(app):
-    with app.app_context():
+   
         courses = Course.query.all()
         for course in courses:
             course.time_studied = 0
@@ -37,5 +41,5 @@ atexit.register(lambda: scheduler.shutdown(wait=False))
 
 if __name__ == '__main__':
     with app.app_context():
-        #db.create_all()
+        # db.create_all()
         app.run()

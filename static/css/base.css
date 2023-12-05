@@ -284,3 +284,42 @@ label {
     background-color: #0056b3;
     color: #fff;
 }
+.dropdown-item {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: center;
+}
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+.goal-status {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+.goal-reached,
+.goal-close {
+    color: #4CAF50;
+    border-color: #c8e6c9;
+}
+.goal-exceeded {
+    color: #2196F3;
+    border-color: #bbdefb;
+}
+.goal-pending {
+    color: #FFC107;
+    border-color: #ffecb3;
+}
+.goal-none {
+    color: #9E9E9E;
+    border-color: #e0e0e0;
+}

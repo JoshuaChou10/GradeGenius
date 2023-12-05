@@ -17,16 +17,23 @@
             <h1>{% block header %}{% endblock %}</h1>
         </div>
         <div id="user-info" style="position: absolute; right: 20px; top: 20px;">
-            {% if user %}
-                <img src="{{ user.profile_pic_url | default('path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50">
-                <span>{{ user.username }}</span>
-                <!-- Logout Button -->
-                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
-            {% else %}
-                <!-- Signup/Login Button -->
-                <a href="{{ url_for('login') }}" class="btn-login">Signup/Login</a>
-            {% endif %}
-        </div>
+          {% if user %}
+              <!-- Profile Picture with onClick event to toggle dropdown -->
+              <img src="{{ user.profile_pic_url | default('path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50" onclick="toggleDropdown()">
+              <span>{{ user.username }}</span>
+              <!-- Dropdown Menu -->
+              <div id="profile-dropdown" class="dropdown-content" style="display:none; position:absolute; right:0; background-color:#f9f9f9; min-width:160px; box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2); z-index:1;">
+                  <form action="/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+                      <button type="submit" class="dropdown-item">Delete Account</button>
+                  </form>
+                  <!-- Logout Button -->
+                  <a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
+              </div>
+          {% else %}
+              <!-- Signup/Login Button -->
+              <a href="{{ url_for('login') }}" class="btn-login">Signup/Login</a>
+          {% endif %}
+      </div>
         <hr>
         
     </header>
@@ -113,6 +120,24 @@
       if (event.target == modal) {
         modal.style.display = "none";
       }
+    }
+     // Function to toggle the dropdown visibility
+     function toggleDropdown() {
+        var dropdown = document.getElementById("profile-dropdown");
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Event listener to close the dropdown if clicked outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('img[alt="{{ user.username }}"]')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.style.display === 'block') {
+                    openDropdown.style.display = 'none';
+                }
+            }
+        }
     }
   </script>
 </body>

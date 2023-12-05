@@ -48,20 +48,21 @@ def get_weights(course):
         finals = [a for a in assessments if get_attr(a, 'weight') is not None]
         courses = [a for a in assessments if get_attr(a, 'weight') is None]
     finals_total=(sum(get_attr(f, 'total') for f in finals)) 
-    if len(finals) > 0 and finals_total>0 :
+    if len(finals) > 0 and finals_total>0:
         finals_weight = sum(get_attr(f, 'weight') for f in finals)/finals_total
-        finals_grade = (sum(get_attr(f, 'earned') for f in finals)) / (sum(get_attr(f, 'total') for f in finals))
+        finals_grade = (sum(get_attr(f, 'earned') for f in finals)) /finals_total
 
-    courses_grade=0 if (get_attr(course,'total_marks')- (sum(get_attr(f, 'total') for f in finals)))<=0 else ( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))
+    courses_grade=0 if (get_attr(course,'total_marks')- finals_total)<=0 else ( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))
     return finals_weight, finals_grade, courses_grade
 
    
 def scale_finals(course,finals):
     #current final should be added before this is called
     finals_total=sum(get_attr(f,'total') for f in finals) 
-    if len(finals)>0 and finals_total>0:
+    if len(finals)>0:
         finals_weight=sum(get_attr(f,'weight') for f in finals) 
-
+        # if finals_weight>1 or finals_weight>=1 and get_attr(course,'total_marks')-finals_total>0:
+        #     return False
                 #Get total marks finals are worth eg. 30% finals would be worth 30 marks if weight of course work is 70
         finals_mark=(get_attr(course,'total_marks')-finals_total)/((1/(finals_weight))-1)#Derived from finals_weight=(finals_mark/finals_mark+course_work_marks) 
                 #scale each final assessment based on their weighting in the finals, eg. 10% final out of a total of 30% finals
@@ -73,11 +74,23 @@ def scale_finals(course,finals):
             else:
                 f['total']=round((finals_mark*f['weight']/finals_weight),1)
                 f['earned']=round(percentage*f['total'],1)  
+    # return True
 
                
-        #TODO ensure finals weight is less than or equal to 100
-       
-
+#TODO Scale finals bool in course.py edit
+def handle_grades(course):
+    finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all() if 'user_id' in session else [a for a in course['assessments'] if a['weight'] is not None]
+   
+    if 'user_id' in session:
+        course.total_marks, course.grade = course.get_updated_grade()
+    else:
+         course["total_marks"],course["grade"]=get_guest_grade(course)
+    before_final=get_attr(course,'total_marks')-(sum(get_attr(f,'total') for f in finals) )
     
-      
-    
+    #if no course marks, then dont scale final to 0/0, maintain the score user entered instead
+    if before_final>0:
+        scale_finals(course,finals)
+        if 'user_id' in session:
+            course.total_marks, course.grade = course.get_updated_grade()
+        else:
+            course["total_marks"],course["grade"]=get_guest_grade(course)

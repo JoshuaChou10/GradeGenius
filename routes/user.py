@@ -113,6 +113,7 @@ def login():
         
 
         if user and bcrypt.check_password_hash(user.password, password):
+            session.clear()
             session['user_id'] = user.id
             flash(f'Logged in as {user.username}', 'success')
             return redirect(url_for('dashboard'))
@@ -129,10 +130,9 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/account/delete', methods=['POST'])
+@app.route('/delete-account', methods=['POST'])
 def delete_account():
     user_id = session.get('user_id')
-    
     # Check if the user is logged in
     if not user_id:
         flash('You must be logged in to delete an account.', 'danger')
@@ -140,9 +140,16 @@ def delete_account():
 
     # Retrieve the user from the database
     user_to_delete = User.query.get(user_id)
-
-    # If the user exists, delete their account
     if user_to_delete:
+        # Manually delete all courses and assessments related to the user
+        courses_to_delete = Course.query.filter_by(user_id=user_id).all()
+        for course in courses_to_delete:
+            assessments_to_delete = Assessment.query.filter_by(course_id=course.id).all()
+            for assessment in assessments_to_delete:
+                db.session.delete(assessment)
+            db.session.delete(course)
+        
+        # Finally delete the user
         db.session.delete(user_to_delete)
         db.session.commit()
         flash('Your account has been successfully deleted.', 'success')

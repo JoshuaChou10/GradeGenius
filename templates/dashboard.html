@@ -16,7 +16,22 @@
 <div class="gpa">
     {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
 </div>
-
+<div class="{{ 'goal-status' }} {{
+    'goal-reached' if GPA >= user.goal or user.goal - GPA <= 0.5 else
+    'goal-exceeded' if GPA > user.goal else
+    'goal-pending' if GPA < user.goal else
+    'goal-none' if GPA == 0.0 }}">
+    {% if GPA == 0.0 %}
+        <p>Your goal is {{ user.goal }}%</p>
+    {% elif GPA >= user.goal or user.goal - GPA <= 0.5 %}
+        <p>You are reaching your goal</p>
+    {% elif GPA > user.goal %}
+        <p>You are exceeding your goal by {{ GPA - user.goal }}%</p> 
+    {% else %}
+        <p>{{ (user.goal - GPA) | round(2) }}% left until your goal</p>
+    {% endif %}
+</div>
+       
 
 <div class="dashboard-container">
 <section class="courses-list">

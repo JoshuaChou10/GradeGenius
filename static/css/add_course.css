@@ -1,9 +1,10 @@
 /* add_course.css */
 
-main{
-    background-color:transparent;
+main {
+    background-color: transparent;
     box-shadow: none;
 }
+
 form {
     background-color: white;
     max-width: 600px;
@@ -11,12 +12,17 @@ form {
     padding: 60px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form label {
     display: block;
     margin-top: 10px;
+    width: 100%; /* Ensure labels also span the full width on mobile */
 }
+
 form input[type="text"],
 form input[type="date"],
 form input[type="number"] {
@@ -37,9 +43,29 @@ form input[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
-    width: 100%;
+    width: 100%; /* Make sure the submit button also spans the full width */
 }
 
 form input[type="submit"]:hover {
     background-color: #3498db;
+}
+
+
+@media only screen and (max-width: 600px) {
+    form {
+        margin: 10px auto; /* Adjust margin to center the form */
+        padding: 20px; /* Adjust padding to give more space for content */
+        width: auto; /* Set width to auto for full width on mobile devices */
+        box-sizing: border-box; /* Ensure padding is included in width calculation */
+        max-width: 90%; /* Limit max-width to prevent form from touching the screen edges */
+    }
+
+    /* You might also need to adjust other elements within the form to match the new form width */
+    form input[type="text"],
+    form input[type="date"],
+    form input[type="number"],
+    form input[type="submit"] {
+        width: 100%; /* Make sure all input elements take full width of the form */
+        box-sizing: border-box; /* Ensure padding is included in width calculation */
+    }
 }
