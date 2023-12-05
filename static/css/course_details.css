@@ -230,64 +230,6 @@ main {
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Focus ring around the button for accessibility */
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    #study-button {
-        width: 100%; /* Full width button on smaller screens for better touch targets */
-        padding: 15px 20px; /* Slightly larger padding on smaller screens */
-    }
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a 
-{
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-
-.dropdown-content a:hover {background-color: #f1f1f1}
-.kebab-menu {
-    cursor: pointer;
-    font-size: 24px; /* Adjust size as needed */
-}
-
-
-.dropdown-content {
-    position: absolute;
-    left: 155px; /* Aligns the right edge of the dropdown with the left edge of the kebab menu */
-    top:40px;
-    z-index: 1000; 
-}
-
-
-.assessment-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-}
-tr:hover .kebab-menu {
-    visibility: visible; /* or use 'opacity: 1;' */
-}
-.kebab-menu {
-    cursor: pointer;
-    visibility: hidden; 
-    text-align: right; /* Align the ellipsis to the right */
-    width: 30px; /* Example width; adjust as needed */
-
-}
 table {
     width: 100%;
     table-layout: fixed; /* This helps in maintaining the column widths */
@@ -302,6 +244,36 @@ table {
 .scores-container p {
     margin: 0; /* Removes default margin to control spacing better */
  
+}
+
+.assessment-container {
+    position: relative; /* This makes the child .menu position relative to this container */
+    
+}
+
+.menu {
+    visibility:hidden;
+    position: absolute;
+    top: 50%; /* Adjust the top to align the menu vertically */
+    transform: translateY(-50%); /* This will perfectly center it vertically */
+    right: 10px; /* Adjust this value to move the menu away from the right edge */
+   
+}
+.menu a {
+    color: #333; /* Darker text/icons for better visibility */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.menu a:hover,
+.menu a:focus {
+    color: #0056b3; /* Highlight color when hovered or focused */
+}
+
+.menu i {
+    font-size: 1rem; /* Icon size */
+}
+.assessment-container:hover .menu {
+    visibility: visible; /* Show menu on container hover */
 }
 @media (max-width: 768px) {
     .container, main {

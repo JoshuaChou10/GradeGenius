@@ -212,7 +212,7 @@ def delete_course(course_id):
 @check_course_ownership
 def update_grade(course_id):
     course=None
-    new_grade=int(request.form.get('new_grade'))
+    new_grade=float(request.form.get('new_grade'))
     if 'user_id' in session:
         course=Course.query.get(course_id)
         course.grade=new_grade

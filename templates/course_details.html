@@ -185,13 +185,7 @@
                         <td style="width:10px">
                             <div class="assessment-container">
                               
-                                <div id="menu-{{ assessment.id }}" class="dropdown-content">
-                                    <a href="{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}">Edit</a>
-                                    <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}')">Delete</a>
-                                    <form id="delete-form-{{ assessment.id }}" action="{{ url_for('delete_assessment', course_id=course['id'], assessment_id=assessment['id']) }}" method="post" style="display: none;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                    </form>
-                                </div>
+                                
                                
                                 <div class="assessment-name" style="{% if assessment.weight %}color: blue;{% endif %}">
                                     {{ assessment.name }} 
@@ -199,9 +193,14 @@
                                         {{assessment.weight*100}}%
                                     {% endif %}
                                 </div>
-                                <div class="kebab-menu" onclick="toggleMenu('menu-{{ assessment.id }}')">...</div>
+                                <div id="menu-{{ assessment.id }}" class="menu" >
+                                    <a href="{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}"><i class="fas fa-edit"></i></a>
+                                    <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}')"><i class="fa fa-trash"></i></a>
+                                    <form id="delete-form-{{ assessment.id }}" action="{{ url_for('delete_assessment', course_id=course['id'], assessment_id=assessment['id']) }}" method="post" style="display: none;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                </div>
                           
-                               
                             </div>
                         </td>
                         <td>{{ assessment.earned }} / {{ assessment.total }}</td>

@@ -119,6 +119,7 @@ def edit_assessment(course_id,assessment_id):
     # Check if the user is logged in
     if 'user_id' in session:
         course=Course.query.get(course_id)
+        finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
         prev_grade=course.grade
         assessment= Assessment.query.get(assessment_id)
     else:
@@ -128,6 +129,7 @@ def edit_assessment(course_id,assessment_id):
                 if temp_course['id'] == course_id:
                     course = temp_course
                     break
+            finals=[a for a in course['assessments'] if a['weight'] is not None]
             prev_grade=course['grade']
         if course is None:
             return render_template("not_found.html")
@@ -174,4 +176,5 @@ def edit_assessment(course_id,assessment_id):
         return redirect(url_for('course_details', course_id=course_id))
     
     # If GET request, display the course data for editing
-    return render_template('add_assessment.html', course=course,assessment=assessment, action="Edit")
+    finals_weight=sum(get_attr(f,'weight') for f in finals) 
+    return render_template('add_assessment.html', course=course,finals_weight=finals_weight, assessment=assessment, action="Edit")
