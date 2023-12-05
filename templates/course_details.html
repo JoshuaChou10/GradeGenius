@@ -46,11 +46,11 @@
     {% if course.grade == 0.0 %}
         <p>Your goal is {{ course.goal }}%</p>
     {% elif course.grade >= course.goal or course.goal - course.grade <= 0.5 %}
-        <p>You are reaching your goal</p>
+        <p>You are reaching your goal of {{course.goal}}%</p>
     {% elif course.grade > course.goal %}
-        <p>You are exceeding your goal by {{ course.grade - course.goal }}%</p> 
+        <p>You are exceeding your goal of {{course.goal}}% by {{ course.grade - course.goal }}%</p> 
     {% else %}
-        <p>{{ (course.goal - course.grade) | round(2) }}% left until your goal</p>
+        <p>{{ (course.goal - course.grade) | round(2) }}% left until your goal of {{course.goal}}%</p>
     {% endif %}
 </div>
         

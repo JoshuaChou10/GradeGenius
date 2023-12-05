@@ -16,6 +16,7 @@
 <div class="gpa">
     {% if GPA == 0.0 %}No Grade Average yet {%else%} Grade Average: {{ GPA|round(2) }}%{% endif %}
 </div>
+{% if user %}
 <div class="{{ 'goal-status' }} {{
     'goal-reached' if GPA >= user.goal or user.goal - GPA <= 0.5 else
     'goal-exceeded' if GPA > user.goal else
@@ -31,7 +32,7 @@
         <p>{{ (user.goal - GPA) | round(2) }}% left until your goal</p>
     {% endif %}
 </div>
-       
+{% endif %}  
 
 <div class="dashboard-container">
 <section class="courses-list">
@@ -91,7 +92,7 @@
             <p>Time Left:</p>
             <span id="time-left">
                 {% if timeLeft > 0 %}
-                    {{ (timeLeft // 60) | int }}:{{ (timeLeft % 60) |int }}  minutes
+                    {{ (timeLeft // 60) | int }}:{{ '%02d' | format(timeLeft% 60)}}  minutes
                 {% else %}
                     0:00
                 {% endif %}

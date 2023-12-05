@@ -27,6 +27,12 @@ def get_guest_GPA():
             count += 1
 
     return total / count if count > 0 else 0
+def get_guest_total_study():
+    courses = session.get("temporary_courses",[])
+    total=0
+    for c in courses:
+            total+=c['total_study']
+    return total
 
 def check_grade_change(course, prev_grade, action):
     course_grade = get_attr(course, 'grade')
