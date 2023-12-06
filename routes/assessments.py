@@ -23,6 +23,11 @@ def add_assessment(course_id):
     if 'user_id' in session:
         course = Course.query.get(course_id)
         finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+        finals_weight=sum(get_attr(f,'weight') for f in finals) 
+        if finals_weight>=1:
+            flash('Cannot add more assessments as weight of finals is worth 100%','danger')
+            flash("Edit or delete final assessments to leave space for more assessments",'info')
+            return redirect(url_for("course_details",course_id=course_id))
     else:
         for c in session['temporary_courses']:
             if str(c['id']) == str(course_id):
@@ -81,8 +86,9 @@ def add_assessment(course_id):
             check_grade_change(course,prev_grade,'added')
         form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
-    finals_weight=sum(get_attr(f,'weight') for f in finals) 
-    return render_template('add_assessment.html',course_id=course_id,finals_weight=finals_weight,action="Add")
+    
+    course_marks=course.total_marks-sum(get_attr(f,'total') for f in finals) 
+    return render_template('add_assessment.html',course=course,course_marks=course_marks,finals_weight=finals_weight,action="Add")
 
 
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
@@ -195,4 +201,5 @@ def edit_assessment(course_id,assessment_id):
     
     # If GET request, display the course data for editing
     finals_weight=sum(get_attr(f,'weight') for f in finals) 
-    return render_template('add_assessment.html', course=course,finals_weight=finals_weight, assessment=assessment, action="Edit")
+    course_marks=course.total_marks-sum(get_attr(f,'total') for f in finals) 
+    return render_template('add_assessment.html', course=course,course_marks=course_marks,finals_weight=finals_weight, assessment=assessment, action="Edit")

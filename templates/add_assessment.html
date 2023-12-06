@@ -12,11 +12,11 @@
         <div class="autoupdate-container">
             <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" onchange="toggleAutoupdate(this)" {{ 'checked' if session.get('autoupdate', True) else '' }}>
             <label class="checkbox-custom" for="autoupdate-mark"></label>
-            <label for="autoupdate-mark" id="autoupdate-mark-label">Autoupdate-mark: 
+            <label for="autoupdate-mark" id="autoupdate-mark-label">Auto-Update Course Grade
                 <span id="autoupdate-status">{{ 'Off' if not session.get('autoupdate', True) else '' }}</span>
             </label>
           </div>
-        <form action="{% if action == 'Add' %}{{ url_for('add_assessment', course_id=course_id) }}{% else %}{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}{% endif %}" method="post">
+        <form action="{% if action == 'Add' %}{{ url_for('add_assessment', course_id=course.id) }}{% else %}{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}{% endif %}" method="post">
             <div class="form-group">
                 <label for="name">Assessment Name:</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ assessment.name if assessment and action == 'Edit' else (session['form_data']['name'] if 'form_data' in session and 'name' in session['form_data'] else '') }}" required>
@@ -43,14 +43,16 @@
                     <option value="yes" {% if assessment and assessment.weight %}selected{% endif %}>Yes</option>
                 </select>
             </div>
-            <div class="form-group" id="current-finals-weight" style="display:none;">
-                    <label>Current Finals Weight (%):</label>
-                    <span>{{ finals_weight * 100 }}</span>% <!-- finals_weight is between 0 and 1 -->
-                </div>
+            
             <div class="form-group" id="weightInput" style="{{ 'display:block;' if assessment and assessment.weight else 'display:none;' }}">
-                
+                <div class="form-group" id="current-finals-weight" style="{{ 'display:block;' if finals_weight>0 else 'display:none;' }}">
+                    <label>Current Finals Weight:</label>
+                    <span>{{ (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0)) }}</span>% 
+                </div>
                 <label for="weight">Weight (%):</label>
-                <input type="number" step="0.1" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" max="100" value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
+                <input type="number" step="0.1" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" 
+                max="{{ (100 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0))) if course_marks <= 0 else (99 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0))) }}" 
+                value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
             </div>
 
             <button type="submit" class="btn btn-primary">{{ action }} Assessment</button>
@@ -67,23 +69,8 @@
             }
         }
     
-        // Event listener for form submission
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelector("form").addEventListener("submit", function(event) {
-                var weightElement = document.getElementById("weight");
-                var finalsWeightElement = document.getElementById("current-finals-weight") ? document.getElementById("current-finals-weight").querySelector("span") : null;
-                var finalsWeight = finalsWeightElement ? parseFloat(finalsWeightElement.textContent) : 0;
-                var assessmentWeight = weightElement ? parseFloat(weightElement.value) || 0 : 0;
-                
-                // Calculate the combined weight and validate
-                var combinedWeight = finalsWeight + assessmentWeight;
-                console.log(combinedWeight);
-                if (combinedWeight > 100) {
-                    alert('The combined weight of the finals and this assessment exceeds 100%. Please adjust the weights.');
-                    event.preventDefault(); // Prevent form submission
-                }
-            });
-        });
+  
+
     </script>
     
     

@@ -145,25 +145,7 @@
       }
   }
 
-      document.getElementById('submit_button').addEventListener('click', function(event) {
-  var currentGrade = document.getElementById('grade').value;
-  var startingGradeElement = document.getElementById('starting_grade');
-  var totalMarks = document.getElementById('total_marks').value;
-
-  var startingGrade = startingGradeElement ? startingGradeElement.value : null;
-  if (!startingGrade){
-  // Check if current grade is entered but total marks is not
-  if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0)) {
-          alert('Please enter a value for Total Marks.');
-          event.preventDefault(); // Prevent form submission
-      }
-  }else{
-      if ( (totalMarks=='' || totalMarks==0) && (startingGrade!='' && startingGrade!=0)) {
-          alert('Please enter a value for Total Marks.');
-          event.preventDefault(); // Prevent form submission
-      }
-  }
-});
+      
 function toggleManualUpdate() {
     var autoUpdateCheckbox = document.getElementById('autoupdate-mark');
     var manualUpdateButton = document.getElementById('update-mark-manually');
@@ -197,6 +179,8 @@ toggleManualUpdate();
   })
   .catch(error => console.error('Error:', error));
 }
+ 
+      
 
 </script>
 </body>
