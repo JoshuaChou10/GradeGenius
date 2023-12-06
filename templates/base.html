@@ -164,6 +164,40 @@
       }
   }
 });
+function toggleManualUpdate() {
+    var autoUpdateCheckbox = document.getElementById('autoupdate-mark');
+    var manualUpdateButton = document.getElementById('update-mark-manually');
+    if (autoUpdateCheckbox && manualUpdateButton) {
+        manualUpdateButton.style.display = autoUpdateCheckbox.checked ? 'none' : 'block';
+    }
+
+    }
+toggleManualUpdate();
+
+function toggleAutoupdate(checkbox) {
+toggleManualUpdate();
+  const checked = checkbox.checked;
+  document.getElementById('autoupdate-status').textContent = checked ? '' : 'Off';
+
+
+  // Save the preference locally
+  localStorage.setItem('autoupdate', checked);
+
+  // Send the state to the server
+  fetch('/set-autoupdate-preference', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ autoupdate: checked })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.message); // Handle any response from the server here
+  })
+  .catch(error => console.error('Error:', error));
+}
+
 </script>
 </body>
 </html>

@@ -12,6 +12,7 @@
 {% endblock %}
 {% block header %}
     {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
+   
 {% endblock %}
 
 
@@ -19,17 +20,14 @@
 
 {% block content %}
 
+
     <!-- Notification Bar -->
     {% if time_left == 0 %}
     <div class="flash-message flash-warning">
         Course is finished!
     </div>
     {% endif %}
-    <div class="autoupdate-container">
-        <label for="autoupdate-mark">Autoupdate-mark:</label>
-        <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" checked onchange="toggleManualUpdate()">
-    </div>
-    <button id="update-mark-manually" onclick="show()" style="display: none;">Update Mark Manually</button>
+    
    
     <div id="update_grade" class="modal">
         <!-- Modal content -->
@@ -43,6 +41,14 @@
         </div>
     </div>
     <main class="page-main">
+        <div class="autoupdate-container">
+            <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" onchange="toggleAutoupdate(this)" {{ 'checked' if session.get('autoupdate', True) else '' }}>
+            <label class="checkbox-custom" for="autoupdate-mark"></label>
+            <label for="autoupdate-mark" id="autoupdate-mark-label">Auto-Update Mark
+                <span id="autoupdate-status">{{ 'Off' if not session.get('autoupdate', True) else '' }}</span>
+            </label>
+          </div>
+          <button class='btn' id="update-mark-manually" style="display:none" onclick="show()">Update Mark Manually</button>
 <div class="{{ 'goal-status' }} {{
     'goal-reached' if course.grade >= course.goal or course.goal - course.grade <= 0.5 else
     'goal-exceeded' if course.grade > course.goal else
@@ -299,18 +305,10 @@
         clearInterval(saveInterval);
         updateStudyTimes(courseId, timeStudied);
     });
-    function toggleManualUpdate() {
+  
 
-var autoUpdateCheckbox = document.getElementById('autoupdate-mark');
-var manualUpdateButton = document.getElementById('update-mark-manually');
-if (autoUpdateCheckbox && manualUpdateButton) {
-    manualUpdateButton.style.display = autoUpdateCheckbox.checked ? 'none' : 'block';
-}
-
-}
-toggleManualUpdate();
 function submitDeleteForm(formId) {
-var confirmation = confirm('Are you sure you want to delete this assessment?');
+var confirmation = confirm('Are you sure you want to delete this assessment? ');
 if (confirmation) {
     document.getElementById(formId).submit();
 }

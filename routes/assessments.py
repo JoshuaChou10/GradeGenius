@@ -1,5 +1,5 @@
 from routes.user import check_course_ownership
-from flask import session, request, redirect, url_for, render_template,flash
+from flask import session, request, redirect, url_for, render_template,flash,jsonify
 from helpers import check_grade_change,handle_grades,get_attr
 
 import uuid
@@ -8,10 +8,18 @@ from models import Course, Assessment
 from app import app
 from flask import session
 from app import db
+@app.route('/set-autoupdate-preference', methods=['POST'])
+def set_autoupdate_preference():
+    data = request.get_json()
+    autoupdate = data.get('autoupdate', True)
+    # Save the preference in the session or database
+    session['autoupdate'] = autoupdate
+    return jsonify(message='Autoupdate preference saved successfully.')
 
 @app.route('/course/<course_id>/add_assessment', methods=['POST','GET'])
 @check_course_ownership
 def add_assessment(course_id):
+    update_mark=session.get('autoupdate',True)
     if 'user_id' in session:
         course = Course.query.get(course_id)
         finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
@@ -47,7 +55,9 @@ def add_assessment(course_id):
             db.session.add(new_assessment)
             #if normal assessment then include in the course grade. 
             # Don't include final assessment grade in course grade because will be scaled to fit course marks
-            handle_grades(course)
+         
+            if update_mark:
+                handle_grades(course)
             db.session.commit()
                     
         else:  # For guest users
@@ -64,11 +74,11 @@ def add_assessment(course_id):
                 'weight': weight
             })
             
-               
-            handle_grades(course)
+            if update_mark:
+                handle_grades(course)
             session.modified = True
-
-        check_grade_change(course,prev_grade,'added')
+        if update_mark:
+            check_grade_change(course,prev_grade,'added')
         form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
     finals_weight=sum(get_attr(f,'weight') for f in finals) 
@@ -78,6 +88,7 @@ def add_assessment(course_id):
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/delete',methods=["POST"])
 @check_course_ownership
 def delete_assessment(course_id, assessment_id):
+    update_mark=session.get('autoupdate',True)
     if request.form.get('_method') == 'DELETE':
         assessment=None
         if 'user_id' in session:
@@ -88,7 +99,8 @@ def delete_assessment(course_id, assessment_id):
             course=Course.query.get(course_id)
             prev_grade=course.grade
             db.session.delete(assessment)
-            handle_grades(course)
+            if update_mark:
+                handle_grades(course)
             db.session.commit()
            
         else:
@@ -104,9 +116,13 @@ def delete_assessment(course_id, assessment_id):
                 return render_template("not_found.html")
             assessments=[a for a in course['assessments'] if a['id']!=assessment_id]
             course['assessments']=assessments
-            handle_grades(course)
+            if update_mark:
+                handle_grades(course)
             session.modified=True
-        check_grade_change(course,prev_grade,'deleted')
+        if update_mark:
+            check_grade_change(course,prev_grade,'deleted')
+        else:
+            flash("Auto-update mark is off",'warning')
         return redirect(url_for('course_details',course_id=course_id))
     else:
         flash('Invalid method', 'error')
@@ -116,7 +132,7 @@ def delete_assessment(course_id, assessment_id):
 @app.route('/course/<int:course_id>/assessment/<int:assessment_id>/edit', methods=['POST', 'GET'])
 @check_course_ownership
 def edit_assessment(course_id,assessment_id):
-    # Check if the user is logged in
+    update_mark=session.get('autoupdate',True)
     if 'user_id' in session:
         course=Course.query.get(course_id)
         finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
@@ -163,15 +179,17 @@ def edit_assessment(course_id,assessment_id):
             # Update course in the database
             for key, value in assessment_data.items():
                 setattr(assessment, key, value)
-            handle_grades(course)
+            if update_mark:
+                handle_grades(course)
             db.session.commit()
         else:
             for key, value in assessment_data.items():
                 assessment[key] = value
-            handle_grades(course)
+            if update_mark:
+                handle_grades(course)
             session.modified = True
-
-        check_grade_change(course,prev_grade,'edited')
+        if update_mark:
+            check_grade_change(course,prev_grade,'edited')
         
         return redirect(url_for('course_details', course_id=course_id))
     
