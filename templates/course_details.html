@@ -3,17 +3,20 @@
 
 
 
+
 {% block stylesheets %}
     <!-- Specific stylesheet for the course details page -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/course_details.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    
 {% endblock %}
 {% block header %}
     {{ course.name }} - {% if course.grade == 0.0 %}No grade yet{% else %}{{ course.grade|round(2) }}%{% endif %}
 {% endblock %}
 
 
-<button onclick="show()">Update Mark Manually</button>
+
+
 {% block content %}
 
     <!-- Notification Bar -->
@@ -22,7 +25,11 @@
         Course is finished!
     </div>
     {% endif %}
-
+    <div class="autoupdate-container">
+        <label for="autoupdate-mark">Autoupdate-mark:</label>
+        <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" checked onchange="toggleManualUpdate()">
+    </div>
+    <button id="update-mark-manually" onclick="show()" style="display: none;">Update Mark Manually</button>
    
     <div id="update_grade" class="modal">
         <!-- Modal content -->
@@ -36,8 +43,6 @@
         </div>
     </div>
     <main class="page-main">
-        <button onclick="show()">Update Mark Manually</button>
-       
 <div class="{{ 'goal-status' }} {{
     'goal-reached' if course.grade >= course.goal or course.goal - course.grade <= 0.5 else
     'goal-exceeded' if course.grade > course.goal else
@@ -220,64 +225,12 @@
     </div>
     </main>
 
-    <script type="text/javascript">
-        // JavaScript to open the modal
-function show() {
-    var update_grade = document.getElementById('update_grade');
-    update_grade.style.display = 'block';
-}
-
-// Close the modal when user clicks on <span> (x)
-document.querySelector(".close").addEventListener("click", function() {
-    document.getElementById('update_grade').style.display = "none";
-});
-
-// Close the modal when user clicks outside of it
-window.addEventListener('click', function(event) {
-    var modal = document.getElementById('update_grade');
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-});
-
-function toggleMenu(menuId) {
-
-    // Toggle the clicked menu
-    var menu = document.getElementById(menuId);
-    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    // Close any open menus
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.id !== menuId && openDropdown.style.display === 'block') {
-            openDropdown.style.display = 'none';
-        }
-    }
-
-}
-
-// Close the dropdown if the user clicks outside of it
-window.addEventListener('click', function(event) {
-    if (!event.target.matches('.kebab-menu')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === 'block') {
-                openDropdown.style.display = 'none';
-            }
-        }
-    }
-});function submitDeleteForm(formId) {
-    var confirmation = confirm('Are you sure you want to delete this assessment?');
-    if (confirmation) {
-        document.getElementById(formId).submit();
-    }
-}
-// Define studyInterval and saveInterval as global variables
-let studyInterval = null;
-let saveInterval = null;
-
-document.addEventListener('DOMContentLoaded', function() {
+    {% block extrascripts %}<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>{% endblock %}
+  
+<script>let studyInterval = null;
+    let saveInterval = null;
+    
+ 
     const studyButton = document.getElementById('user-study-button');
     let timeLeft = parseInt(studyButton.getAttribute('data-time-left'), 10);
     let timeStudied = parseInt(studyButton.getAttribute('data-time-studied'), 10);
@@ -285,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeStudiedDisplay = document.getElementById('time-studied');
     // const timeStudiedSecondsDisplay = document.getElementById('time-studied-seconds');
     const courseId = studyButton.getAttribute('data-course-id');
-
+    
     function updateStudyTimes(courseId, timeStudied) {
         fetch(`/course/${courseId}/update_study_times`, {
             method: 'POST',
@@ -298,38 +251,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     function padToTwo(number) {
     return number.toString().padStart(2, '0');
-}
-
+    }
+    
     studyButton.addEventListener('click', function() {
         let isStudying = studyButton.getAttribute('data-studying') === 'true';
         isStudying = !isStudying;
         studyButton.setAttribute('data-studying', isStudying.toString());
-
+    
         if (isStudying) {
             if (studyInterval) clearInterval(studyInterval);
             if (saveInterval) clearInterval(saveInterval);
             studyButton.textContent = 'Stop studying';
             studyButton.style.backgroundColor='#ff2338'
-
+    
             // Clear existing intervals if any
             studyInterval = setInterval(() => {
     timeStudied += 1;
     if (timeLeft > 0) {
         timeLeft -= 1;
         timeLeftDisplay.textContent = Math.floor(timeLeft / 60) + ':' + padToTwo(timeLeft % 60);
-
+    
     } else {
         timeLeftDisplay.textContent = "0:00";
     }
     timeStudiedDisplay.textContent = Math.floor(timeStudied / 60) + ':' + padToTwo(timeStudied % 60);
      
             }, 1000);
-
+    
             // Save the study time every minute
             saveInterval = setInterval(() => {
                 updateStudyTimes(courseId, timeStudied);
             }, 60000); // 60000ms = 1 minute
-
+    
         } else {
             clearInterval(studyInterval);
             clearInterval(saveInterval);
@@ -339,32 +292,86 @@ document.addEventListener('DOMContentLoaded', function() {
            
         }
     });
-
+    
     // Save the study time when leaving the page
     window.addEventListener('beforeunload', function() {
         clearInterval(studyInterval);
         clearInterval(saveInterval);
         updateStudyTimes(courseId, timeStudied);
     });
+    function toggleManualUpdate() {
+
+var autoUpdateCheckbox = document.getElementById('autoupdate-mark');
+var manualUpdateButton = document.getElementById('update-mark-manually');
+if (autoUpdateCheckbox && manualUpdateButton) {
+    manualUpdateButton.style.display = autoUpdateCheckbox.checked ? 'none' : 'block';
+}
+
+}
+toggleManualUpdate();
+function submitDeleteForm(formId) {
+var confirmation = confirm('Are you sure you want to delete this assessment?');
+if (confirmation) {
+    document.getElementById(formId).submit();
+}
+}
+function show() {
+var update_grade = document.getElementById('update_grade');
+update_grade.style.display = 'block';
+}
+
+// Close the modal when user clicks on <span> (x)
+document.querySelector(".close").addEventListener("click", function() {
+document.getElementById('update_grade').style.display = "none";
 });
+
+// Close the modal when user clicks outside of it
+window.addEventListener('click', function(event) {
+var modal = document.getElementById('update_grade');
+if (event.target == modal) {
+    modal.style.display = "none";
+}
+});
+
+function toggleMenu(menuId) {
+
+// Toggle the clicked menu
+var menu = document.getElementById(menuId);
+menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+// Close any open menus
+var dropdowns = document.getElementsByClassName("dropdown-content");
+for (var i = 0; i < dropdowns.length; i++) {
+    var openDropdown = dropdowns[i];
+    if (openDropdown.id !== menuId && openDropdown.style.display === 'block') {
+        openDropdown.style.display = 'none';
+    }
+}
+
+}
+
+
+
+// Define studyInterval and saveInterval as global variables
+openTab('left')
+
 function openTab(tabName) {
-    var i, tabcontent, tabbuttons;
-    tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tabbuttons = document.getElementsByClassName("tab-button");
-    for (i = 0; i < tabbuttons.length; i++) {
-        tabbuttons[i].classList.remove("active-tab");
-    }
-    document.getElementById(tabName).style.display = "block";
-    document.getElementById(tabName + "-btn").classList.add("active-tab");
+var i, tabcontent, tabbuttons;
+tabcontent = document.getElementsByClassName("tab-content");
+for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+}
+tabbuttons = document.getElementsByClassName("tab-button");
+for (i = 0; i < tabbuttons.length; i++) {
+    tabbuttons[i].classList.remove("active-tab");
+}
+document.getElementById(tabName).style.display = "block";
+document.getElementById(tabName + "-btn").classList.add("active-tab");
 }
 
 // Initial default active tab
-document.getElementById("studied-btn").classList.add("active-tab");
 
 
-</script>
 
-{% endblock %}
+
+    </script>
+{% endblock %} 

@@ -6,6 +6,9 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% block stylesheets %}{% endblock %}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
 </head>
 <body>
     <header>
@@ -80,7 +83,7 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
-  
+ 
     <script>
         function toggleSidebar() {
     var sidebar = document.querySelector('.sidebar');
@@ -106,39 +109,61 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
-  <script>
-    // When the user clicks on <span> (x), close the modal
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function() {
-      var modal = document.getElementById('signupModal');
+
+<script>
+  
+  // When the user clicks on <span> (x), close the modal
+  var span = document.getElementsByClassName("close")[0];
+  span.onclick = function() {
+    var modal = document.getElementById('signupModal');
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    var modal = document.getElementById('signupModal');
+    if (event.target == modal) {
       modal.style.display = "none";
     }
-  
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      var modal = document.getElementById('signupModal');
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-     // Function to toggle the dropdown visibility
-     function toggleDropdown() {
-        var dropdown = document.getElementById("profile-dropdown");
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    }
+  }
+   // Function to toggle the dropdown visibility
+   function toggleDropdown() {
+      var dropdown = document.getElementById("profile-dropdown");
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  }
 
-    // Event listener to close the dropdown if clicked outside of it
-    window.onclick = function(event) {
-        if (!event.target.matches('img[alt="{{ user.username }}"]')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.style.display === 'block') {
-                    openDropdown.style.display = 'none';
-                }
-            }
-        }
-    }
-  </script>
+  // Event listener to close the dropdown if clicked outside of it
+  window.onclick = function(event) {
+      if (!event.target.matches('img[alt="{{ user.username }}"]')) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.style.display === 'block') {
+                  openDropdown.style.display = 'none';
+              }
+          }
+      }
+  }
+
+      document.getElementById('submit_button').addEventListener('click', function(event) {
+  var currentGrade = document.getElementById('grade').value;
+  var startingGradeElement = document.getElementById('starting_grade');
+  var totalMarks = document.getElementById('total_marks').value;
+
+  var startingGrade = startingGradeElement ? startingGradeElement.value : null;
+  if (!startingGrade){
+  // Check if current grade is entered but total marks is not
+  if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0)) {
+          alert('Please enter a value for Total Marks.');
+          event.preventDefault(); // Prevent form submission
+      }
+  }else{
+      if ( (totalMarks=='' || totalMarks==0) && (startingGrade!='' && startingGrade!=0)) {
+          alert('Please enter a value for Total Marks.');
+          event.preventDefault(); // Prevent form submission
+      }
+  }
+});
+</script>
 </body>
 </html>

@@ -65,7 +65,10 @@ def signup():
                                 starting_marks=course_data["starting_marks"],
                                 grade=course_data["grade"],
                                 total_marks=course_data["total_marks"],
-                                goal=course_data["goal"])
+                                goal=course_data["goal"],
+                                total_study=course_data['total_study']
+                                )
+                
          
                 db.session.add(temp_course)
                 db.session.flush()  # to get an ID for the new course before committing
