@@ -29,18 +29,25 @@
     {% endif %}
     
    
-    <div id="update_grade" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form action="{{ url_for('update_grade', course_id=course.id) }}" method="post">
-                <label for="new_grade">Enter Updated Grade:</label>
-                <input type="text" id="new_grade" name="new_grade" required>
-                <input type="submit" value="Update Grade">
-            </form>
-        </div>
-    </div>
+   
     <main class="page-main">
+        <div class="tabs">
+            <div id="update_grade" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <form action="{{ url_for('update_grade', course_id=course.id) }}" method="post">
+                        <label for="new_grade">Enter Updated Grade:</label>
+                        <input type="text" id="new_grade" name="new_grade" required>
+                        <input type="submit" value="Update Grade">
+                    </form>
+                </div>
+            </div>
+            <button id="home-tab" class="tab-button" onclick="openCourseTab('home')">Home</button>
+            <button id="notes-tab" class="tab-button" onclick="openCourseTab('notes')">Notes</button>
+        </div>
+
+    <div id="home" class="course-tab-content">
         <div class="autoupdate-container">
             <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" onchange="toggleAutoupdate(this)" {{ 'checked' if session.get('autoupdate', True) else '' }}>
             <label class="checkbox-custom" for="autoupdate-mark"></label>
@@ -229,6 +236,9 @@
             
         </section>
     </div>
+    <div id="notes" class="course-tab-content" style="display:none;">
+        <!-- Content for the Notes tab goes here -->
+    </div>
     </main>
 
     {% block extrascripts %}<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>{% endblock %}
@@ -368,7 +378,28 @@ document.getElementById(tabName + "-btn").classList.add("active-tab");
 
 // Initial default active tab
 
+function openCourseTab(tabName) {
+    var i, tabcontent, tabbuttons;
+    tabcontent = document.getElementsByClassName("course-tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tabbuttons = document.getElementsByClassName("tab-button");
+    for (i = 0; i < tabbuttons.length; i++) {
+        tabbuttons[i].classList.remove("active-tab");
+    }
+    var tabContent = document.getElementById(tabName);
+    var tabButton = document.getElementById(tabName + "-tab");
+    if (tabContent) {
+        tabContent.style.display = "block";
+    }
+    if (tabButton) {
+        tabButton.classList.add("active-tab");
+    }
+}
 
+// Initialize with the Home tab open
+openCourseTab('home');
 
 
     </script>
