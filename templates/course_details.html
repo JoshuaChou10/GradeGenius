@@ -236,9 +236,32 @@
             
         </section>
     </div>
-    <div id="notes" class="course-tab-content" style="display:none;">
-        <!-- Content for the Notes tab goes here -->
+</div>
+<div class="course-tab-content" id="notes">
+<!-- Plus button for adding notes -->
+<button id="add-note-button" class="add-note-button" onclick="openNoteModal();">
+    <i class="fas fa-plus"></i>
+</button>
+
+<!-- Modal for note upload -->
+<div id='note-modal' class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeNoteModal();">&times;</span>
+        <form action="{{ url_for('upload_note',course_id=course.id) }}" method="post" enctype="multipart/form-data">
+            <label for="note-title">Note Title:</label>
+            <input type="text" name="note-title" id='note-title' required>
+            <label for="note_file">Upload File:</label>
+            <input type="file" name="note_file" required>
+            <input type="submit" value="Upload Note">
+        </form>
     </div>
+</div>
+
+<!-- Container for document previews -->
+<div id="document-previews"></div>
+
+</div>
+    
     </main>
 
     {% block extrascripts %}<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>{% endblock %}
@@ -400,6 +423,44 @@ function openCourseTab(tabName) {
 
 // Initialize with the Home tab open
 openCourseTab('home');
+
+function handleFileUpload(files) {
+    if (files.length > 0) {
+        var file = files[0];
+        // Assuming it's an image or a PDF for simplicity
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var previewContainer = document.getElementById('document-previews');
+            var preview = document.createElement('img');
+            preview.src = e.target.result;
+            preview.className = 'document-preview';
+            preview.onclick = function() {
+                // Enlarge the image
+                var modal = document.createElement('div');
+                modal.className = 'notes-modal';
+                var enlargedImg = document.createElement('img');
+                enlargedImg.src = e.target.result;
+                modal.appendChild(enlargedImg);
+                document.body.appendChild(modal);
+
+                // Close the modal on click
+                modal.onclick = function() {
+                    document.body.removeChild(modal);
+                }
+            };
+            previewContainer.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+function openNoteModal() {
+    document.getElementById('note-modal').style.display = 'block';
+}
+
+function closeNoteModal() {
+    document.getElementById('note-modal').style.display = 'none';
+}
+
 
 
     </script>

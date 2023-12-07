@@ -93,7 +93,7 @@ header{
 }
 
 .assessments-section {
-    background-color: #fff; /* or any other color you prefer */
+    background-color: #fff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Horizontal offset, vertical offset, blur radius, and color */
@@ -350,4 +350,68 @@ table {
 
 .tab-button:hover, .tab-button.active-tab:hover {
     background-color: #ccc;
+}
+/* notes page */
+#notes {
+    position: relative;
+}
+
+.add-note-button {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background-color: white;
+    color: blue;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    font-size: 24px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.add-note-button i {
+    pointer-events: none;
+}
+.document-preview {
+    width: 100px; /* Small preview size */
+    height: auto;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.notes-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notes-modal img {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

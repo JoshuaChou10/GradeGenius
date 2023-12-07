@@ -4,10 +4,13 @@ from helpers import get_weights,get_guest_grade,scale_finals
 from datetime import datetime
 import uuid
 from datetime import datetime
-from models import Course, Assessment
+from models import Course, Assessment,Note
 from app import app
 from flask import session
 from app import db
+from werkzeug.utils import secure_filename
+import os
+
 
 #side bar in all templates need courses
 @app.context_processor
@@ -243,3 +246,16 @@ def update_study_times(course_id):
     return redirect(url_for("course_details",course_id=course_id))
 
 
+@app.route('/course/<int:course_id>/upload_note', methods=['POST'])
+def upload_note(course_id):
+    file = request.files['note_file']
+    title = request.form.get('note-title')
+    if file and title:
+        file_content = file.read()
+        new_note = Note(title=title, content=file_content, course_id=course_id)
+        db.session.add(new_note)
+        db.session.commit()
+
+        # Redirect to a relevant view
+        return redirect(url_for('course_details',course_id=course_id))
+    return 'No file or title provided', 400

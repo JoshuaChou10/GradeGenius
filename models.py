@@ -54,6 +54,7 @@ class Course(db.Model):
     goal = db.Column(db.Integer, nullable=False)  # Goal for the course (e.g., target grade or outcome)
     total_study=db.Column(db.Float, nullable=False) 
     time_studied=db.Column(db.Float, nullable=False, default=0)
+    notes = db.relationship('Note', backref='course', lazy=True)
     def days_remaining(self):
         current_date = datetime.utcnow()
         difference = self.end_date - current_date
@@ -69,8 +70,11 @@ class Course(db.Model):
 
         return round(total_marks,1),round(grade,1)
 
-
-   
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title=db.Column(db.String, nullable=False)
+    content = db.Column(db.LargeBinary, nullable=False)  #storing files
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  
                     
 
   

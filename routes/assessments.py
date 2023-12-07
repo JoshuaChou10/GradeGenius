@@ -41,16 +41,17 @@ def add_assessment(course_id):
         earned = float(request.form.get('earned'))
         total= float(request.form.get('total'))
         weight=request.form.get('weight')
-        #If final, get weight and percentage grade
+        #If final, get weight and percentage graded
         if weight:
             weight=float(weight)/100
         else:
             weight=None
             
-        if earned>total:
-            session['form_data'] = request.form
-            flash("Earned cannot be more than Total. Eg. 9/10",'danger')
-            return redirect(url_for('add_assessment', course_id=course_id))
+        # if earned>total:
+        #     session['form_data'] = request.form
+        #     flash("Earned cannot be more than Total. Eg. 9/10",'danger')
+        #     return redirect(url_for('add_assessment', course_id=course_id))
+        
         
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
@@ -200,6 +201,6 @@ def edit_assessment(course_id,assessment_id):
         return redirect(url_for('course_details', course_id=course_id))
     
     # If GET request, display the course data for editing
-    finals_weight=sum(get_attr(f,'weight') for f in finals) 
+    finals_weight=sum(get_attr(f,'weight') for f in finals)
     course_marks=course.total_marks-sum(get_attr(f,'total') for f in finals) 
     return render_template('add_assessment.html', course=course,course_marks=course_marks,finals_weight=finals_weight, assessment=assessment, action="Edit")

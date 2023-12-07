@@ -47,11 +47,11 @@
             <div class="form-group" id="weightInput" style="{{ 'display:block;' if assessment and assessment.weight else 'display:none;' }}">
                 <div class="form-group" id="current-finals-weight" style="{{ 'display:block;' if finals_weight>0 else 'display:none;' }}">
                     <label>Current Finals Weight:</label>
-                    <span>{{ (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0)) }}</span>% 
+                    <span>{{ (finals_weight*100 - (assessment.weight*100 if action == 'Edit' and assessment.weight else 0)) }}</span>% 
                 </div>
                 <label for="weight">Weight (%):</label>
                 <input type="number" step="0.1" placeholder="Enter weight in percent" id="weight" name="weight" class="form-control" min="0" 
-                max="{{ (100 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0))) if course_marks <= 0 else (99 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' else 0))) }}" 
+                max="{{ (100 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' and assessment.weight else 0))) if course_marks <= 0 else (99 - (finals_weight*100 - (assessment.weight*100 if action == 'Edit' and assessment.weight else 0))) }}" 
                 value="{{ assessment.weight*100 if assessment and assessment.weight and action == 'Edit' else (session['form_data']['weight']*100 if 'form_data' in session and 'weight' in session['form_data'] else '') }}" >
             </div>
 
