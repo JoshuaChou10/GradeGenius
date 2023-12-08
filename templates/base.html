@@ -22,16 +22,20 @@
         <div id="user-info" style="position: absolute; right: 20px; top: 20px;">
           {% if user %}
               <!-- Profile Picture with onClick event to toggle dropdown -->
-              <img src="{{ user.profile_pic_url | default('path/to/default/profile/pic.png') }}" alt="{{ user.username }}" width="50" height="50" onclick="toggleDropdown()">
-              <span>{{ user.username }}</span>
-              <!-- Dropdown Menu -->
-              <div id="profile-dropdown" class="dropdown-content" style="display:none; position:absolute; right:0; background-color:#f9f9f9; min-width:160px; box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2); z-index:1;">
-                  <form action="/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
-                      <button type="submit" class="dropdown-item">Delete Account</button>
-                  </form>
-                  <!-- Logout Button -->
-                  <a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
-              </div>
+              <div style="text-align: center;">
+                <img src="{{ url_for('static',filename='images/profile_pic.png') }}" alt="{{ user.username }}" width="50" height="50" onclick="toggleDropdown()" style="display: block; margin: auto;">
+                <span style="display: block;">{{ user.username }}</span>
+             </div>
+             
+                <!-- Dropdown Menu -->
+    <div id="profile-dropdown" class="dropdown-content" >
+      <form action="/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+          <button type="submit" class="dropdown-item">Delete Account</button>
+      </form>
+  <!-- Logout Button -->
+  <a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
+</div>
+
           {% else %}
               <!-- Signup/Login Button -->
               <a href="{{ url_for('login') }}" class="btn-login">Signup/Login</a>
@@ -63,6 +67,9 @@
     
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required>
+
+          <label for="password-confirm">Password:</label>
+          <input type="password" id="password-confirm" name="password-confirm" required>
     
           <input type="submit" value="Sign Up">
         </form>

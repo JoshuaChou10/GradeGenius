@@ -180,7 +180,7 @@ main {
     background-color: #e74c3c;
 }
 .modal {
-    position:relative;
+    
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -194,36 +194,36 @@ main {
 }
 
 .modal-content {
+    position: relative; /* This makes sure that the absolute positioning of .close is relative to this container */
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 30%; /* Could be more or less, depending on screen size */
-    max-width: 400px; /* Maximum width */
-    min-height: 300px; /* Minimum height */
-    max-height: 400px; /* Maximum height */
+    width: 30%;
+    max-width: 400px;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    border-radius: 10px; /* Optional: for rounded corners */
-   
+    border-radius: 10px;
+    overflow: auto;
 }
+
 .close {
     color: #aaa;
-    position: absolute; /* Position it absolutely within the modal */
-    top: 20px; /* Position it 20px from the top */
-    right: 20px; /* Position it 20px from the right */
-    font-size: 24px; /* Adjust the font size */
+    position: absolute;
+    top: 0; /* Adjusted to align with the top edge of modal-content */
+    right: 0; /* Adjusted to align with the right edge of modal-content */
+    padding: 20px; /* Add padding to give space inside the modal-content */
+    font-size: 24px;
     cursor: pointer;
 }
 
-/* Hover effect for close button */
-.close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
+/* It is good practice to add a z-index value higher than the modal-content to ensure it is clickable */
+.close {
+    z-index: 2;
 }
-
 
 /* Additional styling for form elements */
 input[type=text], input[type=password] {
@@ -263,6 +263,7 @@ label {
 
 /* Adjusting the margins and layout of the sign-up message */
 .modal-content p {
+  
     text-align: center;
     margin-top: 20px;
 }
@@ -285,6 +286,16 @@ label {
     background-color: #0056b3;
     color: #fff;
 }
+.dropdown-content {
+    display: none; 
+    right: 0; 
+    top: 100px; 
+    background-color: #f9f9f9; 
+    min-width: 160px; 
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
+    z-index: 1;
+}
+
 .dropdown-item {
     padding: 12px 16px;
     text-decoration: none;

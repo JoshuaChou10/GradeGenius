@@ -104,7 +104,7 @@ def create_course():
                     'code': course_code,
                     'description':course_description,
                     'name': course_name,
-                    "creation_date": creation_date.strftime('%Y-%m-%d'),
+                    "creation_date": creation_date,
                     'end_date': end_date,
                     'assessments': [],
                     'starting_grade':grade,

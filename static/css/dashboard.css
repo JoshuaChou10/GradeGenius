@@ -162,7 +162,7 @@ html, body {
     margin-bottom: 20px;
 }
 
-.goal-section input[type="text"] {
+.goal-section input[type="number"] {
     flex-grow: 1; /* Input field takes up remaining space */
     padding: 10px;
     font-size: 1em;

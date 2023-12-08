@@ -75,7 +75,7 @@
             <h2>Target Grade Average</h2>
        
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form">
-            <input type="text" name="goal" placeholder="Enter your goal" id="goal-input" required>
+            <input type="number" name="goal" placeholder="Enter your goal" id="goal-input" required> %
             <input type="submit" value="Add Goal" id="goal-submit">
         </form>
         {% endif %}

@@ -37,12 +37,16 @@ def signup():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        password_confirm=request.form.get('password-confirm')
         
         # Check if a user with this username already exists
         existing_user = User.query.filter_by(username=username).first()
         
         if existing_user:
             flash('This username is already taken. Please choose another one.', 'danger')
+            return redirect(url_for('signup'))
+        if password_confirm!=password:
+            flash('Passwords do not match', 'danger')
             return redirect(url_for('signup'))
         
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -88,7 +92,7 @@ def addgoal():
         user = User.query.get(user_id)
         
         if user is None:
-            flash('User not found. Please log in again.', 'error')
+            flash('User not found. Please log in again.', 'danger')
             return redirect(url_for('login'))
 
         goal = request.form.get("goal")
@@ -138,7 +142,7 @@ def delete_account():
     user_id = session.get('user_id')
     # Check if the user is logged in
     if not user_id:
-        flash('You must be logged in to delete an account.', 'danger')
+        flash('You must be logged in to delete an account.', 'error')
         return redirect(url_for('login'))
 
     # Retrieve the user from the database
