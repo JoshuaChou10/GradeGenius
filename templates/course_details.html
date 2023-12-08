@@ -32,6 +32,14 @@
    
     <main class="page-main">
         <div class="tabs">
+            {% if page == 'notes' %}
+            <script type="text/javascript">
+                window.onload = function() {
+                    openCourseTab('notes'); // Replace 'defaultTabId' with the ID of the tab you want to open
+                };
+            </script>
+        {% endif %}
+
             <div id="update_grade" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -237,6 +245,7 @@
         </section>
     </div>
 </div>
+
 <div class="course-tab-content" id="notes">
 <!-- Plus button for adding notes -->
 <button id="add-note-button" class="add-note-button" onclick="openNoteInputModal();">
@@ -278,7 +287,7 @@
 
 
 </div>
-    
+
     </main>
 
     {% block extrascripts %}<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>{% endblock %}
@@ -374,12 +383,6 @@ document.getElementById('update_grade').style.display = "none";
 });
 
 // Close the modal when user clicks outside of it
-window.addEventListener('click', function(event) {
-var modal = document.getElementById('update_grade');
-if (event.target == modal) {
-    modal.style.display = "none";
-}
-});
 
 function toggleMenu(menuId) {
 
@@ -428,15 +431,15 @@ function openCourseTab(tabName) {
     for (i = 0; i < tabbuttons.length; i++) {
         tabbuttons[i].classList.remove("active-tab");
     }
-    var tabContent = document.getElementById(tabName);
-    var tabButton = document.getElementById(tabName + "-tab");
-    if (tabContent) {
-        tabContent.style.display = "block";
-    }
-    if (tabButton) {
-        tabButton.classList.add("active-tab");
-    }
+    document.getElementById(tabName).style.display = "block";
+    document.getElementById(tabName + "-tab").classList.add("active-tab");
+
+    // Update the URL without reloading the page
+    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?page=' + tabName;
+    window.history.pushState({path: newUrl}, '', newUrl);
 }
+
+
 
 // Initialize with the Home tab open
 openCourseTab('home');
