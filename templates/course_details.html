@@ -63,7 +63,7 @@
                 <span id="autoupdate-status">{{ 'Off' if not session.get('autoupdate', True) else '' }}</span>
             </label>
           </div>
-          <button class='btn' id="update-mark-manually" style="display:none" onclick="show()">Update Mark Manually</button>
+          <button class='btn' id="update-mark-manually" onclick="show()">Update Mark Manually</button>
 <div class="{{ 'goal-status' }} {{
     'goal-reached' if course.grade >= course.goal or course.goal - course.grade <= 0.5 else
     'goal-exceeded' if course.grade > course.goal else
@@ -221,7 +221,7 @@
                                 </div>
                                 <div id="menu-{{ assessment.id }}" class="menu" >
                                     <a href="{{ url_for('edit_assessment', course_id=course.id, assessment_id=assessment.id) }}"><i class="fas fa-edit"></i></a>
-                                    <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}')"><i class="fa fa-trash"></i></a>
+                                    <a href="javascript:void(0);" onclick="submitDeleteForm('delete-form-{{ assessment.id }}','assessment')"><i class="fa fa-trash"></i></a>
                                     <form id="delete-form-{{ assessment.id }}" action="{{ url_for('delete_assessment', course_id=course['id'], assessment_id=assessment['id']) }}" method="post" style="display: none;">
                                         <input type="hidden" name="_method" value="DELETE">
                                     </form>
@@ -251,11 +251,13 @@
 <button id="add-note-button" class="add-note-button" onclick="openNoteInputModal();">
     <i class="fas fa-plus"></i>
 </button>
-
+<br>
+<br>
+<br>
 <!-- Modal for note upload -->
 <div id='note-input-modal' class="modal" style="display: none;">
     <div class="modal-content">
-        <span class="close" onclick="closeNoteInputModal();">&times;</span>
+        <span style='color:grey' class="close" onclick="closeNoteInputModal();">&times;</span>
         <form action="{{ url_for('upload_note',course_id=course.id) }}" method="post" enctype="multipart/form-data">
             <label for="note-title">Note Title:</label>
             <input type="text" name="note-title" id='note-title' required>
@@ -269,12 +271,18 @@
 <div id="document-previews">
     {% for note in course.notes %}
         <div class="note-container" onclick="openNoteModal('{{ note.id }}');">
+            <a href="javascript:void(0);" class="delete-button" onclick="submitDeleteForm('delete-form-{{ note.id }}','note')">
+                <i class="fa fa-times"></i>
+            </a>
+            <form id="delete-form-{{ note.id }}" action="{{ url_for('delete_note', course_id=course['id'], note_id=note['id']) }}" method="post" style="display: none;">
+                <input type="hidden" name="_method" value="DELETE">
+            </form>
             <h3>{{ note.title }}</h3>
             <img class='note' src="data:image/jpeg;base64,{{ note.content | b64encode }}">
         </div>
 
         <!-- Modal for each note -->
-        <div id="note-modal-{{ note.id }}" class="note-modal" style="display: none;">
+        <div id="note-modal-{{ note.id }}" class="modal" style="display: none;">
             <div class="note-modal-content">
                 <span class="close" onclick="closeNoteModal('{{ note.id }}');">&times;</span>
                 <h3>{{ note.title }}</h3>
@@ -366,16 +374,25 @@
     });
   
 
-function submitDeleteForm(formId) {
-var confirmation = confirm('Are you sure you want to delete this assessment? ');
+function submitDeleteForm(formId,item) {
+var confirmation = confirm(`Are you sure you want to delete this ${item}? This cannot be undone. `);
 if (confirmation) {
     document.getElementById(formId).submit();
 }
 }
 function show() {
-var update_grade = document.getElementById('update_grade');
-update_grade.style.display = 'block';
+    var update_grade = document.getElementById('update_grade');
+    if (update_grade) {
+        update_grade.style.display = 'block';
+    }
+
+    var checkbox = document.getElementById('autoupdate-mark');
+    if (checkbox) {
+        checkbox.checked = false;
+        toggleAutoupdate(checkbox); // Assuming this function correctly handles the checkbox state
+    }
 }
+
 
 // Close the modal when user clicks on <span> (x)
 document.querySelector(".close").addEventListener("click", function() {
@@ -460,6 +477,8 @@ function openNoteModal(noteId) {
 function closeNoteModal(noteId) {
     document.getElementById('note-modal-' + noteId).style.display = 'none';
 }
+
+ 
 
 
 

@@ -161,23 +161,9 @@ window.addEventListener('click', function(event) {
       }
   }
 
-      
-function toggleManualUpdate() {
-    var autoUpdateCheckbox = document.getElementById('autoupdate-mark');
-    var manualUpdateButton = document.getElementById('update-mark-manually');
-    if (autoUpdateCheckbox && manualUpdateButton) {
-        manualUpdateButton.style.display = autoUpdateCheckbox.checked ? 'none' : 'block';
-    }
-
-    }
-toggleManualUpdate();
-
-function toggleAutoupdate(checkbox) {
-toggleManualUpdate();
+  function toggleAutoupdate(checkbox) {
   const checked = checkbox.checked;
   document.getElementById('autoupdate-status').textContent = checked ? '' : 'Off';
-
-
   // Save the preference locally
   localStorage.setItem('autoupdate', checked);
 
@@ -196,6 +182,7 @@ toggleManualUpdate();
   .catch(error => console.error('Error:', error));
 }
  
+
       
 
 </script>
