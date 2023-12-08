@@ -239,14 +239,14 @@
 </div>
 <div class="course-tab-content" id="notes">
 <!-- Plus button for adding notes -->
-<button id="add-note-button" class="add-note-button" onclick="openNoteModal();">
+<button id="add-note-button" class="add-note-button" onclick="openNoteInputModal();">
     <i class="fas fa-plus"></i>
 </button>
 
 <!-- Modal for note upload -->
-<div id='note-modal' class="modal" style="display: none;">
+<div id='note-input-modal' class="modal" style="display: none;">
     <div class="modal-content">
-        <span class="close" onclick="closeNoteModal();">&times;</span>
+        <span class="close" onclick="closeNoteInputModal();">&times;</span>
         <form action="{{ url_for('upload_note',course_id=course.id) }}" method="post" enctype="multipart/form-data">
             <label for="note-title">Note Title:</label>
             <input type="text" name="note-title" id='note-title' required>
@@ -257,8 +257,25 @@
     </div>
 </div>
 
-<!-- Container for document previews -->
-<div id="document-previews"></div>
+<div id="document-previews">
+    {% for note in course.notes %}
+        <div class="note-container" onclick="openNoteModal('{{ note.id }}');">
+            <h3>{{ note.title }}</h3>
+            <img class='note' src="data:image/jpeg;base64,{{ note.content | b64encode }}">
+        </div>
+
+        <!-- Modal for each note -->
+        <div id="note-modal-{{ note.id }}" class="note-modal" style="display: none;">
+            <div class="note-modal-content">
+                <span class="close" onclick="closeNoteModal('{{ note.id }}');">&times;</span>
+                <h3>{{ note.title }}</h3>
+                <img src="data:image/jpeg;base64,{{ note.content | b64encode }}" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
 
 </div>
     
@@ -424,41 +441,21 @@ function openCourseTab(tabName) {
 // Initialize with the Home tab open
 openCourseTab('home');
 
-function handleFileUpload(files) {
-    if (files.length > 0) {
-        var file = files[0];
-        // Assuming it's an image or a PDF for simplicity
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var previewContainer = document.getElementById('document-previews');
-            var preview = document.createElement('img');
-            preview.src = e.target.result;
-            preview.className = 'document-preview';
-            preview.onclick = function() {
-                // Enlarge the image
-                var modal = document.createElement('div');
-                modal.className = 'notes-modal';
-                var enlargedImg = document.createElement('img');
-                enlargedImg.src = e.target.result;
-                modal.appendChild(enlargedImg);
-                document.body.appendChild(modal);
 
-                // Close the modal on click
-                modal.onclick = function() {
-                    document.body.removeChild(modal);
-                }
-            };
-            previewContainer.appendChild(preview);
-        };
-        reader.readAsDataURL(file);
-    }
-}
-function openNoteModal() {
-    document.getElementById('note-modal').style.display = 'block';
+function openNoteInputModal() {
+    document.getElementById('note-input-modal').style.display = 'block';
 }
 
-function closeNoteModal() {
-    document.getElementById('note-modal').style.display = 'none';
+function closeNoteInputModal() {
+    document.getElementById('note-input-modal').style.display = 'none';
+}
+
+function openNoteModal(noteId) {
+    document.getElementById('note-modal-' + noteId).style.display = 'block';
+}
+
+function closeNoteModal(noteId) {
+    document.getElementById('note-modal-' + noteId).style.display = 'none';
 }
 
 

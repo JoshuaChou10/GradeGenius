@@ -73,7 +73,7 @@ class Course(db.Model):
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title=db.Column(db.String, nullable=False)
-    content = db.Column(db.LargeBinary, nullable=False)  #storing files
+    content = db.Column(db.LargeBinary, nullable=False) 
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  
                     
 

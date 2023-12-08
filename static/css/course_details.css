@@ -395,12 +395,29 @@ table {
     justify-content: center;
     align-items: center;
 }
-
-.notes-modal img {
-    max-width: 80%;
-    max-height: 80%;
+.note-modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.note-modal-content {
+    position:relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 
 .close {
     color: #aaa;
@@ -414,4 +431,36 @@ table {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.notes-modal img {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+
+#document-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust the minmax values as needed */
+    gap: 10px; /* Space between grid items */
+    padding: 10px; /* Padding around the grid */
+}
+
+.note {
+    border: 1px solid #ddd; /* Border for each note */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Ensures content fits within the borders */
+    display: flex; /* To center the content */
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    height: 150px; /* Height of each note, making it a square. Match with grid's minmax */
+    text-align: center; /* Center text */
+    padding: 5px; /* Padding inside each note */
+}
+
+.note img {
+    max-width: 100%; /* Ensures image doesn't overflow its container */
+    max-height: 100%; /* Same as above */
+    object-fit: cover; /* Keeps aspect ratio but fills the area */
 }

@@ -10,6 +10,8 @@ from flask import session
 from app import db
 from werkzeug.utils import secure_filename
 import os
+import base64
+
 
 
 #side bar in all templates need courses
@@ -245,9 +247,16 @@ def update_study_times(course_id):
         flash("signup_prompt","info")
     return redirect(url_for("course_details",course_id=course_id))
 
+@app.template_filter('b64encode')
+def b64encode_filter(s):
+    return base64.b64encode(s).decode('utf-8')
 
 @app.route('/course/<int:course_id>/upload_note', methods=['POST'])
 def upload_note(course_id):
+    if 'user_id' not in session:
+        flash("Sign up to add a note!",'info')
+        flash('signup_prompt','info')
+        return redirect(url_for('course_details',course_id=course_id))
     file = request.files['note_file']
     title = request.form.get('note-title')
     if file and title:
