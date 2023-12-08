@@ -27,6 +27,7 @@ def inject_courses():
 @app.route('/course/<int:course_id>')
 @check_course_ownership
 def course_details(course_id):
+    page = request.args.get('page', 'home')
     course=None
     time_left = 0
     if 'user_id' in session:
@@ -44,7 +45,7 @@ def course_details(course_id):
     finals_weight,finals_grade,courses_grade=get_weights(course)
     courses_score=f"{round(courses_grade*((1-finals_weight)*100),1)}/{round((1-finals_weight)*100,1)}"
     finals_score=f"{round(finals_grade*finals_weight*100,1)}/{round(finals_weight*100,1)}"
-    return render_template('course_details.html', datetime=datetime,course=course,time_left=time_left if time_left>0 else 0,courses_score=courses_score,finals_score=finals_score)
+    return render_template('course_details.html', page=page,datetime=datetime,course=course,time_left=time_left if time_left>0 else 0,courses_score=courses_score,finals_score=finals_score)
 
 
 @app.route('/course/create', methods=['POST', 'GET'])
@@ -131,6 +132,7 @@ def create_course():
 @app.route('/course/<int:course_id>/edit', methods=['POST', 'GET'])
 @check_course_ownership
 def edit_course(course_id):
+    update_mark=session.get('autoupdate',True)
     # Check if the user is logged in
     if 'user_id' in session:
         # Fetch the course from the database
@@ -167,10 +169,12 @@ def edit_course(course_id):
             # Update course in the database
             for key, value in course_data.items():
                 setattr(course, key, value)
-            finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-            course.total_marks,course.grade=course.get_updated_grade()
-            scale_finals(course,finals) 
-            course.total_marks,course.grade=course.get_updated_grade()
+           
+            if update_mark:
+                finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
+                course.total_marks,course.grade=course.get_updated_grade()
+                scale_finals(course,finals) 
+                course.total_marks,course.grade=course.get_updated_grade()
             db.session.commit()
   
         else:
@@ -178,10 +182,11 @@ def edit_course(course_id):
             #TODO, time studied and total_study not included in guest session
             for key, value in course_data.items():
                 course[key] = value
-            finals=[a for a in course['assessments'] if a['weight'] is not None]
-            course["total_marks"],course["grade"]=get_guest_grade(course)
-            scale_finals(course,finals)
-            course["total_marks"],course["grade"]=get_guest_grade(course)
+            if update_mark:
+                finals=[a for a in course['assessments'] if a['weight'] is not None]
+                course["total_marks"],course["grade"]=get_guest_grade(course)
+                scale_finals(course,finals)
+                course["total_marks"],course["grade"]=get_guest_grade(course)
             session.modified = True
 
         flash("Course successfully updated!", "success")
@@ -266,5 +271,24 @@ def upload_note(course_id):
         db.session.commit()
 
         # Redirect to a relevant view
-        return redirect(url_for('course_details',course_id=course_id))
+        return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
     return 'No file or title provided', 400
+
+@app.route('/course/<int:course_id>/note/<int:note_id>/delete_note', methods=['POST'])
+def delete_note(course_id,note_id):
+    if 'user_id' not in session:
+        flash("Sign up to delete a note!",'info')
+        flash('signup_prompt','info')
+        return redirect(url_for('course_details',course_id=course_id))
+    if request.form.get('_method') == 'DELETE':
+        note=Note.query.get(note_id)
+        if not note:
+            flash("note not found","error")
+            return redirect(url_for("course_details",course_id=course_id))
+        db.session.delete(note)
+        db.session.commit()
+         
+    else:
+        flash('Invalid method', 'error')
+    return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
+

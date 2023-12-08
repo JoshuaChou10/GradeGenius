@@ -163,7 +163,7 @@ window.addEventListener('click', function(event) {
 
   function toggleAutoupdate(checkbox) {
   const checked = checkbox.checked;
-  document.getElementById('autoupdate-status').textContent = checked ? '' : 'Off';
+  document.getElementById('autoupdate-status').textContent = checked ? 'On' : 'Off';
   // Save the preference locally
   localStorage.setItem('autoupdate', checked);
 

@@ -438,29 +438,52 @@ table {
     max-height: 80%;
 }
 
-
 #document-previews {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust the minmax values as needed */
-    gap: 10px; /* Space between grid items */
-    padding: 10px; /* Padding around the grid */
+    grid-template-columns: repeat(4, 1fr); /* Creates four columns */
+    grid-gap: 20px; /* Space between grid items */
+    padding: 20px;
+    margin: 0 auto; /* Center the grid in the middle of its parent */
+    max-width: 1200px; /* Adjust max-width as needed */
 }
 
-.note {
-    border: 1px solid #ddd; /* Border for each note */
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for a bit of depth */
-    border-radius: 10px; /* Rounded corners */
-    overflow: hidden; /* Ensures content fits within the borders */
-    display: flex; /* To center the content */
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
-    height: 150px; /* Height of each note, making it a square. Match with grid's minmax */
-    text-align: center; /* Center text */
-    padding: 5px; /* Padding inside each note */
+/* Individual note container */
+.note-container {
+    position: relative;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-.note img {
-    max-width: 100%; /* Ensures image doesn't overflow its container */
-    max-height: 100%; /* Same as above */
-    object-fit: cover; /* Keeps aspect ratio but fills the area */
+.note-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title within each note container */
+.note-container h3 {
+    padding: 8px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Style for the note images */
+.note-container .note {
+    width: 100%; /* Make sure the image covers the full container width */
+    height: 150px; /* Fixed height for the images */
+    object-fit: cover; /* Cover the container without losing aspect ratio */
+}
+
+.delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* additional styling as needed */
+}
+.fa-times {
+    color: grey; /* or use a specific shade of grey like #808080 */
 }

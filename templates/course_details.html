@@ -59,8 +59,8 @@
         <div class="autoupdate-container">
             <input type="checkbox" id="autoupdate-mark" name="autoupdate-mark" onchange="toggleAutoupdate(this)" {{ 'checked' if session.get('autoupdate', True) else '' }}>
             <label class="checkbox-custom" for="autoupdate-mark"></label>
-            <label for="autoupdate-mark" id="autoupdate-mark-label">Auto-Update Grade
-                <span id="autoupdate-status">{{ 'Off' if not session.get('autoupdate', True) else '' }}</span>
+            <label for="autoupdate-mark" id="autoupdate-mark-label">Auto-Update Grade:
+                <span id="autoupdate-status">{{ 'Off' if not session.get('autoupdate', True) else 'On' }}</span>
             </label>
           </div>
           <button class='btn' id="update-mark-manually" onclick="show()">Update Mark Manually</button>
