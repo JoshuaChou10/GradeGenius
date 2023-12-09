@@ -8,8 +8,6 @@ from models import Course, Assessment,Note
 from app import app
 from flask import session
 from app import db
-from werkzeug.utils import secure_filename
-import os
 import base64
 
 
@@ -35,7 +33,8 @@ def course_details(course_id):
         days_left=course.days_remaining()
         time_left = days_left
     else:
-        temporary_courses = session.get('temporary_courses', [])  # Use .get() to avoid KeyError
+        temporary_courses = session.get('temporary_courses',[]) 
+
         for c in temporary_courses:
             if c['id'] == course_id:
                 course=c
@@ -231,9 +230,11 @@ def update_grade(course_id):
         courses=session.get("temporary_courses",[])
         for c in courses:
             if c['id']==course_id:
-                c['grade']=new_grade
+                course=c
         if not course:
             return render_template("not_found.html")
+        else:
+            course['grade']=new_grade
     return redirect(url_for('course_details',course_id=course_id))
 
 

@@ -26,6 +26,14 @@
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" class="form-control" value="{{ assessment.date.strftime('%Y-%m-%d') if assessment and action == 'Edit' else (session['form_data']['date'] if 'form_data' in session and 'date' in session['form_data'] else '') }}" required>
             </div>
+            <br>
+            <br>
+            <span class="format-hint">
+                Format: Earned Marks/Total Marks
+                <span class="tooltip-icon" title="Eg. Earned Marks: 38 Total Marks: 40 38/40">?</span>
+            </span>
+            
+            
             <div class="form-group">
                 <label for="earned">Earned Marks:</label>
                 <input type="number" min=0 id="earned" name="earned" step=0.1 class="form-control" value="{% if assessment and assessment.weight and action == 'Edit' %}{{ assessment.original_earned }}{% elif assessment and action == 'Edit' %}{{ assessment.earned }}{% else %}{{ session['form_data']['earned'] if 'form_data' in session and 'earned' in session['form_data'] else '' }}{% endif %}" required>

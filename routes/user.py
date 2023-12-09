@@ -133,7 +133,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
+    while 'user_id' in session:
+        session.pop('user_id',None)
     return redirect(url_for('index'))
 
 

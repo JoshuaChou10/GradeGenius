@@ -17,8 +17,7 @@ def get_guest_grade(course):
         return round(total_marks,1),round(grade,1)
 
 
-def get_guest_GPA():
-    courses = session.get("temporary_courses", [])
+def get_guest_GPA(courses):
     total = 0
     count = 0
     for course in courses:
@@ -27,8 +26,7 @@ def get_guest_GPA():
             count += 1
 
     return total / count if count > 0 else 0
-def get_guest_total_study():
-    courses = session.get("temporary_courses",[])
+def get_guest_total_study(courses):
     total=0
     for c in courses:
             total+=c['total_study']

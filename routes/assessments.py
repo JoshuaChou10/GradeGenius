@@ -34,6 +34,7 @@ def add_assessment(course_id):
                 course = c
                 break
         finals=[a for a in course['assessments'] if a['weight'] is not None]
+        finals_weight=sum(get_attr(f,'weight') for f in finals) 
     if request.method == 'POST':
         name= request.form.get('name')
         date_str=request.form.get('date')
@@ -51,7 +52,7 @@ def add_assessment(course_id):
         #     session['form_data'] = request.form
         #     flash("Earned cannot be more than Total. Eg. 9/10",'danger')
         #     return redirect(url_for('add_assessment', course_id=course_id))
-        
+    
         
         if 'user_id' in session:
             # Add the assessment to the database if the user is logged in
@@ -88,7 +89,7 @@ def add_assessment(course_id):
         form_data=session.pop('form_data',None)
         return redirect(url_for('course_details', course_id=course_id))
     
-    course_marks=course.total_marks-sum(get_attr(f,'total') for f in finals) 
+    course_marks=get_attr(course,'total_marks')-sum(get_attr(f,'total') for f in finals) 
     return render_template('add_assessment.html',course=course,course_marks=course_marks,finals_weight=finals_weight,action="Add")
 
 

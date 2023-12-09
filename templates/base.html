@@ -22,26 +22,23 @@
         <div id="user-info" style="position: absolute; right: 20px; top: 20px;">
           {% if user %}
               <!-- Profile Picture with onClick event to toggle dropdown -->
-              <div style="text-align: center;">
-                <img src="{{ url_for('static',filename='images/profile_pic.png') }}" alt="{{ user.username }}" width="50" height="50" onclick="toggleDropdown()" style="display: block; margin: auto;">
+              <div style="text-align: center;" onclick="toggleDropdown()">
+                <img src="{{ url_for('static',filename='images/profile_pic.png') }}" alt="{{ user.username }}" width="50" height="50" style="display: block; margin: auto;">
                 <span style="display: block;">{{ user.username }}</span>
              </div>
              
                 <!-- Dropdown Menu -->
-    <div id="profile-dropdown" class="dropdown-content" >
-      <form action="/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
-          <button type="submit" class="dropdown-item">Delete Account</button>
-      </form>
-  <!-- Logout Button -->
-  <a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
-</div>
-
+                <div id="profile-dropdown" class="dropdown-content">
+                  <form action="/delete-account" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+                      <button type="submit" style="color:red; font-weight:500" class="dropdown-item">Delete Account</button>
+                  </form>
+                  <a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
+              </div>
           {% else %}
-              <!-- Signup/Login Button -->
               <a href="{{ url_for('login') }}" class="btn-login">Signup/Login</a>
           {% endif %}
       </div>
-        <hr>
+      <hr>
         
     </header>
     
