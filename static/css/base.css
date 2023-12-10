@@ -19,7 +19,7 @@ header, footer {
     color: white;
     text-align: center;
     flex-shrink: 0; /* Prevents header and footer from shrinking */
-    
+
 }
 
 
@@ -188,7 +188,7 @@ main {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
-.btn-login, .btn-logout {
+ .btn-logout {
     padding: 5px 10px;
     text-decoration: none;
     color: white;
@@ -536,4 +536,21 @@ span.tooltip-icon::after {
 span.tooltip-icon:hover::after {
     opacity: 1;
     visibility: visible;
+}
+#login-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-left:10px;
+    text-decoration: none;
+    background-color: transparent; /* Make the background transparent */
+    color: #007bff; /* Blue text color, adjust the color code as needed */
+    border: 2px solid #007bff; /* Blue border, adjust the color code as needed */
+    border-radius: 5px; /* Rounded corners for the border */
+    font-weight: bold; /* Optional: make the text bold */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+#login-btn:hover {
+    background-color: #007bff; /* Change background to blue on hover */
+    color: white; /* Change text color to white on hover */
 }
