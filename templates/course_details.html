@@ -275,29 +275,46 @@
     </div>
 </div>
 
-<div id="document-previews">
-    {% for note in course.notes %}
-        <div class="note-container" onclick="openNoteModal('{{ note.id }}');">
-            <a href="javascript:void(0);" class="delete-button" onclick="submitDeleteForm('delete-form-{{ note.id }}','note')">
-                <i class="fa fa-times"></i>
-            </a>
-            <form id="delete-form-{{ note.id }}" action="{{ url_for('delete_note', course_id=course['id'], note_id=note['id']) }}" method="post" style="display: none;">
-                <input type="hidden" name="_method" value="DELETE">
-            </form>
-            <h3>{{ note.title }}</h3>
-            <img class='note' src="data:image/jpeg;base64,{{ note.content | b64encode }}">
-        </div>
-
-        <!-- Modal for each note -->
-        <div id="note-modal-{{ note.id }}" class="modal" style="display: none;">
-            <div class="note-modal-content">
-                <span class="close" onclick="closeNoteModal('{{ note.id }}');">&times;</span>
+<!-- Share notes form -->
+<form action="{{ url_for('share_notes', course_id=course.id) }}" method="post">
+    <div id="document-previews">
+        {% for note in course.notes %}
+            <div class="note-container" onclick="openNoteModal('{{ note.id }}');">
+                {% if not note.community %}
+               
+                
+                <input type="checkbox" name="share_notes" value="{{ note.id }}" id="note-{{ note.id }}" onclick="event.stopPropagation()">
+{% endif %}
+         
                 <h3>{{ note.title }}</h3>
-                <img src="data:image/jpeg;base64,{{ note.content | b64encode }}" style="max-width: 100%; height: auto;">
+                <img class='note' src="data:image/jpeg;base64,{{ note.content | b64encode }}">
+                <a href="javascript:void(0);" class="delete-button" onclick="submitDeleteForm('delete-form-{{ note.id }}', 'note'); event.stopPropagation();">
+                    <i class="fa fa-times"></i>
+                </a>
             </div>
+           
+        {% endfor %}
+    </div>
+    <input type="submit" value="Share Selected Notes">
+</form>
+
+<!-- Delete forms (outside the share notes form) -->
+{% for note in course.notes %}
+    <form id="delete-form-{{ note.id }}" action="{{ url_for('delete_note', course_id=course['id'], note_id=note['id']) }}" method="post" style="display: none;">
+        <input type="hidden" name="_method" value="DELETE">
+    </form>
+    <!-- Delete button associated with each note -->
+    
+
+    <!--Full sized Modal for each note -->
+    <div id="note-modal-{{ note.id }}" class="modal" style="display: none;">
+        <div class="note-modal-content">
+            <span class="close" onclick="closeNoteModal('{{ note.id }}');">&times;</span>
+            <h3>{{ note.title }}</h3>
+            <img src="data:image/jpeg;base64,{{ note.content | b64encode }}" style="max-width: 100%; height: auto;">
         </div>
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}
 
 
 
@@ -487,6 +504,21 @@ function closeNoteModal(noteId) {
 
  
 
+function toggleShareMode() {
+    var shareCheckboxes = document.querySelectorAll('.share-checkbox');
+    var deleteButtons = document.querySelectorAll('.delete-button');
+    var shareForm = document.getElementById('share-notes-form');
+
+    shareCheckboxes.forEach(function(checkbox) {
+        checkbox.style.display = checkbox.style.display === 'none' ? 'block' : 'none';
+    });
+
+    deleteButtons.forEach(function(button) {
+        button.style.display = button.style.display === 'none' ? 'block' : 'none';
+    });
+
+    shareForm.style.display = shareForm.style.display === 'none' ? 'block' : 'none';
+}
 
 
     </script>

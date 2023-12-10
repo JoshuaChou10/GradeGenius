@@ -1,0 +1,110 @@
+#community-notes {
+    text-align: center;
+    margin: 20px;
+}
+
+#search-bar {
+    margin-top: 20px; /* Space below the Community Notes title */
+    margin-bottom: 20px; /* Space above the note previews */
+}
+
+#search-bar input {
+    padding: 10px;
+    margin-right: 5px; /* Space between the input field and the search button */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#search-bar button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+#search-bar button:hover {
+    background-color: #e0e0e0;
+}
+
+
+.community-note {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px; /* Width of the note preview */
+    margin: 0 auto; /* Center the note if alone in a row */
+}
+
+.community-note img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+
+#note-previews {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between note rows */
+}
+
+.community-note-row {
+    display: flex;
+    align-items: center;
+    background-color: #f8f8f8; /* Background color for the entire row */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.note-image-container {
+    flex: 0 0 auto; /* Do not grow or shrink */
+    padding-right: 20px; /* Space between the image and the details */
+}
+
+.note-image {
+    max-width: 200px; /* Width of the note image */
+    height: auto;
+    border-radius: 5px;
+}
+
+.note-details-container {
+    flex: 1; /* Take up the remaining space */
+    text-align: left;
+}
+
+.note-title {
+    font-size: 1.25em;
+    margin-bottom: 0.5em;
+}
+
+.note-author,
+.note-course-code,
+.note-course-name {
+    margin-bottom: 0.25em;
+}
+
+.report-button {
+    padding: 5px 10px;
+    background-color: #ff4444; /* Red color for report button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.report-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+
+
+.note-modal-content {
+    position:relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}

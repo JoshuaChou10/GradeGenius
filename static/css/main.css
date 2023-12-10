@@ -27,13 +27,14 @@ html, body {
     display: flex; /* Makes button container a flex container */
     align-items: center; /* Centers button vertically */
     justify-content: center; /* Centers button horizontally */
+    gap:20px;
 }
 
 .explore-button {
     display: inline-block;
     font-weight: bold;
     font-size: 30px;
-    padding: 25px 50px;
+    padding: 20px 40px;
     text-decoration: none;
     border-radius: 16px;
     background-color: #fff;
@@ -106,9 +107,9 @@ footer {
 }
 .slogan {
     text-align: center; /* Center the slogan horizontally */
-    font-size: 2em; /* Make the slogan text large */
+    font-size: 2.5em; /* Make the slogan text large */
     color: black; /* Set the slogan text color to black */
     font-weight: bold; /* Make the slogan text bold */
     margin-top: 20px; /* Space between the nav bar and the slogan */
-    margin-bottom: 20px; /* Space between the slogan and the next content */
+    margin-bottom: 0px; /* Space between the slogan and the next content */
 }

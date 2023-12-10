@@ -3,7 +3,6 @@ from flask import session, request, redirect, url_for, render_template,flash,jso
 from helpers import get_weights,handle_grades
 from datetime import datetime
 import uuid
-from datetime import datetime
 from models import Course, Assessment,Note
 from app import app
 from flask import session
@@ -299,3 +298,32 @@ def delete_note(course_id,note_id):
         flash('Invalid method', 'error')
     return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
 
+@app.route('/course/<int:course_id>/share_notes', methods=['POST'])
+def share_notes(course_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You must be logged in to share notes.', 'error')
+        return redirect(url_for('login'))
+
+    shared_note_ids = request.form.getlist('share_notes')
+
+    if shared_note_ids:
+        # Update the community property of each selected note
+        for note_id in shared_note_ids:
+            note = Note.query.get(note_id)
+            if note.community==True:
+                flash("Note is already shared")
+            if note and note.course_id == course_id:
+                note.community = True
+        db.session.commit()
+        flash('Your notes have been shared successfully.', 'success')
+    else:
+        flash('No notes were selected to share.', 'warning')
+
+    return redirect(url_for('community'))
+
+@app.route('/community')
+def community():
+    # Retrieve all notes marked for community sharing
+    community_notes = Note.query.filter_by(community=True).all()
+    return render_template('community.html', community_notes=community_notes)

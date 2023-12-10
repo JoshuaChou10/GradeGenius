@@ -48,7 +48,8 @@
     <aside class="sidebar">
         <!-- Sidebar content -->
         <ul>
-            <li class="{% if request.endpoint == 'dashboard' %}active{% endif %}"><a href="{{ url_for('dashboard') }}">Home</a></li>
+            <li class="{% if request.endpoint == 'dashboard' %}active{% endif %}"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li class="{% if request.endpoint == 'community' %}active{% endif %}"><a href="{{ url_for('community') }}">Community Notes</a></li>
             <hr>
             <li class="courses-heading">Courses</li>
             {% for course in courses %}
@@ -187,7 +188,24 @@ window.addEventListener('click', function(event) {
 }
  
 
-      
+
+     
+    
+function openNoteModal(noteId) {
+        // Ensure that the ID passed to the function matches the ID on the modal
+        var modal = document.getElementById('note-modal-' + noteId);
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+
+    function closeNoteModal(noteId) {
+        var modal = document.getElementById('note-modal-' + noteId);
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+ 
 
 </script>
 </body>

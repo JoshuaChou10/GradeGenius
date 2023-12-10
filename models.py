@@ -74,6 +74,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title=db.Column(db.String, nullable=False)
     content = db.Column(db.LargeBinary, nullable=False) 
+    community = db.Column(db.Boolean, default=False, nullable=False) 
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)  
                     
 

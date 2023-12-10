@@ -1,0 +1,66 @@
+<!-- course_details.html -->
+{% extends 'base.html' %}
+
+
+
+
+{% block stylesheets %}
+
+  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
+{% endblock %}
+{% block header %}
+Community Notes
+{% endblock %}
+
+
+
+
+{% block content %}
+
+    <div id="community-notes">
+       
+    
+        <!-- Search Bar -->
+        <div id="search-bar">
+            <input type="text" id="search-input" placeholder="Search notes...">
+            <button onclick="searchNotes()">Search</button>
+        </div>
+    
+        <!-- Container for note previews -->
+        <div id="note-previews">
+            {% for note in community_notes %}
+            <div class="community-note-row"  onclick="openNoteModal('{{ note.id }}');">
+                <div class="note-image-container">
+                    <!-- Add the onclick event handler to the img tag -->
+                    <img class='note-image' src="data:image/jpeg;base64,{{ note.content | b64encode }}" >
+                </div>
+                <div class="note-details-container">
+                    <h3 class="note-title">{{ note.title }}</h3>
+                    <p class="note-author">Author: {{ note.author }}</p>
+                    <p class="note-course-code">Course Code: {{ note.course_code }}</p>
+                    <p class="note-course-name">Course Name: {{ note.course_name }}</p>
+                    <button onclick="event.stopPropagation()" class="report-button">Report</button>
+                </div>
+            </div>
+            <!-- Full-size Modal for each note -->
+            <div id="note-modal-{{ note.id }}" style="display:none;" class="modal">
+                <div class="note-modal-content">
+                    <span class="close" onclick="closeNoteModal('{{ note.id }}');">&times;</span>
+                    <h3>{{ note.title }}</h3>
+                    <img src="data:image/jpeg;base64,{{ note.content | b64encode }}" style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+           
+            {% endfor %}
+        </div>
+        
+              
+    
+    </div>
+    {% endblock %}
+   
+  <script>
+   
+
+  </script>

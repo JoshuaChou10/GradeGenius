@@ -15,14 +15,16 @@
            
         </div>
         <div class="right-nav">
+            <a href="/community" class="nav-button">Community Notes</a>
             <a href="/course/create" class="nav-button">Add Course</a>
             <a href="/dashboard" class="nav-button">Dashboard</a>
             <a href="/signup" id='login-btn' class="nav-button">Login / Signup</a>
         </div>
     </nav>
     <p class="slogan">The Peak of Course Management</p>
-
     <div class="button-container">
+        <a href="{{ url_for('dashboard') }}" class="explore-button">View Community Notes</a>
+    
         <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
     </div>
 
