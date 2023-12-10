@@ -17,19 +17,34 @@ Community Notes
 
 
 {% block content %}
-
+<h1 style="text-align:center">Community Notes Search</h1>
     <div id="community-notes">
+
+            <input type="text" id="search-input" placeholder="Search notes by title..." oninput="filterNotes()">
+
        
-    
-        <!-- Search Bar -->
-        <div id="search-bar">
-            <input type="text" id="search-input" placeholder="Search notes...">
-            <button onclick="searchNotes()">Search</button>
-        </div>
+        
+        <!-- Filter Dropdown -->
+<select id="course-filter" onchange="filterNotes()">
+    <option value="">Filter By Course</option>
+    <option value="Functions">Functions</option>
+    <option value="Data">Data Management</option>
+    <option value="Chem">Chemistry</option>
+    <option value="Bio">Biology</option>
+    <option value="Physics">Physics</option>
+    <option value="Calculas">Calculas</option>
+    <option value="English">English</option>
+    <option value="French">French</option>
+    <option value="Comp">Computer Related</option>
+
+    <!-- Add more options as needed -->
+</select>
     
         <!-- Container for note previews -->
         <div id="note-previews">
             {% for note in community_notes %}
+            <div class="note" data-title="{{ note.title }}" data-course="{{ note.course.name }}">
+
             <div class="community-note-row"  onclick="openNoteModal('{{ note.id }}');">
                 <div class="note-image-container">
                     <!-- Add the onclick event handler to the img tag -->
@@ -51,16 +66,37 @@ Community Notes
                     <img src="data:image/jpeg;base64,{{ note.content | b64encode }}" style="max-width: 100%; height: auto;">
                 </div>
             </div>
-           
+        </div>
             {% endfor %}
         </div>
         
               
     
     </div>
-    {% endblock %}
-   
+       
   <script>
-   
+function filterNotes() {
+  var searchText = document.getElementById("search-input").value.toLowerCase();
+  var selectedCourse = document.getElementById("course-filter").value.toLowerCase();
+  var notes = document.getElementsByClassName("note");
 
-  </script>
+  for (var i = 0; i < notes.length; i++) {
+    var title = notes[i].getAttribute("data-title").toLowerCase();
+    var course = notes[i].getAttribute("data-course").toLowerCase();
+
+    if (title.includes(searchText) && (course.includes(selectedCourse) || selectedCourse === "")) {
+      notes[i].style.display = ""; // Show the note if both conditions are met
+    } else {
+      notes[i].style.display = "none"; // Otherwise, hide the note
+    }
+  }
+}
+
+// Attach the filterNotes function to the search bar input event
+document.getElementById("search-input").addEventListener('input', filterNotes);
+
+// Attach the filterNotes function to the course filter change event
+document.getElementById("course-filter").addEventListener('change', filterNotes);
+
+   </script>
+    {% endblock %}

@@ -10,6 +10,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 70px; /* Set this to the height of your footer */
+   
 }
 html {
     scroll-behavior: smooth;
@@ -33,7 +34,7 @@ html, body {
 .explore-button {
     display: inline-block;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 25px;
     padding: 20px 40px;
     text-decoration: none;
     border-radius: 16px;
@@ -105,11 +106,38 @@ footer {
     text-align: center;
     flex-shrink: 0; /* This is not necessary with absolute positioning but is good practice if you switch to flexbox */
 }
+
+ .title {
+    margin-bottom: 10px; /* Space below the title */
+    font-size: 3em; /* Adjust font size as needed */
+}
+
+
 .slogan {
-    text-align: center; /* Center the slogan horizontally */
-    font-size: 2.5em; /* Make the slogan text large */
-    color: black; /* Set the slogan text color to black */
-    font-weight: bold; /* Make the slogan text bold */
-    margin-top: 20px; /* Space between the nav bar and the slogan */
-    margin-bottom: 0px; /* Space between the slogan and the next content */
+    margin-bottom: 20px; /* Space below the slogan */
+    opacity:0.6;
+    font-size:2rem;
+    font-weight:bold;
+
+}
+
+
+.header-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px; /* Adjust the gap to control spacing */
+    margin-top: 50px; /* Adjust as needed */
+    margin-bottom: 35vh; /* Adjust as needed */
 }

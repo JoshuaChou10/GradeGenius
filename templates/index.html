@@ -21,13 +21,20 @@
             <a href="/signup" id='login-btn' class="nav-button">Login / Signup</a>
         </div>
     </nav>
-    <p class="slogan">The Peak of Course Management</p>
-    <div class="button-container">
-        <a href="{{ url_for('dashboard') }}" class="explore-button">View Community Notes</a>
-    
-        <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
+  
+     <div class="centered-container">
+        <div class="header-content">
+            <h1 class="title">Grade Genius</h1>
+            <p class="slogan">The Peak of Course Management</p>
+        </div>
+        <div class="button-container">
+            <a href="{{ url_for('community') }}" class="explore-button">View Community Notes</a>
+            <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
+        </div>
     </div>
 
+
+    
     <footer>
         <p>&copy; 2023 Grade Genius. All rights reserved. Made by Joshua Chou.</p>
     </footer>
