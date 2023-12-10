@@ -1,17 +1,14 @@
 /* add_assessment.css */
 
-
 .add-assessment-form {
     background-color: transparent; /* Makes the background transparent */
     box-shadow: none; /* Removes any box-shadow */
-    max-width: 800px; /* Increase max width */
+    max-width: 800px; /* Sets maximum width for larger screens */
     margin: 20px auto; /* Auto margins for horizontal centering */
-    padding: 90px;
-    padding-top:50px;
+    padding: 40px; /* Reduced padding */
+    padding-top: 25px; /* Adjusted padding-top */
     border-radius: 8px;
-   
 }
-
 
 .add-assessment-form label {
     display: block;
@@ -23,18 +20,18 @@
 .add-assessment-form input[type="number"],
 .add-assessment-form select {
     width: 100%;
-    padding: 10px;
+    padding: 15px; 
     margin-top: 5px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
-    box-sizing: border-box; /* Ensures padding is included in the width */
+    box-sizing: border-box; 
     border-radius: 4px;
 }
 
 .add-assessment-form button {
     background-color: #2c3e50;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 20px; /* Increased padding for a larger button */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -44,4 +41,20 @@
 
 .add-assessment-form button:hover {
     background-color: #3498db;
+}
+
+/* Media query for devices with width up to 768px (common breakpoint for phones and smaller tablets) */
+@media (max-width: 768px) {
+    .add-assessment-form {
+        max-width: none; /* Allows the form to take full width of the screen */
+        padding: 25px; /* Suitable padding on small screens */
+        padding-top: 20px; /* Adjusted padding-top for small screens */
+    }
+
+    /* You may also want to adjust font sizes for better readability on small screens */
+    .add-assessment-form label,
+    .add-assessment-form input,
+    .add-assessment-form button {
+        font-size: 16px; /* Increases the font size for better readability */
+    }
 }

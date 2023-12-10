@@ -51,6 +51,7 @@ def course_details(course_id):
 def create_course():
    
     if request.method == 'POST':
+
         # Extract the course data from the form
         course_name = request.form.get('course_name')
         course_code = request.form.get('course_code')
@@ -91,6 +92,7 @@ def create_course():
 
             db.session.add(new_course)
             db.session.commit()
+            flash('course successfully added!','success')
             return redirect(url_for('course_details', course_id=new_course.id))
         # If the user is not logged in, store the course data temporarily in the session
         else:
@@ -118,13 +120,21 @@ def create_course():
                     'time_studied':0
             })
         session.modified = True
+        flash('course successfully added! Sign up to save your progress','success')
+
+    if 'user_id' not in session:
         temp_courses=session.get("temporary_courses",[])
         if len(temp_courses)>=2:
             flash("Signup to add more courses!","warning")
             flash('signup_prompt', 'info')
-        else:
-            flash("Course successfully added! Sign up to save your progress.","success")
-        return redirect(url_for('dashboard'))
+            return redirect(url_for('dashboard'))
+      
+    else:
+        courses=Course.query.filter_by(user_id=session['user_id']).all()
+        if len(courses)>=8:
+            flash("Courses Limit Reached","warning")
+            return redirect(url_for('dashboard'))
+    
 
     return render_template('add_course.html',action="Add")
 

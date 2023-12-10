@@ -157,7 +157,7 @@ def delete_account():
                 db.session.delete(assessment)
             db.session.delete(course)
         
-        # Finally delete the user
+     
         db.session.delete(user_to_delete)
         db.session.commit()
         flash('Your account has been successfully deleted.', 'success')

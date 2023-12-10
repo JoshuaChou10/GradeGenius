@@ -10,7 +10,9 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
-
+html {
+    scroll-behavior: smooth;
+}
 
 
 .button-container {

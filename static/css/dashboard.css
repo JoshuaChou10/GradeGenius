@@ -189,6 +189,7 @@ html, body {
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
+        margin-top:10rem;
     }
 
     .courses-list,

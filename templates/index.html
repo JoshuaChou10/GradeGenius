@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GradeGenuis</title>
-<link rel="stylesheet"  href="{{ url_for('static', filename='css/main.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Genius</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 
 <body>
     <header>
-        <h1>Grade Genuis</h1>
-        <p>Master Your Academic Journey</p>
+        <h1>Grade Genius</h1>
+        <p>The Peak of Course Management</p>
     </header>
-<div class="button-container">
-    <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
-   
-</div>
-<footer>
-    <p>&copy; 2023 Grade Genuis. All rights reserved. Made by Joshua Chou.</p>
-</footer>
 
+    <div class="button-container">
+        <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
+    </div>
+
+
+    <footer>         <p>&copy; 2023 Grade Genuis. All rights reserved. Made by Joshua Chou.</p>
+    </footer>
 </body>
-
 </html>

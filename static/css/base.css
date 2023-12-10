@@ -7,6 +7,11 @@ html, body {
    
 }
 
+
+.content {
+    flex: 1; /* This allows the content area to expand and push the footer down */
+}
+
 header, footer {
     background-color: #2c3e50;
     color: white;
@@ -15,15 +20,28 @@ header, footer {
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     width: 100%;
 }
 
 header a, footer a {
     color: #3498db;
+}
+
+html, body {
+    height: 97%; /* Ensure the html and body are at least the height of the viewport */
+    margin: 0; /* Reset default margin */
+    display: flex; /* Enable flex container */
+    flex-direction: column; /* Stack children vertically */
+}
+
+main.content {
+    flex: 1; /* Allow the main content to grow and shrink as needed */
+    /* Other styles for main.content */
+}
+
+footer {
+    flex-shrink: 0; /* Prevent the footer from shrinking */
+    /* Other styles for footer */
 }
 
 
@@ -48,8 +66,8 @@ header {
 
 /* Sidebar */
 .sidebar {
-    width: 250px; 
-    height: 100vh; /* Viewport Height */
+    width: 250px;
+    height: 110vh; /* ensures it covers full height for iPhones */
     background-color: #fff; /* White background */
     border-right: 1px solid #ececec; /* Right border */
     padding-top: 20px;
@@ -61,7 +79,23 @@ header {
     border-bottom-right-radius: 8px; /* Rounded corners on the bottom right */
     top: 120px;
     left: -250px; /* Initially hide the sidebar */
+
 }
+
+
+@media (max-width: 768px) {
+    .sidebar.visible{
+        width: 50%; /* Sidebar takes up half of the screen width */
+        left: 0; /* Adjust the left property to show the sidebar */
+    }
+    .modal-content {
+        margin: 10% auto; /* Adjust margin to center the modal on screen */
+        width: 80%; /* Increase width for smaller devices */
+        min-height: 200px; /* Adjust minimum height as needed */
+        padding: 20px;
+    }
+}
+
 
 .header-content {
     display: flex; /* Use flexbox to align items in a row */
@@ -336,17 +370,26 @@ text-align: left;
 
 }
 
-/* Optional: Adjust for smaller screens */
-@media (max-width: 767px) {
+
+@media (max-width: 768px) {
     #user-info {
         right: 10px; /* Adjust position for smaller screens */
         top: 10px;
     }
 
     #profile-dropdown {
-        /* Adjust styles for smaller screens */
+        position: absolute; /* Absolute positioning with respect to its positioned parent */
+        top: 100%; /* Dropdown appears directly below the user-info element */
+        left: 0; /* Aligns the dropdown to the left edge of the user-info element */
+        width: 100%; /* Dropdown takes full width of the user-info element */
+        /* Or you can use 50% if you want the dropdown to be half the width of the screen */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Adds shadow for better visibility */
+        border-radius: 0; /* Optional: Adjust radius to match your design */
+        background-color: #ffffff; /* Ensure the dropdown is visible against any background */
+        /* Add any additional styles you want for the dropdown here */
     }
 }
+
 
 .goal-status {
     margin: 10px 0;
