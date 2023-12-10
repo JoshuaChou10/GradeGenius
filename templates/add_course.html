@@ -68,7 +68,7 @@
     var startingGrade = startingGradeElement ? startingGradeElement.value : null;
     if (!startingGrade){
     // Check if current grade is entered but total marks is not
-    if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0) && (!startingGrade || startingGrade=='')) {
+    if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0) && startingGrade!='') {
             alert('Please enter a value for Total Marks or leave the Current Grade field blank');
             event.preventDefault(); // Prevent form submission
         }

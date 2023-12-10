@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import session, request, redirect, url_for, render_template,flash
 from flask_bcrypt import Bcrypt
-from models import User,Course, Assessment
+from models import User,Course, Assessment,Note
 from app import app
 from flask import session
 from app import db
@@ -152,9 +152,8 @@ def delete_account():
         # Manually delete all courses and assessments related to the user
         courses_to_delete = Course.query.filter_by(user_id=user_id).all()
         for course in courses_to_delete:
-            assessments_to_delete = Assessment.query.filter_by(course_id=course.id).all()
-            for assessment in assessments_to_delete:
-                db.session.delete(assessment)
+            Assessment.query.filter_by(course_id=course.id).delete()
+            Note.query.filter_by(course_id=course.id).delete()
             db.session.delete(course)
         
      

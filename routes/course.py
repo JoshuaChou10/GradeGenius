@@ -208,6 +208,7 @@ def delete_course(course_id):
         if 'user_id' in session:
             course=Course.query.get(course_id)
             Assessment.query.filter_by(course_id=course_id).delete()
+            Note.query.filter_by(course_id=course_id).delete()
             db.session.delete(course)
             db.session.commit()
 
