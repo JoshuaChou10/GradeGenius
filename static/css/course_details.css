@@ -487,3 +487,21 @@ table {
 .fa-times {
     color: grey; /* or use a specific shade of grey like #808080 */
 }
+.unshare-button {
+    padding: 5px 15px;
+    background-color: #f44336; /* Red color for unshare button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.unshare-button:hover {
+    background-color: #d32f2f; /* Slightly darker red on hover */
+}
+
+.unshare-button:active {
+    background-color: #b71c1c; /* Even darker red when clicked */
+}

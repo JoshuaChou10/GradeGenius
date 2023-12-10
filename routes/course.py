@@ -322,6 +322,17 @@ def share_notes(course_id):
 
     return redirect(url_for('community'))
 
+@app.route('/<int:note_id>/unshare_note', methods=['POST'])
+def unshare_note(note_id):
+    note = Note.query.get(note_id)
+    if note and note.community:
+        note.community = False
+        db.session.commit()
+        flash('Note unshared successfully.', 'success')
+    else:
+        flash('Note not found or is not shared.', 'error')
+    return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
+
 @app.route('/community')
 def community():
     # Retrieve all notes marked for community sharing
