@@ -8,17 +8,26 @@
 </head>
 
 <body>
-    <header>
-        <h1>Grade Genius</h1>
-        <p>The Peak of Course Management</p>
-    </header>
+    <nav >
+        <div class="left-nav">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Grade Genius Logo" class="logo">
+            <h1>Grade Genius</h1>
+           
+        </div>
+        <div class="right-nav">
+            <a href="/login" class="nav-button">Login/Signup</a>
+            <a href="/course/create" class="nav-button">Add Course</a>
+            <a href="/dashboard" class="nav-button">Dashboard</a>
+        </div>
+    </nav>
+    <p class="slogan">The Peak of Course Management</p>
 
     <div class="button-container">
         <a href="{{ url_for('dashboard') }}" class="explore-button">Try Now</a>
     </div>
 
-
-    <footer>         <p>&copy; 2023 Grade Genuis. All rights reserved. Made by Joshua Chou.</p>
+    <footer>
+        <p>&copy; 2023 Grade Genius. All rights reserved. Made by Joshua Chou.</p>
     </footer>
 </body>
 </html>

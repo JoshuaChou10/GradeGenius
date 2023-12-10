@@ -68,13 +68,13 @@
     var startingGrade = startingGradeElement ? startingGradeElement.value : null;
     if (!startingGrade){
     // Check if current grade is entered but total marks is not
-    if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0)) {
-            alert('Please enter a value for Total Marks.');
+    if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0) && (!startingGrade || startingGrade=='')) {
+            alert('Please enter a value for Total Marks or leave the Current Grade field blank');
             event.preventDefault(); // Prevent form submission
         }
     }else{
         if ( (totalMarks=='' || totalMarks==0) && (startingGrade!='' && startingGrade!=0)) {
-            alert('Please enter a value for Total Marks.');
+            alert('Please enter a value for Total Marks or leave Starting Grade blank');
             event.preventDefault(); // Prevent form submission
         }
     }

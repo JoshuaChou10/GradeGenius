@@ -35,7 +35,7 @@ def get_guest_total_study(courses):
 def check_grade_change(course, prev_grade, action):
     course_grade = get_attr(course, 'grade')
     if prev_grade != course_grade:
-        flash(f"Assessment successfully {action}. Grade {'increased' if course_grade > prev_grade else 'decreased'} from {prev_grade}% to {course_grade}%",'info' if prev_grade>course_grade else 'success')
+        flash(f"Assessment successfully {action}. Grade {'increased' if course_grade > prev_grade else 'decreased'} from {prev_grade}% to {course_grade}%",'warning' if prev_grade>course_grade else 'success')
     else:
         flash(f"Assessment successfully {action}. Grade stayed the same",'info')
 
@@ -53,7 +53,7 @@ def get_weights(course):
         courses = [a for a in assessments if get_attr(a, 'weight') is None]
     finals_total=(sum(get_attr(f, 'total') for f in finals)) 
     if len(finals) > 0 and finals_total>0:
-        finals_weight = sum(get_attr(f, 'weight') for f in finals)/finals_total
+        finals_weight = sum(get_attr(f, 'weight') for f in finals)
         finals_grade = (sum(get_attr(f, 'earned') for f in finals)) /finals_total
 
     courses_grade=0 if (get_attr(course,'total_marks')- finals_total)<=0 else ( (sum(get_attr(c, 'earned') for c in courses)+(get_attr(course,'starting_marks')*get_attr(course,'starting_grade')/100) ) /( (sum(get_attr(c, 'total') for c in courses))+get_attr(course,'starting_marks')))

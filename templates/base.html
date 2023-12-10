@@ -17,7 +17,10 @@
             <div class="hamburger" onclick="toggleSidebar()">
                 &#9776; <!-- Unicode character for hamburger icon -->
             </div>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Grade Genius Logo" style="height:50px; border-radius:5px;margin-right: 20px;"> <!-- Adjust path and style as needed -->
+
             <h1>{% block header %}{% endblock %}</h1>
+
         </div>
         <div id="user-info" style="position: absolute; right: 20px; top: 20px;">
           {% if user %}

@@ -1,6 +1,6 @@
 from routes.user import check_course_ownership
 from flask import session, request, redirect, url_for, render_template,flash,jsonify
-from helpers import get_weights,get_guest_grade,scale_finals
+from helpers import get_weights,handle_grades
 from datetime import datetime
 import uuid
 from datetime import datetime
@@ -94,6 +94,7 @@ def create_course():
             db.session.commit()
             flash('course successfully added!','success')
             return redirect(url_for('course_details', course_id=new_course.id))
+            
         # If the user is not logged in, store the course data temporarily in the session
         else:
             
@@ -121,7 +122,8 @@ def create_course():
             })
         session.modified = True
         flash('course successfully added! Sign up to save your progress','success')
-
+        return redirect(url_for('course_details', course_id=temp_id))
+    #For get requests
     if 'user_id' not in session:
         temp_courses=session.get("temporary_courses",[])
         if len(temp_courses)>=2:
@@ -134,7 +136,6 @@ def create_course():
         if len(courses)>=8:
             flash("Courses Limit Reached","warning")
             return redirect(url_for('dashboard'))
-    
 
     return render_template('add_course.html',action="Add")
 
@@ -180,10 +181,7 @@ def edit_course(course_id):
                 setattr(course, key, value)
            
             if update_mark:
-                finals=Assessment.query.filter(Assessment.weight!=None,Assessment.course_id==course.id).all()
-                course.total_marks,course.grade=course.get_updated_grade()
-                scale_finals(course,finals) 
-                course.total_marks,course.grade=course.get_updated_grade()
+                handle_grades(course)
             db.session.commit()
   
         else:
@@ -192,10 +190,7 @@ def edit_course(course_id):
             for key, value in course_data.items():
                 course[key] = value
             if update_mark:
-                finals=[a for a in course['assessments'] if a['weight'] is not None]
-                course["total_marks"],course["grade"]=get_guest_grade(course)
-                scale_finals(course,finals)
-                course["total_marks"],course["grade"]=get_guest_grade(course)
+                handle_grades(course)
             session.modified = True
 
         flash("Course successfully updated!", "success")

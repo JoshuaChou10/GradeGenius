@@ -1,9 +1,11 @@
 html, body {
-    padding-top: 70px;
-    height: 100%;
+    padding-top:70px;
     margin: 0;
     background: #56CCF2; 
     font-family: Arial, sans-serif;
+    height: 97%; /* Ensure the html and body are at least the height of the viewport */
+    display: flex; /* Enable flex container */
+    flex-direction: column; /* Stack children vertically */
    
 }
 
@@ -17,32 +19,19 @@ header, footer {
     color: white;
     text-align: center;
     flex-shrink: 0; /* Prevents header and footer from shrinking */
+    
 }
 
-footer {
-    width: 100%;
-}
 
 header a, footer a {
     color: #3498db;
 }
 
-html, body {
-    height: 97%; /* Ensure the html and body are at least the height of the viewport */
-    margin: 0; /* Reset default margin */
-    display: flex; /* Enable flex container */
-    flex-direction: column; /* Stack children vertically */
-}
 
 main.content {
     flex: 1; /* Allow the main content to grow and shrink as needed */
-    /* Other styles for main.content */
 }
 
-footer {
-    flex-shrink: 0; /* Prevent the footer from shrinking */
-    /* Other styles for footer */
-}
 
 
 header {

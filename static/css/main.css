@@ -9,9 +9,16 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-bottom: 70px; /* Set this to the height of your footer */
 }
 html {
     scroll-behavior: smooth;
+    position: relative;
+    min-height: 100%;
+    
+}
+html, body {
+    padding:0;
 }
 
 
@@ -41,4 +48,67 @@ html {
     background-color: #ececec; /* Slight background color change on hover */
     transform: translateY(-2px); /* Moves the button up a bit */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Reduces shadow for pressed effect */
+}
+
+.left-nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px; /* Adjust as necessary */
+    margin-right: 15px;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-button {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #ababab;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; 
+    background:#2c3e50 ; 
+    color:white;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure the nav is above other elements */
+   
+}
+
+
+footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 70px; /* Set the height of your footer */
+    background-color: #2c3e50; /* Adjust the color as needed */
+    color: white;
+    text-align: center;
+    flex-shrink: 0; /* This is not necessary with absolute positioning but is good practice if you switch to flexbox */
+}
+.slogan {
+    text-align: center; /* Center the slogan horizontally */
+    font-size: 2em; /* Make the slogan text large */
+    color: black; /* Set the slogan text color to black */
+    font-weight: bold; /* Make the slogan text bold */
+    margin-top: 20px; /* Space between the nav bar and the slogan */
+    margin-bottom: 20px; /* Space between the slogan and the next content */
 }
