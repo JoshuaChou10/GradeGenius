@@ -51,7 +51,7 @@
 {% else %}
 <label class="format-hint">
     Total Marks Available So Far
-    <span style='right:20vw;'class="tooltip-icon" title="Sum total of marks avalible for all assessments. eg. x/40 + y/20 = 60 marks">?</span>
+    <span style='right:20vw;'class="tooltip-icon" title="Sum total of marks avalible for all assessments. Eg. test was out of 40, quiz out of 20, so total is 60">?</span>
 </label>
 
     <input type="number" step=0.1 id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">

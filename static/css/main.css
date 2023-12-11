@@ -10,7 +10,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 70px; /* Set this to the height of your footer */
-   
+    background-image: radial-gradient(circle at center, #26CCFF 0%, #56CCF2 33%, #009BDB 66%, #0077B5 100%);
 }
 html {
     scroll-behavior: smooth;
