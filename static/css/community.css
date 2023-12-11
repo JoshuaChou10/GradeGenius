@@ -122,7 +122,7 @@
 }
 
 /* Button styling */
-#course-filter {
+.filter {
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
@@ -137,7 +137,7 @@
 }
 
 /* Button hover effect */
-#course-filter:hover {
+.filter:hover {
     background-image: linear-gradient(to right, #8f94fb, #4e54c8); /* Reverse gradient on hover */
     box-shadow: 0 6px 8px rgba(0,0,0,0.3); /* Larger shadow on hover for "lifting" effect */
 }
@@ -147,7 +147,7 @@
   
 
     #search-input,
-    #course-filter {
+    .filter {
         width: 100%; /* Full width on small screens */
         margin-bottom: 10px; /* Space between stacked elements */
     }

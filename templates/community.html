@@ -25,7 +25,7 @@ Community Notes
        
         
         <!-- Filter Dropdown -->
-<select id="course-filter" onchange="filterNotes()">
+<select id="course-filter" class='filter' onchange="filterNotes()">
     <option value="">Filter By Course</option>
     <option value="Math">Math</option>
     <option value="Functions">Functions</option>
@@ -54,11 +54,21 @@ Community Notes
     
     <!-- Add more options as needed -->
 </select>
+        <!-- Filter Dropdown -->
+        <select id="grade-filter" class='filter' onchange="filterNotes()">
+            <option value="">Filter By Grade</option>
+            <option value="1">9</option>
+            <option value="2">10</option>
+            <option value="3">11</option>
+            <option value="4">12</option>
+            
+        </select>
+            
     
         <!-- Container for note previews -->
         <div id="note-previews">
             {% for note in community_notes %}
-            <div class="note" data-title="{{ note.title }}" data-course="{{ note.course.name }}">
+            <div class="note" data-title="{{ note.title }}" data-course="{{ note.course.name }}" data-code="{{note.course.code}}">
 
             <div class="community-note-row"  onclick="openNoteModal('{{ note.id }}');">
                 <div class="note-image-container">
@@ -93,13 +103,15 @@ Community Notes
 function filterNotes() {
   var searchText = document.getElementById("search-input").value.toLowerCase();
   var selectedCourse = document.getElementById("course-filter").value.toLowerCase();
+  var selectedGrade = document.getElementById("grade-filter").value.toLowerCase();
   var notes = document.getElementsByClassName("note");
 
   for (var i = 0; i < notes.length; i++) {
     var title = notes[i].getAttribute("data-title").toLowerCase();
     var course = notes[i].getAttribute("data-course").toLowerCase();
+    var code = notes[i].getAttribute("data-code").toLowerCase();
 
-    if (title.includes(searchText) && (course.includes(selectedCourse) || selectedCourse === "")) {
+    if (title.includes(searchText) && (course.includes(selectedCourse) || selectedCourse === "") && (code.includes(selectedGrade) || selectedGrade === "")  ) {
       notes[i].style.display = ""; // Show the note if both conditions are met
     } else {
       notes[i].style.display = "none"; // Otherwise, hide the note
