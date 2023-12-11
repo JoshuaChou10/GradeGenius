@@ -68,7 +68,7 @@
         </div>
         <p>Current Goal: {{ user.goal }}%</p>
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form" style="display:none;">
-            <input type="text" name="goal" placeholder="New goal" id="goal-input" required>
+            <input type='number' name="goal" placeholder="New goal" id="goal-input" max=100 min=0 required>
             <input type="submit" value="Edit Goal" id="goal-submit">
         </form>
         {% else %}
@@ -76,7 +76,7 @@
             <h2>Target Grade Average</h2>
        
         <form action="{{ url_for('addgoal') }}" method="post" id="goal-form">
-            <input type="number" name="goal" placeholder="Enter your goal" id="goal-input" required> %
+            <input  type="number" name="goal" placeholder="Enter your goal" id="goal-input" max=100 min=0 required> %
             <input type="submit" value="Add Goal" id="goal-submit">
         </form>
         {% endif %}

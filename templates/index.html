@@ -18,7 +18,17 @@
             <a href="/community" class="nav-button">Community Notes</a>
             <a href="/course/create" class="nav-button">Add Course</a>
             <a href="/dashboard" class="nav-button">Dashboard</a>
-            <a href="/signup" id='login-btn' class="nav-button">Login / Signup</a>
+            {% if user %}
+            <!-- Profile Picture with onClick event to toggle dropdown -->
+            <div style="text-align: center;" >
+              <img src="{{ url_for('static',filename='images/profile_pic.png') }}" alt="{{ user.username }}" width="50" height="50" style="display: block; margin: auto;">
+              <span style="display: block;">{{ user.username }}</span>
+           </div>
+
+              
+        {% else %}
+            <a href="{{ url_for('signup') }}" id='login-btn' >Login / Signup</a>
+        {% endif %}
         </div>
     </nav>
   
@@ -38,5 +48,6 @@
     <footer>
         <p>&copy; 2023 Grade Genius. All rights reserved. Made by Joshua Chou.</p>
     </footer>
+   
 </body>
 </html>

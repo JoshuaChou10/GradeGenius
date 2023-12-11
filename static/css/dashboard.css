@@ -163,7 +163,7 @@ html, body {
 }
 
 .goal-section input[type="number"] {
-    flex-grow: 1; /* Input field takes up remaining space */
+    width: 90%; /* This will make the input take up 100% of the parent container's width */
     padding: 10px;
     font-size: 1em;
     border: 1px solid #ccc;
@@ -244,17 +244,17 @@ html, body {
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space between the h2 and the icon */
 }
-
-.goal-header #edit-btn {
-    visibility: hidden; /* Hide the edit icon initially */
+/* only show edit button if hovering */
+/* .goal-header #edit-btn {
+    visibility: hidden; 
     opacity: 0;
 }
 
 .goal-header:hover #edit-btn {
-    visibility: visible; /* Show the edit icon on hover */
+    visibility: visible; 
     color:#666;
     opacity: 1;
-}
+} */
 
 hr {
     margin-bottom: 20px; /* Adjust the value as needed */

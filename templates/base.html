@@ -22,10 +22,10 @@
             <h1>{% block header %}{% endblock %}</h1>
 
         </div>
-        <div id="user-info" style="position: absolute; right: 20px; top: 20px;">
+        <div id="user-info" style="position: absolute; right: 20px; top: 20px;" onclick="toggleDropdown()">
           {% if user %}
               <!-- Profile Picture with onClick event to toggle dropdown -->
-              <div style="text-align: center;" onclick="toggleDropdown()">
+              <div style="text-align: center;" >
                 <img src="{{ url_for('static',filename='images/profile_pic.png') }}" alt="{{ user.username }}" width="50" height="50" style="display: block; margin: auto;">
                 <span style="display: block;">{{ user.username }}</span>
              </div>
@@ -147,7 +147,7 @@ window.addEventListener('click', function(event) {
 });
 
 
-   // Function to toggle the dropdown visibility
+
    function toggleDropdown() {
       var dropdown = document.getElementById("profile-dropdown");
       dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';

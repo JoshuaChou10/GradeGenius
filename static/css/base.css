@@ -503,7 +503,7 @@ span.question-mark:hover::after {
 span.tooltip-icon {
     position: absolute;
     top: -10px; 
-    right: -10px; 
+   right:-10px;
     width: 20px; /* Size of the circle */
     height: 20px; /* Size of the circle */
     line-height: 20px; /* Center the question mark vertically */
@@ -513,6 +513,9 @@ span.tooltip-icon {
     font-weight: bold;
     text-align: center;
     border-radius: 50%;
+    cursor: help;
+    display: inline; /* Ensures the tooltip is inline with the text */
+    margin-left: 5px; /* Gives a little space between the label text and the tooltip */
     cursor: help;
 }
 
@@ -537,6 +540,15 @@ span.tooltip-icon:hover::after {
     opacity: 1;
     visibility: visible;
 }
+.format-hint {
+    display: inline-block; /* This makes the label inline-block so that elements sit next to each other */
+    margin-right: 5px; /* Adjust as needed to give space between the label and the input field */
+}
+
+
+
+/* Rest of your CSS for the tooltip */
+
 #login-btn {
     display: inline-block;
     padding: 10px 20px;

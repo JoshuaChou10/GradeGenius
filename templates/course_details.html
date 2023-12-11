@@ -90,6 +90,13 @@
             </div>
             
             <div class="info-grid">
+                {% if 'chem' in course.name.lower() %}
+                <div class="info-item">
+                    <label>Recourses</label>
+                    <a target='_blank' href="https://learn-chemistry.joshuac16.repl.co/">Learn Chemistry App</a>
+                    <p>Provides quizzes and concept overviews from atom structure to reactions</p>
+                </div>
+              {% endif %}
               
                 <div class="info-item">
                     <label>Code</label>
@@ -297,7 +304,7 @@
            
         {% endfor %}
     </div>
-    <input type="submit" value="Share Selected Notes">
+    <input type="submit" value="Share Selected Notes To Community">
 </form>
 
 <!-- Delete forms (outside the share notes form) -->

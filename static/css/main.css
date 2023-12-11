@@ -65,6 +65,7 @@ html, body {
 .right-nav {
     display: flex;
     align-items: center;
+    padding:20px;
 }
 
 .nav-button {
