@@ -91,10 +91,31 @@ html, body {
     padding: 10px; 
     margin-left:2rem;
 }
-#add-course:hover{
-    background-color: #0056b3;
-    color: #fff;
+#add-course {
+    background-color: #33eeff; /* Bright yellow background */
+    color: #333; /* Dark text for contrast */
+
+    padding: 15px 25px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    display: inline-block; /* To apply padding and margin correctly */
+    margin: 10px; /* Spacing around the button */
+    cursor: pointer; /* Change cursor to indicate it's clickable */
 }
+
+#add-course:hover {
+    transform: translateY(-3px); /* Lift the button slightly on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Increase shadow for a "raised" effect */
+}
+
+#add-course:active {
+    transform: translateY(1px); /* Push the button down when clicked */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow for a "pressed" effect */
+}
+
 
 .courses-list a:hover,
 .courses-list ul li a:hover {

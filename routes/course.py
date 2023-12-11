@@ -313,12 +313,14 @@ def share_notes(course_id):
             note = Note.query.get(note_id)
             if note.community==True:
                 flash("Note is already shared")
-            if note and note.course_id == course_id:
+            if note and note.course.id == course_id:
                 note.community = True
         db.session.commit()
         flash('Your notes have been shared successfully.', 'success')
     else:
-        flash('No notes were selected to share.', 'warning')
+        flash('No notes were selected to share.', 'warning') 
+        return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
+
 
     return redirect(url_for('community'))
 
@@ -331,7 +333,7 @@ def unshare_note(note_id):
         flash('Note unshared successfully.', 'success')
     else:
         flash('Note not found or is not shared.', 'error')
-    return redirect(url_for('course_details', course_id=course_id) + '?page=notes')
+    return redirect(url_for('course_details', course_id=note.course.id) + '?page=notes')
 
 @app.route('/community')
 def community():

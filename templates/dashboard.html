@@ -37,7 +37,13 @@
 
 <div class="dashboard-container">
 <section class="courses-list">
+    {% if 'user_id' not in session %}
     <a href="{{ url_for('create_course') }}" id="add-course" class="btn">+ Course</a>
+{% else %}
+    <!-- The regular Add Course button for logged-in users -->
+    <a href="{{ url_for('create_course') }}" class="btn">+ Course</a>
+{% endif %}
+
 
     <ul>
         {% for course in courses %}
