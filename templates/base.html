@@ -17,8 +17,9 @@
             <div class="hamburger" onclick="toggleSidebar()">
                 &#9776; <!-- Unicode character for hamburger icon -->
             </div>
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Grade Genius Logo" style="height:50px; border-radius:5px;margin-right: 20px;"> <!-- Adjust path and style as needed -->
-
+            <a href="/dashboard">
+            <img  src="{{ url_for('static', filename='images/logo.png') }}" alt="Grade Genius Logo" style="height:50px; border-radius:5px;margin-right: 20px;"> <!-- Adjust path and style as needed -->
+          </a>
             <h1>{% block header %}{% endblock %}</h1>
 
         </div>
