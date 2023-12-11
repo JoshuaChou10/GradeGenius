@@ -94,11 +94,11 @@ html, body {
 #add-course {
     background-color: #33eeff; /* Bright yellow background */
     color: #333; /* Dark text for contrast */
-
+    font-size:20px;
     padding: 15px 25px;
     font-weight: bold;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 10px;
     transition: transform 0.2s, box-shadow 0.2s;
 
     display: inline-block; /* To apply padding and margin correctly */
@@ -115,7 +115,9 @@ html, body {
     transform: translateY(1px); /* Push the button down when clicked */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow for a "pressed" effect */
 }
-
+#add-course-user:hover{
+    color:white;
+}
 
 .courses-list a:hover,
 .courses-list ul li a:hover {
