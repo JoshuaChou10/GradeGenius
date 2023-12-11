@@ -36,7 +36,7 @@ Community Notes
     <option value="Bio">Biology</option>
     <option value="Physics">Physics</option>
     <option value="English">English</option>
-    <option value="French">French</option>
+    <option value="Fr">French</option>
     <option value="Hist">History</option>
     <option value="Geo">Geography</option>
     <option value="Health">Health</option>
@@ -55,14 +55,14 @@ Community Notes
     <!-- Add more options as needed -->
 </select>
         <!-- Filter Dropdown -->
-        <select id="grade-filter" class='filter' onchange="filterNotes()">
+        <!-- <select id="grade-filter" class='filter' onchange="filterNotes()">
             <option value="">Filter By Grade</option>
             <option value="1">9</option>
             <option value="2">10</option>
             <option value="3">11</option>
             <option value="4">12</option>
             
-        </select>
+        </select> -->
             
     
         <!-- Container for note previews -->
@@ -103,7 +103,7 @@ Community Notes
 function filterNotes() {
   var searchText = document.getElementById("search-input").value.toLowerCase();
   var selectedCourse = document.getElementById("course-filter").value.toLowerCase();
-  var selectedGrade = document.getElementById("grade-filter").value.toLowerCase();
+//   var selectedGrade = document.getElementById("grade-filter").value.toLowerCase();
   var notes = document.getElementsByClassName("note");
 
   for (var i = 0; i < notes.length; i++) {
@@ -111,7 +111,7 @@ function filterNotes() {
     var course = notes[i].getAttribute("data-course").toLowerCase();
     var code = notes[i].getAttribute("data-code").toLowerCase();
 
-    if (title.includes(searchText) && (course.includes(selectedCourse) || selectedCourse === "") && (code.includes(selectedGrade) || selectedGrade === "")  ) {
+    if (title.includes(searchText) && (course.includes(selectedCourse) || selectedCourse === "")  ) {
       notes[i].style.display = ""; // Show the note if both conditions are met
     } else {
       notes[i].style.display = "none"; // Otherwise, hide the note
