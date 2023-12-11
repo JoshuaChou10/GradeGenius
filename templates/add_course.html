@@ -51,7 +51,7 @@
 {% else %}
 <label class="format-hint">
     Total Marks Available So Far
-    <span style='right:20vw;'class="tooltip-icon" title="Sum total of marks avalible for all assessments. Eg. test was out of 40, quiz out of 20, so total is 60">?</span>
+    <span style='right:20vw;'class="tooltip-icon" title="Sum total of marks available for all assessments. Eg. test was out of 40, quiz out of 20, so total is 60. ">?</span>
 </label>
 
     <input type="number" step=0.1 id="total_marks" name="total_marks" value="{{ course.total_marks if course else '' }}" min="0" placeholder="Blank for none">
@@ -69,7 +69,7 @@
     if (!startingGrade){
     // Check if current grade is entered but total marks is not
     if ( (totalMarks=='' || totalMarks==0) && (currentGrade!='' && currentGrade!=0) && startingGrade!='') {
-            alert('Please enter a value for Total Marks or leave the Current Grade field blank');
+            alert('Please enter a value for Total Marks or leave the Current Grade field blank. ');
             event.preventDefault(); // Prevent form submission
         }
     }else{
